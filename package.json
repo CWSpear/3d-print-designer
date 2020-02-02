@@ -1,0 +1,14 @@
+{
+  "name": "cad",
+  "version": "1.0.0",
+  "description": "",
+  "main": "token-grid.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/openjscad": "0.0.31"
+  }
+}
