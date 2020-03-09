@@ -10,5 +10,8 @@
   "license": "ISC",
   "devDependencies": {
     "@types/openjscad": "0.0.31"
+  },
+  "dependencies": {
+    "@jscad/csg": "^0.7.0"
   }
 }
