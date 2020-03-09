@@ -50,7 +50,7 @@ function main() {
 
 function makeLongSlots(num) {
   const arr = [];
-  for (let i = 0; i < num; i ++) {
+  for (let i = 0; i < num; i++) {
     const y = TOTAL_HEIGHT - (CARD_SLOT_SPACING * i + CARD_SLOT_PADDING) + (CARD_SLOT_THICKNESS * i);
 
     arr.push(makeLongSlot(y));
@@ -73,7 +73,7 @@ function makeTokenArea() {
 
 function makeSlots(num, x) {
   const arr = [];
-  for (let i = 0; i < num; i ++) {
+  for (let i = 0; i < num; i++) {
     const y = (CARD_SLOT_SPACING * i + CARD_SLOT_PADDING) + (CARD_SLOT_THICKNESS * i);
 
     arr.push(makeSlot(x, y));
