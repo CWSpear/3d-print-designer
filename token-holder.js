@@ -15,7 +15,7 @@ const fitTolerance = -0.05;
 const lidThickness = 2; // magnetPadding * 2 + magnetHeight;
 // END CONFIG
 
-function main () {
+function main() {
   const box = difference(
     roundedCube({ size: [width, len, height], center: false, radius: [0, 12, 0] }),
     translate(
@@ -33,7 +33,13 @@ function main () {
     translate([0, len - (roundiness + wallThickness), floorThickness], rotate([0, 0, 0], makeRamp(width)))
   );
 
-  const ledge = difference(CSG.cube({ size: [width, len, clearance] }), translate([wallThickness + fitTolerance, wallThickness + fitTolerance, 0], CSG.cube({ size: [width - (wallThickness * 2) - (fitTolerance * 2), len - (wallThickness * 2) - (fitTolerance * 2), clearance] })));
+  const ledge = difference(
+    CSG.cube({ size: [width, len, clearance] }),
+    translate(
+      [wallThickness + fitTolerance, wallThickness + fitTolerance, 0],
+      CSG.cube({ size: [width - (wallThickness * 2) - (fitTolerance * 2), len - (wallThickness * 2) - (fitTolerance * 2), clearance] })
+    )
+  );
 
 
   const finalBase = difference(
@@ -48,7 +54,10 @@ function main () {
 
   const finalLid = union(
     lid,
-    translate([lidWidthOffset + wallThickness, lidLenOffset + wallThickness, lidThickness], CSG.cube({ size: [width - (wallThickness * 2), len - (wallThickness * 2), clearance] }))
+    translate(
+      [lidWidthOffset + wallThickness, lidLenOffset + wallThickness, lidThickness],
+      CSG.cube({ size: [width - (wallThickness * 2), len - (wallThickness * 2), clearance] })
+    )
   );
 
   // return finalBase;
@@ -68,7 +77,7 @@ function makeRamp(l) {
     rotate(
       [-90, 0, 0],
       difference(
-        CSG.cube({ size: [l, roundiness, roundiness]}),
+        CSG.cube({ size: [l, roundiness, roundiness] }),
         rotate([0, 90, 0], cylinder({ r: roundiness, h: l, fn: 64 }))
       )
     )
@@ -76,7 +85,7 @@ function makeRamp(l) {
 }
 
 function makeWall() {
-  return CSG.cube({ size: [dividerThickness, len, height - floorThickness - clearance]});
+  return CSG.cube({ size: [dividerThickness, len, height - floorThickness - clearance] });
 }
 
 function makeMagnetSlot() {

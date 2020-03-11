@@ -14,7 +14,7 @@ const len = cols * ((radius * 2) + (gap * 2)) + (padding * 2);
 
 console.log('Final Size:', width, len);
 
-function main () {
+function main() {
   const holes = [];
 
   for (let row = 0; row < rows; row++) {
