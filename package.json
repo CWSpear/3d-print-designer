@@ -12,6 +12,8 @@
     "@types/openjscad": "0.0.31"
   },
   "dependencies": {
-    "@jscad/csg": "^0.7.0"
+    "@jscad/core": "^0.4.0",
+    "@jscad/csg": "^0.7.0",
+    "@jscad/openjscad": "^1.6.1"
   }
 }
