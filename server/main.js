@@ -1,6 +1,8 @@
-const chokidar = require('chokidar');
+const { startWatcher } = require('../tools/watch');
+
 const path = require('path');
 const chalk = require('chalk');
+const notifier = require('node-notifier');
 
 // relative to this project directory
 const WEB_ROOT = '../Online3DViewer/build/website';
@@ -26,21 +28,47 @@ io.on('connection', () => {
 
 app.use(express.static(absoluteWebRootPath));
 
-// One-liner for current directory
-chokidar.watch(absoluteWatchPath)
-  .on('change', (filePath) => {
-    const baseName = path.basename(filePath);
+startWatcher()
+  .on('ready', ({ files, watchDir }) => {
+    console.log(chalk.cyan(`Watching ${watchDir} for changes...\n`));
 
-    console.log(chalk.blue(`Detected change in ${baseName}...`));
-    console.log(chalk.yellow(`Notifying...`));
+    console.log(chalk.yellow('Existing compiled designs:\n'));
+
+    files.forEach((file) => {
+      console.log(chalk.blue(`http://localhost:3333#designs/${file}`));
+    });
+
+    console.log('\n');
+  })
+  .on('start-compile', ({ newName }) => {
+    console.log(chalk.yellow(`Compiling ${newName}...\n`));
+  })
+  .on('end-compile', ({ newName, output }) => {
+    console.log(output);
+
+    const url = `http://localhost:3333#designs/${newName}`;
+    console.log(chalk.green(`Compiled ${newName}`));
+
+    console.log(chalk.yellow(`\nNotifying...`));
 
     io.emit('file-updated');
 
-    console.log(chalk.green(`Notified`));
+    notifier.notify(
+      {
+        title: '3D Print Design',
+        message: `${newName} has finished compiling.`,
+        timeout: 4,
+        open: url,
+        actions: ['Close']
+      }
+    );
 
+    console.log(chalk.green(`Notified`));
+    console.log(chalk.blue(`\nView file at: ${url}`));
+  })
+  .on('finally', () => {
     console.log(chalk.magenta(`\n-----------\n`));
   })
-  .on('ready', () => {
-    console.log(chalk.cyan(`Watching ${DIR_TO_WATCH} for changes...\n`));
+  .on('error', ({ err }) => {
+    console.error(chalk.red('[Error]\n\n', err));
   });
-

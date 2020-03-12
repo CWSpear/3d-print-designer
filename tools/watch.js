@@ -3,6 +3,7 @@ const shell = require('shelljs');
 const path = require('path');
 const fs = require('fs');
 const chalk = require('chalk');
+const EventEmitter = require('events');
 
 // relative to project root (and run this command from root!)
 const DIR_TO_WATCH = './cad/designs';
@@ -15,42 +16,45 @@ shell.config.silent = true;
 const absoluteWatchPath = path.join(process.cwd(), DIR_TO_WATCH);
 const absoluteOutputPath = path.join(process.cwd(), OUTPUT_DIR);
 
-fs.readdir(absoluteOutputPath, (err, files) => {
-  console.log(chalk.yellow('Existing compiled designs:\n'));
-  files.filter(file => file.match(/\.stl$/)).forEach((file) => {
-    console.log(chalk.blue(`http://localhost:3333#designs/${file}`));
+module.exports.startWatcher = function startWatcher() {
+  const events = new EventEmitter();
+
+  fs.readdir(absoluteOutputPath, (err, files) => {
+    const filteredFiles = files.filter(file => file.match(/\.stl$/));
+    events.emit('ready', { files: filteredFiles, watchDir: DIR_TO_WATCH });
+    events.emit('finally');
   });
 
-  console.log('\n');
-});
+  // One-liner for current directory
+  chokidar.watch(absoluteWatchPath)
+    .on('change', (filePath) => {
+      const baseName = path.basename(filePath);
+      const newName = baseName.replace(/\.js$/, '.stl');
 
-// One-liner for current directory
-chokidar.watch(absoluteWatchPath)
-  .on('change', (filePath) => {
-    const baseName = path.basename(filePath);
-    const newName = baseName.replace(/\.js$/, '.stl');
+      const outputFileName = path.join(absoluteOutputPath, newName);
 
-    console.log(chalk.yellow(`Compiling ${newName}...\n`));
+      events.emit('start-compile', { newName });
 
-    const outputFileName = path.join(absoluteOutputPath, newName);
-    shell.exec(
-      `npx openjscad ${filePath} -o ${outputFileName}`,
-      (code, stdout, stderr) => {
-        if (!!code || stderr) {
-          console.error(chalk.red('[Error]\n\n', stderr));
-        } else {
-          // first line is output from openjscad
-          console.log('' + stdout.split('\n').slice(1).join('\n'));
+      shell.exec(
+        `npx openjscad ${filePath} -o ${outputFileName}`,
+        (code, stdout, stderr) => {
+          if (!!code || stderr) {
+            events.emit('error', { err: stderr });
+          } else {
+            // first line is output from openjscad
+            const output = stdout.split('\n').slice(1).join('\n');
 
-          console.log(chalk.green(`Compiled ${newName}`));
-          console.log(chalk.blue(`View file at: http://localhost:3333#designs/${newName}`));
+            events.emit('end-compile', { newName, output });
+          }
+
+          events.emit('finally');
         }
+      );
+    })
+    .on('ready', () => {
+      console.log(chalk.cyan(`Watching ${DIR_TO_WATCH} for changes...\n`));
+    });
 
-        console.log(chalk.magenta('\n-------------\n'));
-      }
-    );
-  })
-  .on('ready', () => {
-    console.log(chalk.cyan(`Watching ${DIR_TO_WATCH} for changes...\n`));
-  });
+  return events;
+};
 

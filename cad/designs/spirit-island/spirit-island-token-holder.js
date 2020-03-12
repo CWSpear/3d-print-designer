@@ -17,7 +17,7 @@ const LIP_HANG_ON_NESS = 1;
 const BUTTON_RADIUS = 6;
 const BUTTON_DISTANCE_FROM_EDGE = 15;
 
-const PRINTER_MAX = 240; //sdf sdf
+const PRINTER_MAX = 240;
 // END CONFIG
 
 
