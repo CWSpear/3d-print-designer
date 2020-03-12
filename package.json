@@ -1,23 +1,24 @@
 {
-  "name": "cad",
+  "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "designs/mansions-of-madness/token-grid.js",
+  "main": "server/main.js",
   "scripts": {
+    "start": "node server/main",
+    "build": "python Online3DViewer/tools/build.py",
+    "watch": "node tools/watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "@types/openjscad": "0.0.31"
-  },
   "dependencies": {
-    "@jscad/cli": "^1.10.0",
-    "@jscad/core": "^0.4.0",
-    "@jscad/csg": "^0.7.0",
-    "@jscad/openjscad": "^1.6.1",
     "chalk": "^3.0.0",
     "chokidar": "^3.3.1",
-    "shelljs": "^0.8.3"
+    "express": "^4.17.1",
+    "shelljs": "^0.8.3",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/shelljs": "^0.8.6"
   }
 }

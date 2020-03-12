@@ -3,24 +3,28 @@ const shell = require('shelljs');
 const path = require('path');
 const chalk = require('chalk');
 
-const DIR_TO_WATCH = './designs'; // relative to project root (and run this command from root!)
+// relative to project root (and run this command from root!)
+const DIR_TO_WATCH = './cad/designs';
+const OUTPUT_DIR = './Online3DViewer/build/website/designs';
 
 shell.config.silent = true;
 
-///
+/// END CONFIG ///
 
-const absolutePath = path.join(process.cwd(), DIR_TO_WATCH);
+const absoluteWatchPath = path.join(process.cwd(), DIR_TO_WATCH);
+const absoluteOutputPath = path.join(process.cwd(), OUTPUT_DIR);
 
 // One-liner for current directory
-chokidar.watch(absolutePath)
+chokidar.watch(absoluteWatchPath)
   .on('change', (filePath) => {
     const baseName = path.basename(filePath);
     const newName = baseName.replace(/\.js$/, '.stl');
 
     console.log(chalk.yellow(`[Compiling ${newName}...]\n`));
 
+    const outputFileName = path.join(absoluteOutputPath, newName);
     shell.exec(
-      `npx openjscad ${filePath} -o /Users/cwspear/Projects/Online3DViewer/build/website/scratch/${newName}`,
+      `npx openjscad ${filePath} -o ${outputFileName}`,
       (code, stdout, stderr) => {
         if (!!code || stderr) {
           console.error(chalk.red('[Error]\n\n', stderr));
