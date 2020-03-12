@@ -1,6 +1,6 @@
 const GAME_BOX_WIDTH = 288;
 const SPIRIT_CARD_HEIGHT = 153;
-const ROW_COUNT = 12;
+const ROW_COUNT = 9;
 const COL_COUNT = 3;
 const RAMP_SIZE = 8;
 
@@ -10,13 +10,13 @@ const BORDER_WIDTH = 1;
 const THICKNESS = BORDER_WIDTH * 3;
 const LIPNESS = BORDER_WIDTH * 2;
 const EXTRA = 0.2;
-const DEPTH = 40 - LIPNESS - EXTRA;
+const DEPTH = 42 - LIPNESS - EXTRA;
 const LIP_HANG_ON_NESS = 1;
 
-const BUTTON_RADIUS = 7;
+const BUTTON_RADIUS = 6;
 const BUTTON_DISTANCE_FROM_EDGE = 15;
 
-const PRINTER_MAX = 240;
+const PRINTER_MAX = 215;
 // END CONFIG
 
 
@@ -32,12 +32,12 @@ function main() {
   console.log(ROW_UNIT_WIDTH, CELL_HEIGHT);
   console.log(BOX_WIDTH_WITH_WIGGLE, BOX_HEIGHT_WITH_WIGGLE);
 
-  return lid();
+  // return lid();
 
   const grid = [
-    [5, 2, 2, 3],
-    [2, 2, 2, 3, 3],
-    [2, 2, 2, 2, 2, 2]
+    [5, 2, 2],
+    [2, 2, 2, 3],
+    [1.5, 1.5, 1.5, 1.5, 3]
   ];
 
   const holes = [];
@@ -97,7 +97,7 @@ function makeRamp(l) {
 }
 
 
-function makeLidLip() {
+function makeLidLip(offset = 0) {
   // const squareLip = difference(
   //   cube({ size: [BOX_WIDTH_WITH_WIGGLE, BOX_HEIGHT_WITH_WIGGLE, THICKNESS + EXTRA] }),
   //   translate(
@@ -110,9 +110,12 @@ function makeLidLip() {
   const yLeg = LIPNESS;
 
   return union(
-    translate([0, BOX_HEIGHT_WITH_WIGGLE - THICKNESS, 0], makeLipPart(BOX_WIDTH_WITH_WIGGLE)),
-    translate([0, THICKNESS, 0], mirror([0, 1, 0], makeLipPart(BOX_WIDTH_WITH_WIGGLE))),
-    translate([BOX_WIDTH_WITH_WIGGLE - THICKNESS, BOX_HEIGHT_WITH_WIGGLE, 0], rotate([0, 0, -90], makeLipPart(BOX_HEIGHT_WITH_WIGGLE)))
+    translate([0, BOX_HEIGHT_WITH_WIGGLE - THICKNESS - offset - offset, 0], makeLipPart(BOX_WIDTH_WITH_WIGGLE - offset)),
+    translate([0, THICKNESS, 0], mirror([0, 1, 0], makeLipPart(BOX_WIDTH_WITH_WIGGLE - offset))),
+    translate(
+      [BOX_WIDTH_WITH_WIGGLE - THICKNESS - offset, BOX_HEIGHT_WITH_WIGGLE - offset, 0],
+      rotate([0, 0, -90], makeLipPart(BOX_HEIGHT_WITH_WIGGLE - offset))
+    )
   );
 
   function makeLipPart(len) {
@@ -147,12 +150,15 @@ function makeLidLip() {
 }
 
 function lid() {
+  const offset = 0.2;
+
   return translate(
     [0, 0, -1 * EXTRA],
     difference(
-      translate([0, 0, EXTRA], cube({ size: [BOX_WIDTH_WITH_WIGGLE, BOX_HEIGHT_WITH_WIGGLE, LIPNESS] })),
-      makeLidLip(),
-      translate([BUTTON_DISTANCE_FROM_EDGE, (BOX_HEIGHT_WITH_WIGGLE / 2), 0], cylinder({ r: BUTTON_RADIUS, h: LIPNESS * .6, fn: 64 }))
+      translate([0, 0, EXTRA], cube({ size: [BOX_WIDTH_WITH_WIGGLE - offset, BOX_HEIGHT_WITH_WIGGLE - offset - offset, LIPNESS] })),
+      makeLidLip(offset),
+      translate([BUTTON_DISTANCE_FROM_EDGE, (BOX_HEIGHT_WITH_WIGGLE / 2) - BUTTON_RADIUS - 3, 0], cylinder({ r: BUTTON_RADIUS, h: LIPNESS * 0.6, fn: 64 })),
+      translate([BUTTON_DISTANCE_FROM_EDGE, (BOX_HEIGHT_WITH_WIGGLE / 2) + BUTTON_RADIUS + 3, 0], cylinder({ r: BUTTON_RADIUS, h: LIPNESS * 0.6, fn: 64 }))
     )
   );
 }
