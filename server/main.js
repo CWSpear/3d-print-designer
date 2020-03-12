@@ -3,15 +3,13 @@ const path = require('path');
 const chalk = require('chalk');
 
 // relative to this project directory
-const WEB_ROOT = 'Online3DViewer/build/website';
+const WEB_ROOT = '../Online3DViewer/build/website';
 const DIR_TO_WATCH = `${WEB_ROOT}/designs`;
 
 ///
 
 const absoluteWatchPath = path.join(__dirname, DIR_TO_WATCH);
 const absoluteWebRootPath = path.join(__dirname, WEB_ROOT);
-
-console.log(absoluteWatchPath, absoluteWebRootPath);
 
 const express = require('express');
 const app = express();
@@ -33,12 +31,14 @@ chokidar.watch(absoluteWatchPath)
   .on('change', (filePath) => {
     const baseName = path.basename(filePath);
 
-    console.log(chalk.blue(`[Detected change in ${baseName}...]\n`));
-    console.log(chalk.yellow(`[Notifying...]`));
+    console.log(chalk.blue(`Detected change in ${baseName}...`));
+    console.log(chalk.yellow(`Notifying...`));
 
     io.emit('file-updated');
 
-    console.log(chalk.green(`[Notified]`));
+    console.log(chalk.green(`Notified`));
+
+    console.log(chalk.magenta(`\n-----------\n`));
   })
   .on('ready', () => {
     console.log(chalk.cyan(`Watching ${DIR_TO_WATCH} for changes...\n`));

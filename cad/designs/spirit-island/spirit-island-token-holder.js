@@ -10,13 +10,14 @@ const BORDER_WIDTH = 1;
 const THICKNESS = BORDER_WIDTH * 3;
 const LIPNESS = BORDER_WIDTH * 2;
 const EXTRA = 0.2;
+
 const DEPTH = 40 - LIPNESS - EXTRA;
 const LIP_HANG_ON_NESS = 1;
 
 const BUTTON_RADIUS = 6;
 const BUTTON_DISTANCE_FROM_EDGE = 15;
 
-const PRINTER_MAX = 240;
+const PRINTER_MAX = 240; //sdf sdf
 // END CONFIG
 
 
@@ -102,7 +103,10 @@ function makeLidLip(offset = 0) {
   const yLeg = LIPNESS;
 
   return union(
-    translate([0, BOX_HEIGHT_WITH_WIGGLE - THICKNESS - offset - offset, 0], makeLipPart(BOX_WIDTH_WITH_WIGGLE - offset)),
+    translate(
+      [0, BOX_HEIGHT_WITH_WIGGLE - THICKNESS - offset - offset, 0],
+      makeLipPart(BOX_WIDTH_WITH_WIGGLE - offset)
+    ),
     translate([0, THICKNESS, 0], mirror([0, 1, 0], makeLipPart(BOX_WIDTH_WITH_WIGGLE - offset))),
     translate(
       [BOX_WIDTH_WITH_WIGGLE - THICKNESS - offset, BOX_HEIGHT_WITH_WIGGLE - offset, 0],
