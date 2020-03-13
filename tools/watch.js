@@ -27,34 +27,38 @@ module.exports.startWatcher = function startWatcher() {
 
   // One-liner for current directory
   chokidar.watch(absoluteWatchPath)
-    .on('change', (filePath) => {
-      const baseName = path.basename(filePath);
-      const newName = baseName.replace(/\.js$/, '.stl');
-
-      const outputFileName = path.join(absoluteOutputPath, newName);
-
-      events.emit('start-compile', { newName });
-
-      shell.exec(
-        `npx openjscad ${filePath} -o ${outputFileName}`,
-        (code, stdout, stderr) => {
-          if (!!code || stderr) {
-            events.emit('error', { err: stderr });
-          } else {
-            // first line is output from openjscad
-            const output = stdout.split('\n').slice(1).join('\n');
-
-            events.emit('end-compile', { newName, output });
-          }
-
-          events.emit('finally');
-        }
-      );
-    })
+    .on('change', onFileChange)
     .on('ready', () => {
       console.log(chalk.cyan(`Watching ${DIR_TO_WATCH} for changes...\n`));
     });
 
-  return events;
-};
+  // helps with debug
+  onFileChange('/Users/cwspear/Projects/3d-designer/cad/designs/spirit-island/spirit-island-token-holder.js');
 
+  return events;
+
+  function onFileChange(filePath) {
+    const baseName = path.basename(filePath);
+    const newName = baseName.replace(/\.js$/, '.stl');
+
+    const outputFileName = path.join(absoluteOutputPath, newName);
+
+    events.emit('start-compile', { newName });
+
+    shell.exec(
+      `npx openjscad ${filePath} -o ${outputFileName}`,
+      (code, stdout, stderr) => {
+        if (!!code || stderr) {
+          events.emit('error', { err: stderr });
+        } else {
+          // first line is output from openjscad
+          const output = stdout.split('\n').slice(1).join('\n');
+
+          events.emit('end-compile', { newName, output });
+        }
+
+        events.emit('finally');
+      }
+    );
+  }
+};
