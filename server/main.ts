@@ -14,11 +14,20 @@ import { createServer } from 'http';
 
 /////// CONFIG ////////
 
+const PORT = 3333;
+
 // relative to project root (and run this command from root!)
-const WEB_ROOT_DIST = './site/dist';
-const WEB_ROOT_SRC = './site/src';
+// const WEB_ROOT_DIST = './site/dist';
+// const WEB_ROOT_SRC = './site/src';
+// const DESIGN_DIR = `./cad/designs`;
+// const DESIGN_BUILD_DIR = `./cad/build`;
+
+const WEB_ROOT_DIST = './Online3DViewer/build/website';
+const WEB_ROOT_SRC = './Online3DViewer/build/website';
 const DESIGN_DIR = `./cad/designs`;
 const DESIGN_BUILD_DIR = `./cad/build`;
+
+const BUILD_URL = 'build';
 
 shell.config.silent = true;
 
@@ -37,21 +46,24 @@ const io = socketio(http);
 
 app.use(express.static(absoluteWebRootDirPath, { fallthrough: true }));
 
-app.get('/build/*', (req, res) => {
-  res.sendFile(path.join(absoluteDesignBuildDirPath, req.url.replace(/\/build/, '')));
+app.get(`/${BUILD_URL}/*`, (req, res) => {
+  res.sendFile(path.join(absoluteDesignBuildDirPath, req.url.replace(new RegExp(`\/${BUILD_URL}`), '')));
 });
 
-http.listen(8382, () => {
-  console.log('Listening at http://localhost:8382');
+http.listen(PORT, () => {
+  console.log(`Listening at http://localhost:${PORT}`);
 });
 
 io.on('connection', () => {
   io.emit('ready');
 });
 
+const workingOnNewSite = false;
+
 /// INIT CODE ///
 
 (async () => {
+  // TODO this doesn't get files in folders yet
   const files = await fs.readdir(absoluteDesignBuildDirPath);
 
   const filteredFiles = files.filter(file => file.match(/\.stl$/));
@@ -61,7 +73,7 @@ io.on('connection', () => {
   console.log(chalk.yellow('Existing compiled designs:\n'));
 
   filteredFiles.forEach((file) => {
-    console.log(chalk.blue(`http://localhost:3333#designs/${file}`));
+    console.log(chalk.blue(`http://localhost:${PORT}#${BUILD_URL}/${file}`));
   });
 
   console.log('\n');
@@ -74,19 +86,21 @@ io.on('connection', () => {
       console.log(chalk.cyan(`Watching ${absoluteDesignDirPath.replace(process.cwd(), '.')} for changes...\n`));
     });
 
-  chokidar.watch(absoluteWebRootSrcPath)
-    .on('all', (event: 'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir', path: string) => {
-      if (event !== 'add' || 'change') {
-        return;
-      }
+  if (workingOnNewSite) {
+    chokidar.watch(absoluteWebRootSrcPath)
+      .on('all', (event: 'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir', path: string) => {
+        if (event !== 'add' || 'change') {
+          return;
+        }
 
-      buildSite();
-    })
-    .on('ready', () => {
-      console.log(chalk.cyan(`Watching ${absoluteWebRootSrcPath.replace(process.cwd(), '.')} for changes...\n`));
-    });
+        buildSite();
+      })
+      .on('ready', () => {
+        console.log(chalk.cyan(`Watching ${absoluteWebRootSrcPath.replace(process.cwd(), '.')} for changes...\n`));
+      });
 
-  await buildSite();
+    await buildSite();
+  }
 })().catch(err => {
   console.error(chalk.red('Error on startup'), err);
 });
@@ -123,8 +137,8 @@ async function processDesignFileChange(filePath: string) {
     return;
   }
 
-  const pathToIt = path.join('designs', relativeOutDir, newName);
-  const url = `http://localhost:3333#${pathToIt}`;
+  const pathToIt = path.join(BUILD_URL, relativeOutDir, newName);
+  const url = `http://localhost:${PORT}#${pathToIt}`;
   console.log(chalk.green(`Compiled ${pathToIt}`));
 
   console.log(chalk.yellow(`\nNotifying...`));
