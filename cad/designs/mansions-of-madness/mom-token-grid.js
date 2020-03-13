@@ -23,7 +23,7 @@ const len = cols * ((radius * 2) + (gap * 2)) + (padding * 2);
 function main() {
   console.log('Final Size:', width, len, height + lipHeight);
 
-  return lid(); //
+  // return lid(); ///
 
   const holes = [];
 
@@ -105,7 +105,7 @@ function makeLidLip(offset = 0) {
 }
 
 function lid() {
-  const offset = 0.1;
+  const offset = 0;
 
   return translate(
     [0, 0, -1 * extraLidTolerance],
