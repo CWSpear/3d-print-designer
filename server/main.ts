@@ -117,15 +117,6 @@ async function processDesignFileChange(filePath: string) {
 
   await fs.mkdirp(outputDir);
 
-  console.log({
-    filePath,
-    baseName,
-    relativeOutDir,
-    outputDir,
-    newName,
-    outputFileName,
-  });
-
   console.log(chalk.yellow(`Compiling ${newName}...\n`));
 
   try {
