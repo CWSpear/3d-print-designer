@@ -1,2 +1,6 @@
 node_modules
 .idea
+cad/build
+!cad/build/.gitkeep
+site/dist
+.cache

@@ -23,7 +23,7 @@ const len = cols * ((radius * 2) + (gap * 2)) + (padding * 2);
 function main() {
   console.log('Final Size:', width, len, height + lipHeight);
 
-  // return lid(); //
+  return lid(); //
 
   const holes = [];
 
