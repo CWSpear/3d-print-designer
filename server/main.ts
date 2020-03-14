@@ -14,7 +14,7 @@ import { createServer } from 'http';
 
 /////// CONFIG ////////
 
-const WORKING_ON_NEW_SITE = false;
+const WORKING_ON_NEW_SITE = true;
 
 const PORT = 3333;
 
@@ -105,6 +105,11 @@ async function ready() {
 /// HANDLERS ///
 
 async function processDesignFileChange(filePath: string) {
+  if (filePath.match(/\.ts$/)) {
+    console.log('skipping', filePath);
+    return;
+  }
+
   const baseName = path.basename(filePath);
   const dirName = path.dirname(filePath);
   const relativeOutDir = dirName.replace(absoluteDesignDirPath, '');

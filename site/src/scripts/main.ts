@@ -1,23 +1,11 @@
 import io from 'socket.io-client';
-import {
-  BufferGeometry,
-  Color,
-  DirectionalLight,
-  Fog,
-  HemisphereLight,
-  Mesh,
-  MeshPhongMaterial,
-  PerspectiveCamera,
-  PlaneBufferGeometry,
-  Scene,
-  sRGBEncoding,
-  Vector3,
-  WebGLRenderer,
-} from 'three';
+import * as THREE from 'three';
+import { BufferGeometry, Mesh, MeshPhongMaterial, PerspectiveCamera, Scene, WebGLRenderer, DirectionalLight } from 'three';
 import { StlFileLoader } from './util/stl-file-loader';
 
+const OrbitControls = require('three-orbit-controls')(THREE);
 
-const socket = io('http://localhost:8382');
+const socket = io('http://localhost:3333');
 
 socket.on('ready', () => {
   console.log('Server online');
@@ -25,120 +13,90 @@ socket.on('ready', () => {
 
 socket.on('file-updated', () => refreshItem());
 
+let playground: Playground;
+
 function refreshItem() {
+  if (!playground) {
+    return;
+  }
+
   console.log('File Updated!');
+
+  playground.load();
 }
 
+class Playground {
+  private loader = new StlFileLoader();
+  private scene: Scene = new Scene();
+  private camera: PerspectiveCamera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, .1, 4000);
+  private renderer: WebGLRenderer = new WebGLRenderer();
+  private light: DirectionalLight = new DirectionalLight(0xffffff);
+  private light2: DirectionalLight = new DirectionalLight(0xdddddd);
+  private light3: DirectionalLight = new DirectionalLight(0xc1c1c1);
+  private material: MeshPhongMaterial = new MeshPhongMaterial({
+    color: 0xccaa00,
+    specular: 0x004444,
+    shininess: 3,
+  });
+  private geometry: BufferGeometry;
+  private mesh: Mesh;
+  private controls: any;
 
-(async () => {
-  console.log('test');
+  constructor(private url: string) {
+    this.loader.setResponseType('arraybuffer');
 
-  const container = document.createElement('div');
-  document.body.appendChild(container);
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setClearColor(0xcccccc, 1);
+    this.renderer.shadowMap.enabled = true;
 
-  const camera = new PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1, 15);
-  camera.position.set(3, 0.15, 3);
+    document.body.appendChild(this.renderer.domElement);
+    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    this.camera.position.set(0, 20, 200);
+    this.controls.update();
 
-  const cameraTarget = new Vector3(0, -0.25, 0);
+    this.light.position.set(-1, -1, 1).normalize();
+    this.scene.add(this.light);
+    this.light2.position.set(1, 1, 1).normalize();
+    this.scene.add(this.light2);
+    this.light3.position.set(1, -1, -1).normalize();
+    this.scene.add(this.light3);
 
-  const scene = new Scene();
-  scene.background = new Color(0x72645b);
-  scene.fog = new Fog(0x72645b, 2, 15);
-
-
-  // Ground
-
-  const plane = new Mesh(
-    new PlaneBufferGeometry(40, 40),
-    new MeshPhongMaterial({ color: 0x999999, specular: 0x101010 }),
-  );
-  plane.rotation.x = -Math.PI / 2;
-  plane.position.y = -0.5;
-  scene.add(plane);
-
-  plane.receiveShadow = true;
-
-  // load our object
-  const loader = new StlFileLoader();
-  loader.setResponseType('arraybuffer');
-  const geometry: BufferGeometry = await loader.loadAndParse('/build/spirit-island/spirit-island-token-holder.stl');
-
-  console.log(geometry);
-
-  const material = new MeshPhongMaterial({ color: 0xff5533, specular: 0x111111, shininess: 200 });
-  const mesh = new Mesh(geometry, material);
-
-  mesh.position.set(0, -0.25, 0.6);
-  mesh.rotation.set(0, -Math.PI / 2, 0);
-  mesh.scale.set(0.5, 0.5, 0.5);
-
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
-
-  scene.add(mesh);
-
-  // Lights
-
-  scene.add(new HemisphereLight(0x443333, 0x111122));
-
-  addShadowedLight(1, 1, 1, 0xffffff, 1.35);
-  addShadowedLight(0.5, 1, -1, 0xffaa00, 1);
-
-  // renderer
-
-  const renderer = new WebGLRenderer({ antialias: true });
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.outputEncoding = sRGBEncoding;
-
-  renderer.shadowMap.enabled = true;
-
-  container.appendChild(renderer.domElement);
-
-  window.addEventListener('resize', onWindowResize, false);
-
-  animate();
-
-  function addShadowedLight(x: number, y: number, z: number, color: Color | string | number, intensity: number) {
-    const directionalLight = new DirectionalLight(color, intensity);
-    directionalLight.position.set(x, y, z);
-    scene.add(directionalLight);
-
-    directionalLight.castShadow = true;
-
-    const d = 1;
-    directionalLight.shadow.camera.left = -d;
-    directionalLight.shadow.camera.right = d;
-    directionalLight.shadow.camera.top = d;
-    directionalLight.shadow.camera.bottom = -d;
-
-    directionalLight.shadow.camera.near = 1;
-    directionalLight.shadow.camera.far = 4;
-
-    directionalLight.shadow.bias = -0.002;
+    this.animate();
   }
 
-  function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
+  async load() {
+    this.geometry = await this.loader.loadAndParse(this.url);
+    this.geometry.center();
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    if (this.mesh) {
+      console.log('mesh remove');
+      this.scene.remove(this.mesh);
+      this.mesh.geometry.dispose();
+      if (Array.isArray(this.mesh.material)) {
+        this.mesh.material.forEach(mat => mat.dispose());
+      } else {
+        this.mesh.material.dispose();
+      }
+    }
+
+    console.log('scene add');
+    this.mesh = new Mesh(this.geometry, this.material);
+    this.mesh.castShadow = true;
+    this.scene.add(this.mesh);
   }
 
-  function animate() {
-    requestAnimationFrame(animate);
+  private animate() {
+    requestAnimationFrame(() => this.animate());
 
-    render();
+    // required if controls.enableDamping or controls.autoRotate are set to true
+    this.controls.update();
+
+    this.renderer.render(this.scene, this.camera);
+
+    console.log('render');
   }
+}
 
-  function render() {
-    const timer = Date.now() * 0.0005;
+playground = new Playground(window.location.hash.replace('#', ''));
 
-    camera.position.x = Math.cos(timer) * 3;
-    camera.position.z = Math.sin(timer) * 3;
-
-    camera.lookAt(cameraTarget);
-
-    renderer.render(scene, camera);
-  }
-})().catch(err => console.error(err));
+playground.load();

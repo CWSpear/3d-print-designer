@@ -1,7 +1,7 @@
-import { BufferAttribute, BufferGeometry, FileLoader, Float32BufferAttribute, LoaderUtils, Vector3 } from 'three';
+import { BufferAttribute, BufferGeometry, FileLoader, Float32BufferAttribute, LoaderUtils, Vector3, Geometry } from 'three';
 
 export class StlFileLoader extends FileLoader {
-  loadAndParse(url: string): Promise<BufferGeometry> {
+  loadAndParse(url: string): Promise<Geometry & BufferGeometry & { hasColors: boolean, alpha: number }> {
     return new Promise((resolve, reject) => {
       super.load(
         url,
@@ -9,7 +9,7 @@ export class StlFileLoader extends FileLoader {
           const binData = ensureBinary(strOrBuffer);
           const geo = isBinary(binData) ? parseBinary(binData) : parseAscii(ensureString(strOrBuffer));
 
-          resolve(geo);
+          resolve(<Geometry & BufferGeometry & { hasColors: boolean, alpha: number }>geo);
         },
         undefined,
         (err) => {
@@ -122,12 +122,6 @@ function parseAscii(data: string): BufferGeometry {
 
       faceCounter++;
     }
-
-    console.log(
-      groupCount,
-      startVertex,
-      endVertex,
-    );
 
     const start = startVertex;
     const count = endVertex - startVertex;
@@ -248,8 +242,6 @@ function parseBinary(data: ArrayBufferLike) {
         b = defaultB || null;
       }
     }
-
-    console.log(normalX, normalY, normalZ);
 
     for (let i = 1; i <= 3; i++) {
       const vertexstart = start + i * 12;

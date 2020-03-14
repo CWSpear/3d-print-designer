@@ -1,24 +1,29 @@
 const CONTAINER_WIDTH = inToMm(9);
+
 const CONTAINER_LENGTH = inToMm(6);
+
+// note that the cell depth will have to account for lid and floor
 const CONTAINER_HEIGHT = 30;
 
 const MAKE_LID = false;
 
 const GRID = [
-  [1]
+  [5, 2, 2],
+  [10, 11, 12],
+  [2, 2, 2, 1]
 ];
 
-const USE_RAMPS = false;
+const USE_RAMPS = true;
 
 // minor config, unlikely to change
 const RAMP_SIZE = 8;
-const BORDER_WIDTH = 1;
+const BORDER_AND_FLOOR_WIDTH = 1;
 const CONTAINER_EDGE_WIDTH = 3;
 const LID_HEIGHT = 2;
 const BUTTON_RADIUS = 6;
 const BUTTON_DISTANCE_FROM_EDGE = 15;
 
-const SIDE_HOLE = true;
+const SIDE_HOLE = false;
 
 // better name
 const EXTRA_LIP_HEIGHT = 0.2;
@@ -26,16 +31,23 @@ const EXTRA_LIP_WIGGLE_ROOM = 0;
 
 // END CONFIG //
 
+const CELL_DEPTH = CONTAINER_HEIGHT - (BORDER_AND_FLOOR_WIDTH + EXTRA_LIP_HEIGHT + LID_HEIGHT);
+const HEIGHT_LESS_LID = CONTAINER_HEIGHT - (EXTRA_LIP_HEIGHT + LID_HEIGHT);
+
 const LIP_HANG_ON_NESS = 1;
 
 const PRINTER_MAX_WIDTH = 250;
 const PRINTER_MAX_LENGTH = 210;
 
 const colCount = GRID.length;
-const CELL_HEIGHT = ((CONTAINER_LENGTH - BORDER_WIDTH - BORDER_WIDTH - CONTAINER_EDGE_WIDTH) / colCount) - BORDER_WIDTH;
+const CELL_HEIGHT = ((CONTAINER_LENGTH - BORDER_AND_FLOOR_WIDTH - BORDER_AND_FLOOR_WIDTH - CONTAINER_EDGE_WIDTH) / colCount) -
+  BORDER_AND_FLOOR_WIDTH;
 
 function main() {
-  console.log(CONTAINER_WIDTH, CONTAINER_LENGTH);
+  console.log(`Width:      ${CONTAINER_WIDTH}
+Length:     ${CONTAINER_LENGTH}
+Height:     ${CONTAINER_HEIGHT}
+Cell Depth: ${CELL_DEPTH}`);
 
   if (CONTAINER_WIDTH > PRINTER_MAX_WIDTH) {
     throw new Error(`Container is too big! Max width is: ${PRINTER_MAX_WIDTH}. Width provided: ${CONTAINER_WIDTH}`);
@@ -55,7 +67,8 @@ function main() {
     let accum = 0;
     row.forEach((col) => {
       const rowCount = row.reduce((total, v) => (total + v), 0);
-      const rowUnitWidth = ((CONTAINER_WIDTH - BORDER_WIDTH - BORDER_WIDTH - CONTAINER_EDGE_WIDTH) / rowCount) - BORDER_WIDTH;
+      const rowUnitWidth = ((CONTAINER_WIDTH - BORDER_AND_FLOOR_WIDTH - BORDER_AND_FLOOR_WIDTH - CONTAINER_EDGE_WIDTH) / rowCount) -
+        BORDER_AND_FLOOR_WIDTH;
 
       holes.push(makeHole(accum, r, col, rowUnitWidth));
       accum += col;
@@ -70,25 +83,25 @@ function main() {
 
   return difference(
     union(
-      cube({ size: [CONTAINER_WIDTH, CONTAINER_LENGTH, CONTAINER_HEIGHT] }),
-      translate([0, 0, CONTAINER_HEIGHT], makeLidLip())
+      cube({ size: [CONTAINER_WIDTH, CONTAINER_LENGTH, HEIGHT_LESS_LID] }),
+      translate([0, 0, HEIGHT_LESS_LID], makeLidLip())
     ),
     negative
   );
 }
 
 function makeHole(x, y, size, rowUnitWidth) {
-  const width = (rowUnitWidth + BORDER_WIDTH) * size - BORDER_WIDTH;
+  const width = (rowUnitWidth + BORDER_AND_FLOOR_WIDTH) * size - BORDER_AND_FLOOR_WIDTH;
 
   return translate(
     [
-      CONTAINER_EDGE_WIDTH + (x * (rowUnitWidth + BORDER_WIDTH)),
-      CONTAINER_EDGE_WIDTH + (y * (CELL_HEIGHT + BORDER_WIDTH)),
-      BORDER_WIDTH
+      CONTAINER_EDGE_WIDTH + (x * (rowUnitWidth + BORDER_AND_FLOOR_WIDTH)),
+      CONTAINER_EDGE_WIDTH + (y * (CELL_HEIGHT + BORDER_AND_FLOOR_WIDTH)),
+      BORDER_AND_FLOOR_WIDTH
     ],
     difference(
       cube({
-        size: [width, CELL_HEIGHT, CONTAINER_HEIGHT]
+        size: [width, CELL_HEIGHT, HEIGHT_LESS_LID]
       }),
       ...(USE_RAMPS ? addRamps(width) : [])
     )
@@ -119,7 +132,7 @@ function makeRamp(l) {
 
 function makeSideHole(size) {
   return cube({
-    size: [size / 2, size, CONTAINER_HEIGHT]
+    size: [size / 2, size, HEIGHT_LESS_LID]
   });
 }
 
