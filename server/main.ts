@@ -1,16 +1,20 @@
 import chalk from 'chalk';
 import * as chokidar from 'chokidar';
+
+import express from 'express';
 import * as fs from 'fs-extra';
+import { createServer } from 'http';
 import notifier from 'node-notifier';
 import Bundler from 'parcel-bundler';
 
 import * as path from 'path';
 import * as shell from 'shelljs';
-import { exec } from './util/shelljs-better';
-
-import express from 'express';
 import socketio from 'socket.io';
-import { createServer } from 'http';
+import { Shape } from '../cad/designer/shape';
+import { exec } from './util/shelljs-better';
+import { forEach } from 'lodash';
+
+const stlSerializer = require('@jscad/stl-serializer');
 
 /////// CONFIG ////////
 
@@ -72,6 +76,11 @@ io.on('connection', () => {
 
 /// INIT CODE ///
 
+// Initializes a bundler using the entrypoint location and options provided
+const bundler = new Bundler(`${absoluteWebRootSrcPath}/index.html`, {
+  outDir: './site/dist',
+});
+
 async function ready() {
   console.log(chalk.yellow('Existing compiled designs:\n'));
 
@@ -105,16 +114,11 @@ async function ready() {
 /// HANDLERS ///
 
 async function processDesignFileChange(filePath: string) {
-  if (filePath.match(/\.ts$/)) {
-    console.log('skipping', filePath);
-    return;
-  }
-
   const baseName = path.basename(filePath);
   const dirName = path.dirname(filePath);
   const relativeOutDir = dirName.replace(absoluteDesignDirPath, '');
   const outputDir = path.join(absoluteDesignBuildDirPath, relativeOutDir);
-  const newName = baseName.replace(/\.js$/, '.stl');
+  const newName = baseName.replace(/\.[jt]s$/, '.stl');
   const outputFileName = path.join(outputDir, newName);
 
   await fs.mkdirp(outputDir);
@@ -122,11 +126,45 @@ async function processDesignFileChange(filePath: string) {
   console.log(chalk.yellow(`Compiling ${newName}...\n`));
 
   try {
-    const output = await exec(`npx openjscad ${filePath} -o ${outputFileName}`);
-    // first line is output from openjscad
-    console.log(output.split('\n').slice(1).join('\n'));
+    if (filePath.match(/\.ts$/)) {
+
+      console.log();
+      forEach(require.cache, (r, p) => {
+        if (p.match(/cad\/(designs|designer)/)) {
+          delete require.cache[p];
+        }
+      });
+
+      const { default: shape }: { default: Shape } = require(filePath);
+
+      const output: string[] | ArrayBuffer[] = stlSerializer.serialize(shape.render(), { binary: false });
+      await fs.writeFile(outputFileName, output, typeof output[0] === 'string' ? 'utf-8' : 'binary');
+    } else {
+      delete require.cache[require.resolve(filePath)];
+      const render = require(filePath);
+
+      if (typeof render === 'function') {
+        const output: string[] | ArrayBuffer[] = stlSerializer.serialize(render(), { binary: false });
+        await fs.writeFile(outputFileName, output, typeof output[0] === 'string' ? 'utf-8' : 'binary');
+      } else {
+        const output = await exec(`npx openjscad ${filePath} -o ${outputFileName}`);
+        // first line is output from openjscad
+        console.log(output.split('\n').slice(1).join('\n'));
+      }
+    }
   } catch (err) {
-    console.error(chalk.red('[Error]\n\n', err));
+    console.error(chalk.red('[Error]\n\n', err, err.stack));
+
+    notifier.notify(
+      {
+        title: '3D Print Design',
+        message: `${newName} had an error.`,
+        timeout: 4,
+        actions: ['Close'],
+        sound: 'Basso',
+      },
+    );
+
     return;
   }
 
@@ -155,11 +193,6 @@ async function processDesignFileChange(filePath: string) {
 }
 
 async function buildSite() {
-  // Initializes a bundler using the entrypoint location and options provided
-  const bundler = new Bundler(`${absoluteWebRootSrcPath}/index.html`, {
-    outDir: './site/dist',
-  });
-
   // Run the bundler, this returns the main bundle
   // Use the events if you're using watch mode as this promise will only trigger once and not for every rebuild
   await bundler.bundle();

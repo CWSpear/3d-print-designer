@@ -150,7 +150,7 @@ function makeLidLip(offset = 0) {
       [CONTAINER_WIDTH - CONTAINER_EDGE_WIDTH - offset, CONTAINER_LENGTH - offset, 0],
       rotate([0, 0, -90], makeLipPart(CONTAINER_LENGTH - offset))
     )
-  );
+  ); //
 
   function makeLipPart(len) {
 
