@@ -9,6 +9,7 @@ export interface CubeOptions {
   round?: boolean;
   radius?: number;
   resolution?: number;
+  center?: boolean;
 }
 
 export class Cube extends Shape {

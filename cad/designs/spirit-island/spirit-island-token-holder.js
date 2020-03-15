@@ -1,6 +1,6 @@
-const CONTAINER_WIDTH = inToMm(9);
+const CONTAINER_WIDTH = 240;
 
-const CONTAINER_LENGTH = inToMm(6);
+const CONTAINER_LENGTH = 150;
 
 // note that the cell depth will have to account for lid and floor
 const CONTAINER_HEIGHT = 30;
