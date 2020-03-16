@@ -1,20 +1,20 @@
-import { Dimensions, Shape } from '../../designer/shape';
+import { Shape } from '../../designer/shape';
 import { Cube } from '../../designer/shapes/core/cube';
+import { TriangularPrism } from '../../designer/shapes/custom/triangular-prism';
 import { Util } from '../../designer/util';
-import { sum } from 'lodash';
 
 const config: MomPlayerThingOptions = {
   playerCardLength: 70 + 1,
   playerCardWidth: 120 + 1,
   otherCardLength: 63 + 1,
-  otherCardWidth: 41 + 2,
+  otherCardWidth: 41 + 3.5,
   tokenAreaLength: 20,
-  cardSlotThickness: 1.1,
+  cardSlotThickness: 1.3,
   cardSlotDepth: 5,
   playerCardDepth: 2,
   tokenAreaDepth: 3,
   extraHeight: 1,
-  cardSlotSpacing: 9.5,
+  cardSlotSpacing: 9,
   outerPadding: 5,
 };
 
@@ -138,25 +138,46 @@ export class MomPlayerThing extends Shape {
         .render(),
     );
 
-    const smallSlot = new Cube({
-      size: { width: otherCardWidth, length: cardSlotThickness, height: cardSlotDepth * 2 },
-    })
-      .translate({
-        // need to try and offset the rotation
-        y: -1.6,
-        z: totalHeight - cardSlotDepth,
-      })
-      .rotateX(-20);
+    // const smallSlot = new Cube({
+    //   size: { width: otherCardWidth, length: cardSlotThickness, height: cardSlotDepth * 2 },
+    // })
+    //   .translate({
+    //     // need to try and offset the rotation
+    //     y: -1.6,
+    //     z: totalHeight - cardSlotDepth,
+    //   })
+    //     .rotateX(-20);
 
-    const longSlot = new Cube({
-      size: { width: totalWidth - outerPadding * 2, length: cardSlotThickness, height: cardSlotDepth * 2 },
+    // const smallSlot = new EquilateralTriangularPrism({
+    //   length: otherCardLength,
+    //   legLength: 7,
+    // }).translate({
+    //   z: 4,
+    // });
+
+    const smallSlot = new TriangularPrism({
+      length: otherCardWidth,
+      leftSideLength: 8,
+      rightSideLength: 8,
+      bottomSideLength: 6,
     })
       .translate({
-        // need to try and offset the rotation
-        y: -1.6,
         z: totalHeight - cardSlotDepth,
+        y: -1,
       })
-      .rotateX(-20);
+      .scale({ y: 0.95, z: 0.95 });
+
+    const longSlot = new TriangularPrism({
+      length: totalWidth - outerPadding * 2,
+      leftSideLength: 8,
+      rightSideLength: 8,
+      bottomSideLength: 6,
+    })
+      .translate({
+        z: totalHeight - cardSlotDepth,
+        y: -2.4,
+      })
+      .scale({ y: 0.95, z: 0.95 });
 
     playerThing.subtractShapes(
       ...[
@@ -188,15 +209,18 @@ export class MomPlayerThing extends Shape {
     const width = 51;
     const count = 8;
 
-    let accumThickness: number[] = [];
+    let accumScales: number[] = [];
 
-    const arr: Shape[] = [];
+    const slots: Shape[] = [];
     for (let i = 0; i < count; i++) {
-      const thickness = i * 0.1 + 0.6;
-      accumThickness.push(thickness);
+      const scale = i * 0.05 + 0.8;
+      accumScales.push(scale);
 
-      const slot = new Cube({
-        size: { width, length: thickness, height: this.cardSlotDepth * 2 },
+      const slot = new TriangularPrism({
+        length: width,
+        leftSideLength: 8,
+        rightSideLength: 8,
+        bottomSideLength: 6,
       })
         .translate({
           x: this.outerPadding,
@@ -204,22 +228,22 @@ export class MomPlayerThing extends Shape {
           y: -3.4,
           z: this.totalHeight - this.cardSlotDepth,
         })
-        .rotateX(-20);
+        .scale({ y: scale, z: scale });
 
-      const y = this.cardSlotSpacing * i + this.outerPadding + sum(accumThickness);
+      const y = (this.cardSlotSpacing * i + this.outerPadding) * scale;
 
-      arr.push(slot.clone().translateY(y));
+      slots.push(slot.clone().translateY(y));
     }
 
     const sampler = new Cube({
       size: {
         width: width + this.outerPadding * 2,
-        length: count * this.cardSlotSpacing + this.cardSlotSpacing + sum(accumThickness),
+        length: slots[slots.length - 1].getPositionMaxY() + 1,
         height: this.totalHeight,
       },
     });
 
-    sampler.subtractShapes(...arr.map(s => s.render()));
+    sampler.subtractShapes(...slots.map(s => s.render()));
 
     return sampler;
   }
@@ -229,5 +253,5 @@ export default new MomPlayerThing(config);
 
 // export default new MomPlayerThing({
 //   ...config,
-//   cardSlotSpacing: 4.5,
+//   cardSlotSpacing: 6,
 // }).sampler();

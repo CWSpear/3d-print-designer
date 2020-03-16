@@ -1,6 +1,6 @@
 const { difference } = require('@jscad/csg/src/api/ops-booleans');
 const { union } = require('@jscad/csg/src/api/ops-booleans');
-const { translate, rotate, mirror, center } = require('@jscad/csg/src/api/ops-transformations');
+const { translate, rotate, mirror, center, scale } = require('@jscad/csg/src/api/ops-transformations');
 
 import { cloneDeep, flatMap, map, random } from 'lodash';
 import { Util } from './util';
@@ -95,6 +95,24 @@ export abstract class Shape {
 
   translateZ(distance: number): this {
     return this.translate({ z: distance });
+  }
+
+  scale(translation: Partial<Dimensions>): this {
+    this.rawShape = scale(Util.normalizeDimensions(translation, 1), this.rawShape);
+
+    return this;
+  }
+
+  scaleX(distance: number): this {
+    return this.scale({ x: distance });
+  }
+
+  scaleY(distance: number): this {
+    return this.scale({ y: distance });
+  }
+
+  scaleZ(distance: number): this {
+    return this.scale({ z: distance });
   }
 
   center(): this {

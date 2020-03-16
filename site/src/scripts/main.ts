@@ -111,7 +111,7 @@ class Playground {
     this.geometry.computeBoundingBox();
     this.geometry.center();
 
-    this.refreshObject()
+    this.refreshObject();
   }
 
   refreshObject() {

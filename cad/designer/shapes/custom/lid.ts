@@ -31,14 +31,7 @@ export class LidLip extends Shape {
   private readonly attachmentWidth: number;
   private readonly extraClearance: number;
 
-  constructor({
-    width,
-    length,
-    height = 2,
-    lipWidth = 3,
-    attachmentWidth = 1,
-    extraClearance = 0.2,
-  }: LidLipOptions) {
+  constructor({ width, length, height = 2, lipWidth = 3, attachmentWidth = 1, extraClearance = 0.2 }: LidLipOptions) {
     super();
 
     this.width = width;

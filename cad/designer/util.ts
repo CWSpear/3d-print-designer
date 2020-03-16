@@ -7,7 +7,7 @@ export class Util {
   static readonly PrinterMaxWidth = 250;
   static readonly PrinterMaxLength = 210;
 
-  static normalizeDimensions(dimensions: Partial<Dimensions>): NumbersDimensions {
+  static normalizeDimensions(dimensions: Partial<Dimensions>, defaultValue: number = 0): NumbersDimensions {
     if (!dimensions && dimensions !== 0) {
       return undefined;
     }
@@ -21,11 +21,11 @@ export class Util {
     }
 
     if (Util.dimensionsIsXYZ(dimensions)) {
-      return [dimensions.x || 0, dimensions.y || 0, dimensions.z || 0];
+      return [dimensions.x || defaultValue, dimensions.y || defaultValue, dimensions.z || defaultValue];
     }
 
     if (Util.dimensionsIsWLH(dimensions)) {
-      return [dimensions.width || 0, dimensions.length || 0, dimensions.height || 0];
+      return [dimensions.width || defaultValue, dimensions.length || defaultValue, dimensions.height || defaultValue];
     }
 
     throw new Error(`Unexpected dimensions format: ${JSON.stringify(dimensions)}`);

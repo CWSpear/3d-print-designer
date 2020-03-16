@@ -63,12 +63,14 @@ class TokenHolder extends Shape {
     const cellDepth = height - (dividerThickness + this.lidLip.getTotalHeight());
     const heightWithoutLid = height - this.lidLip.getTotalHeight();
 
-    console.log(Util.trimLines(`
+    console.log(
+      Util.trimLines(`
       Width:      ${width}
       Length:     ${length}
       Height:     ${height}
       Cell Depth: ${cellDepth}
-    `));
+    `),
+    );
 
     console.log('');
 
@@ -80,7 +82,7 @@ class TokenHolder extends Shape {
       let x = 0;
       row.forEach(col => {
         const rowCount = row.reduce((total, v) => total + v, 0);
-        const rowUnitWidth: number  =
+        const rowUnitWidth: number =
           (width - dividerThickness - dividerThickness - outerWallThickness) / rowCount - dividerThickness;
 
         const cellWidth = (rowUnitWidth + dividerThickness) * col - dividerThickness;
