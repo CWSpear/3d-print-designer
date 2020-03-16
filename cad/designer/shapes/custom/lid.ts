@@ -12,7 +12,6 @@ export interface LidLipOptions {
   lipWidth?: number;
   attachmentWidth?: number;
   extraClearance?: number;
-  extraWiggleRoom?: number;
 }
 
 export interface LidOptions {
@@ -21,6 +20,7 @@ export interface LidOptions {
   buttonRadius?: number;
   buttonDepth?: number;
   noButtons?: boolean;
+  extraWiggleRoom?: number;
 }
 
 export class LidLip extends Shape {
@@ -30,7 +30,6 @@ export class LidLip extends Shape {
   private readonly lipWidth: number;
   private readonly attachmentWidth: number;
   private readonly extraClearance: number;
-  private readonly extraWiggleRoom: number;
 
   constructor({
     width,
@@ -39,7 +38,6 @@ export class LidLip extends Shape {
     lipWidth = 3,
     attachmentWidth = 1,
     extraClearance = 0.2,
-    extraWiggleRoom = 0,
   }: LidLipOptions) {
     super();
 
@@ -49,14 +47,11 @@ export class LidLip extends Shape {
     this.lipWidth = lipWidth;
     this.attachmentWidth = attachmentWidth;
     this.extraClearance = extraClearance;
-    this.extraWiggleRoom = extraWiggleRoom;
 
-    this.csgShape = this.makeLip().render();
+    this.rawShape = this.makeLip().render();
   }
 
-  private makeLip(giveItExtraWiggleRoom: boolean = false): Shape {
-    const extraWiggleRoom = giveItExtraWiggleRoom ? this.extraWiggleRoom : 0;
-
+  private makeLip(extraWiggleRoom: number = 0): Shape {
     const lipPartWest: Shape = this.makeLipPart(this.width - extraWiggleRoom).translateY(-this.lipWidth);
     const lipPartEast: Shape = lipPartWest.clone().mirrorAcrossXPlane();
     lipPartWest.translateY(this.length - extraWiggleRoom);
@@ -97,16 +92,18 @@ export class LidLip extends Shape {
       buttonRadius = 6,
       buttonDepth = 1.2,
       noButtons = false,
+      extraWiggleRoom = 0.2,
     }: LidOptions = {
       buttonDistanceFromEdge: 15,
       buttonSpacing: 6,
       buttonRadius: 6,
       buttonDepth: 1.2,
       noButtons: false,
+      extraWiggleRoom: 0.2,
     },
   ): Shape {
-    const width = this.width - this.extraWiggleRoom;
-    const length = this.length - this.extraWiggleRoom;
+    const width = this.width - extraWiggleRoom;
+    const length = this.length - extraWiggleRoom;
 
     const lid = new Cube({
       size: {
@@ -115,7 +112,7 @@ export class LidLip extends Shape {
         height: this.height + this.extraClearance,
       },
     }).subtractShapes(
-      this.makeLip(true).render(),
+      this.makeLip(extraWiggleRoom).render(),
       new Cube({
         size: {
           width,
@@ -130,19 +127,21 @@ export class LidLip extends Shape {
       radius: buttonRadius,
     });
 
-    button.translate({
-      x: buttonDistanceFromEdge,
-      y: length / 2 - buttonRadius - buttonSpacing / 2,
-      z: this.height - buttonDepth,
-    });
+    if (!noButtons) {
+      button.translate({
+        x: buttonDistanceFromEdge,
+        y: length / 2 - buttonRadius - buttonSpacing / 2,
+        z: this.height - buttonDepth,
+      });
 
-    lid.subtractShapes(
-      button.render(),
-      button
-        .clone()
-        .translateY(buttonSpacing + buttonRadius * 2)
-        .render(),
-    );
+      lid.subtractShapes(
+        button.render(),
+        button
+          .clone()
+          .translateY(buttonSpacing + buttonRadius * 2)
+          .render(),
+      );
+    }
 
     return lid;
   }

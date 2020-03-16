@@ -154,11 +154,15 @@ async function processDesignFileChange(filePath: string) {
   try {
     if (filePath.match(/\.ts$/)) {
       console.log();
-      forEach(require.cache, (r, p) => {
-        if (p.match(/cad\/(designs|designer)/)) {
-          delete require.cache[p];
-        }
-      });
+      // forEach(require.cache, (r, p) => {
+      //   if (p.match(/cad\/(designs|designer)/)) {
+      //     console.log('deleting', p);
+      //     delete require.cache[p];
+      //   }
+      // });
+
+      // nuke it all 💥
+      delete require.cache;
 
       const { default: shape }: { default: Shape } = require(filePath);
 

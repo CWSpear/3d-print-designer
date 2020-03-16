@@ -12,7 +12,7 @@ export class Cylinder extends Shape {
   constructor(options: CylinderOptions) {
     super();
 
-    this.csgShape = cylinder({
+    this.rawShape = cylinder({
       ...options,
       r: options.radius,
       // r1: 1,

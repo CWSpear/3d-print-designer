@@ -17,7 +17,7 @@ export class RoundedBottomCube extends Cube {
 
     const [width, height] = Util.normalizeDimensions(options.size);
 
-    this.csgShape = this.subtractShapes(
+    this.rawShape = this.subtractShapes(
       this.makeRamp(width)
         .translate({ y: height - options.rampSize })
         .render(),

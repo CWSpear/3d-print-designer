@@ -10,14 +10,14 @@ let id = 1;
 export abstract class Shape {
   protected id: number = id++;
 
-  protected csgShape: RawShape;
+  protected rawShape: RawShape;
 
   render(): RawShape {
-    return this.csgShape;
+    return this.rawShape;
   }
 
   mirror(translation: Partial<Vector>): this {
-    this.csgShape = mirror(Util.normalizeDimensions(translation), this.csgShape);
+    this.rawShape = mirror(Util.normalizeDimensions(translation), this.rawShape);
 
     return this;
   }
@@ -35,7 +35,7 @@ export abstract class Shape {
   }
 
   rotate(translation: Partial<Dimensions>): this {
-    this.csgShape = rotate(Util.normalizeDimensions(translation), this.csgShape);
+    this.rawShape = rotate(Util.normalizeDimensions(translation), this.rawShape);
 
     return this;
   }
@@ -53,7 +53,7 @@ export abstract class Shape {
   }
 
   translate(translation: Partial<Dimensions>): this {
-    this.csgShape = translate(Util.normalizeDimensions(translation), this.csgShape);
+    this.rawShape = translate(Util.normalizeDimensions(translation), this.rawShape);
 
     return this;
   }
@@ -71,19 +71,19 @@ export abstract class Shape {
   }
 
   center(): this {
-    this.csgShape = center(true, this.csgShape);
+    this.rawShape = center(true, this.rawShape);
 
     return this;
   }
 
   addShapes(...rawShapes: RawShape[]): this {
-    this.csgShape = union(this.csgShape, ...rawShapes);
+    this.rawShape = union(this.rawShape, ...rawShapes);
 
     return this;
   }
 
   subtractShapes(...rawShapes: RawShape[]): this {
-    this.csgShape = difference(this.csgShape, ...rawShapes);
+    this.rawShape = difference(this.rawShape, ...rawShapes);
 
     return this;
   }

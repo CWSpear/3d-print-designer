@@ -16,7 +16,7 @@ export class Cube extends Shape {
   constructor(options: CubeOptions) {
     super();
 
-    this.csgShape = cube({
+    this.rawShape = cube({
       ...options,
       size: Util.normalizeDimensions(options.size),
       offset: Util.normalizeDimensions(options.offset),

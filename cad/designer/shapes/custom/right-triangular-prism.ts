@@ -12,7 +12,7 @@ export class RightTriangularPrism extends Shape {
   constructor({ length, xLegLength, yLegLength }: RightTriangularPrismOptions) {
     super();
 
-    this.csgShape = polyhedron({
+    this.rawShape = polyhedron({
       points: [
         [0, 0, 0],
         [0, xLegLength, 0],

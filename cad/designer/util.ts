@@ -1,5 +1,3 @@
-import { Shape } from './shape';
-
 export type NumbersDimensions = [number, number, number];
 export type WLHDimensions = { width: number; length: number; height: number };
 export type XYZDimensions = { x: number; y: number; z: number };
@@ -10,8 +8,12 @@ export type Vector = Dimensions;
 
 export type RawShape = 'Raw Shape Placeholder';
 
+/**
+ * Library of useful utilities
+ */
 export class Util {
-  shapes: Shape[] = [];
+  static readonly PrinterMaxWidth = 250;
+  static readonly PrinterMaxLength = 210;
 
   static normalizeDimensions(dimensions: Partial<Dimensions>): NumbersDimensions {
     if (!dimensions && dimensions !== 0) {
@@ -53,5 +55,13 @@ export class Util {
     return (
       typeof dimensions === 'object' && ('width' in dimensions || 'length' in dimensions || 'height' in dimensions)
     );
+  }
+
+  static trimLines(str: string): string {
+    return str
+      .split('\n')
+      .map(s => s.trim())
+      .join('\n')
+      .trim();
   }
 }
