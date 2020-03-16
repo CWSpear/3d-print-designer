@@ -12,7 +12,9 @@ import {
   PerspectiveCamera,
   Scene,
   Vector3,
-  WebGLRenderer
+  WebGLRenderer,
+  MeshPhongMaterial,
+  AmbientLight,
 } from 'three';
 import { StlFileLoader } from './util/stl-file-loader';
 
@@ -68,7 +70,12 @@ class Playground {
   private camera: PerspectiveCamera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 4000);
   private renderer: WebGLRenderer = new WebGLRenderer();
   private lights: Light[] = [];
-  private material: MeshNormalMaterial = new MeshNormalMaterial({ flatShading: true });
+  // private material: MeshNormalMaterial = new MeshNormalMaterial({ flatShading: true });
+  private material: MeshPhongMaterial = new MeshPhongMaterial({
+    color: 0x0000aa,
+    specular: 0x004444,
+    shininess: 0.2,
+  });
   private geometry: BufferGeometry;
   private mesh: Mesh;
   private axesHelper = new AxesHelper(Math.max(this.maxX, this.maxY));
@@ -78,12 +85,12 @@ class Playground {
   constructor(private url: string, private maxX: number, private maxY: number) {
     this.setupScene();
 
-    this.setupCamera();
-
     // the material we're currently using does not need light
-    // this.addLighting();
+    this.addLighting();
 
     this.makeGrid();
+
+    this.setupCamera();
 
     window.addEventListener('resize', () => this.onWindowResize(), false);
 
@@ -109,13 +116,13 @@ class Playground {
     this.mesh = new Mesh(this.geometry, this.material);
     this.mesh.castShadow = true;
 
-    const xOffset = this.geometry.boundingBox.max.x - this.geometry.boundingBox.min.x;
-    const yOffset = this.geometry.boundingBox.max.y - this.geometry.boundingBox.min.y;
-    const zOffset = this.geometry.boundingBox.max.z - this.geometry.boundingBox.min.z;
+    const xLength = this.geometry.boundingBox.max.x - this.geometry.boundingBox.min.x;
+    const yLength = this.geometry.boundingBox.max.y - this.geometry.boundingBox.min.y;
+    const zLength = this.geometry.boundingBox.max.z - this.geometry.boundingBox.min.z;
 
     this.mesh.translateX(this.maxX / 2);
     this.mesh.translateY(this.maxY / 2);
-    this.mesh.translateZ(zOffset / 2);
+    this.mesh.translateZ(zLength / 2);
     this.scene.add(this.mesh);
   }
 
@@ -169,26 +176,21 @@ class Playground {
   }
 
   private addLighting() {
-    for (let i = 0; i < 3; i++) {
-      const light = new DirectionalLight(0xffffff, 2);
-
-      light.position.set(i - 1, i - 1, i - 1);
-
-      this.scene.add(light);
-
-      this.scene.add(new DirectionalLightHelper(light, 20));
-
-      this.lights.push(light);
-    }
-
-    const light = new THREE.AmbientLight(0x404040); // soft white light
-
-    this.scene.add(light);
-
+    const light: Light = new THREE.PointLight(0xffffff, 7);
+    this.camera.add(light);
     this.lights.push(light);
+
+    const ambientLight = new AmbientLight(0x404040, 2); // soft white light
+
+    this.scene.add(ambientLight);
+
+    this.lights.push(ambientLight);
   }
 
   private setupCamera() {
+    // needed because we have the point light on the camera
+    this.scene.add(this.camera);
+
     this.camera.up = new Vector3(0, 0, 1);
     this.camera.position.set(-this.maxX / 4, -this.maxY / 4, (this.maxX + this.maxY) / 2);
 
