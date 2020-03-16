@@ -7,6 +7,9 @@
 body {
   padding: 0;
   margin: 0;
+
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
 }
 
 canvas {
@@ -20,6 +23,8 @@ canvas {
 }
 
 #control-panel {
+  font-weight: 500;
+  font-size: 18px;
   position: fixed;
   z-index: 1;
   left: 10px;
@@ -27,6 +32,20 @@ canvas {
   background: white;
   border: #333 1px solid;
   padding: 10px 15px 10px 10px;
+}
+
+.control {
+  display: flex;
+  align-items: center;
+}
+
+label {
+  display: flex;
+  align-items: center;
+}
+
+input[type="checkbox"] {
+  margin-right: 8px;
 }
 
 #refresh-button {
