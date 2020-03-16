@@ -8,6 +8,7 @@
     "dev": "ts-node-dev server/main",
     "build": "python Online3DViewer/tools/build.py",
     "watch": "node tools/watch",
+    "docs": "typedoc --out docs cad/designer",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_util_.html">&quot;util&quot;</a>
+					<a href="../modules/_shape_.html">&quot;shape&quot;</a>
 				</li>
 				<li>
-					<a href="_util_.rawshape.html">RawShape</a>
+					<a href="_shape_.rawshape.html">RawShape</a>
 				</li>
 			</ul>
 			<h1>Interface RawShape</h1>
@@ -84,10 +84,10 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_util_.rawshape.html#iscanonicalized" class="tsd-kind-icon">is<wbr>Canonicalized</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_util_.rawshape.html#isretesselated" class="tsd-kind-icon">is<wbr>Retesselated</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_util_.rawshape.html#polygons" class="tsd-kind-icon">polygons</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_util_.rawshape.html#properties" class="tsd-kind-icon">properties</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shape_.rawshape.html#iscanonicalized" class="tsd-kind-icon">is<wbr>Canonicalized</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shape_.rawshape.html#isretesselated" class="tsd-kind-icon">is<wbr>Retesselated</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shape_.rawshape.html#polygons" class="tsd-kind-icon">polygons</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shape_.rawshape.html#properties" class="tsd-kind-icon">properties</a></li>
 							</ul>
 						</section>
 					</div>
@@ -98,30 +98,30 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="iscanonicalized" class="tsd-anchor"></a>
 					<h3>is<wbr>Canonicalized</h3>
-					<div class="tsd-signature tsd-kind-icon">is<wbr>Canonicalized<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">false</span></div>
+					<div class="tsd-signature tsd-kind-icon">is<wbr>Canonicalized<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/41bd643/cad/designer/util.ts#L25">util.ts:25</a></li>
+							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/3d400ba/cad/designer/shape.ts#L29">shape.ts:29</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="isretesselated" class="tsd-anchor"></a>
 					<h3>is<wbr>Retesselated</h3>
-					<div class="tsd-signature tsd-kind-icon">is<wbr>Retesselated<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">false</span></div>
+					<div class="tsd-signature tsd-kind-icon">is<wbr>Retesselated<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/41bd643/cad/designer/util.ts#L26">util.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/3d400ba/cad/designer/shape.ts#L30">shape.ts:30</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="polygons" class="tsd-anchor"></a>
 					<h3>polygons</h3>
-					<div class="tsd-signature tsd-kind-icon">polygons<span class="tsd-signature-symbol">:</span> <a href="_util_.polygon.html" class="tsd-signature-type">Polygon</a><span class="tsd-signature-symbol">[]</span></div>
+					<div class="tsd-signature tsd-kind-icon">polygons<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>plane<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>normal<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>_x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>_y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>_z<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">; </span>tag<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>w<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">; </span>shared<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>color<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>tag<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">; </span>vertices<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>pos<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>_x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>_y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>_z<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">; </span>tag<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/41bd643/cad/designer/util.ts#L23">util.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/3d400ba/cad/designer/shape.ts#L16">shape.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -131,7 +131,7 @@
 					<div class="tsd-signature tsd-kind-icon">properties<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/41bd643/cad/designer/util.ts#L24">util.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/3d400ba/cad/designer/shape.ts#L28">shape.ts:28</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -143,7 +143,7 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="../modules/_shape_.html">&quot;shape&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -161,7 +161,7 @@
 					<li class=" tsd-kind-module">
 						<a href="../modules/_shapes_custom_rounded_bottom_cube_.html">&quot;shapes/custom/rounded-<wbr>bottom-<wbr>cube&quot;</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="../modules/_util_.html">&quot;util&quot;</a>
 					</li>
 				</ul>
@@ -169,46 +169,61 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/_util_.util.html" class="tsd-kind-icon">Util</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="_util_.polygon.html" class="tsd-kind-icon">Polygon</a>
+						<a href="../classes/_shape_.shape.html" class="tsd-kind-icon">Shape</a>
 					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="_util_.rawshape.html" class="tsd-kind-icon">Raw<wbr>Shape</a>
+						<a href="_shape_.rawshape.html" class="tsd-kind-icon">Raw<wbr>Shape</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_util_.rawshape.html#iscanonicalized" class="tsd-kind-icon">is<wbr>Canonicalized</a>
+								<a href="_shape_.rawshape.html#iscanonicalized" class="tsd-kind-icon">is<wbr>Canonicalized</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_util_.rawshape.html#isretesselated" class="tsd-kind-icon">is<wbr>Retesselated</a>
+								<a href="_shape_.rawshape.html#isretesselated" class="tsd-kind-icon">is<wbr>Retesselated</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_util_.rawshape.html#polygons" class="tsd-kind-icon">polygons</a>
+								<a href="_shape_.rawshape.html#polygons" class="tsd-kind-icon">polygons</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_util_.rawshape.html#properties" class="tsd-kind-icon">properties</a>
+								<a href="_shape_.rawshape.html#properties" class="tsd-kind-icon">properties</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
-						<a href="../modules/_util_.html#dimensions" class="tsd-kind-icon">Dimensions</a>
+						<a href="../modules/_shape_.html#dimensions" class="tsd-kind-icon">Dimensions</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
-						<a href="../modules/_util_.html#numbersdimensions" class="tsd-kind-icon">Numbers<wbr>Dimensions</a>
+						<a href="../modules/_shape_.html#numbersdimensions" class="tsd-kind-icon">Numbers<wbr>Dimensions</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
-						<a href="../modules/_util_.html#vector" class="tsd-kind-icon">Vector</a>
+						<a href="../modules/_shape_.html#vector" class="tsd-kind-icon">Vector</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
-						<a href="../modules/_util_.html#wlhdimensions" class="tsd-kind-icon">WLHDimensions</a>
+						<a href="../modules/_shape_.html#wlhdimensions" class="tsd-kind-icon">WLHDimensions</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
-						<a href="../modules/_util_.html#xyzdimensions" class="tsd-kind-icon">XYZDimensions</a>
+						<a href="../modules/_shape_.html#xyzdimensions" class="tsd-kind-icon">XYZDimensions</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="../modules/_shape_.html#center" class="tsd-kind-icon">center</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="../modules/_shape_.html#difference" class="tsd-kind-icon">difference</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="../modules/_shape_.html#mirror" class="tsd-kind-icon">mirror</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="../modules/_shape_.html#rotate" class="tsd-kind-icon">rotate</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="../modules/_shape_.html#translate" class="tsd-kind-icon">translate</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="../modules/_shape_.html#union" class="tsd-kind-icon">union</a>
 					</li>
 				</ul>
 			</nav>

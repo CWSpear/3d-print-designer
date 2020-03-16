@@ -2,13 +2,36 @@ const { difference } = require('@jscad/csg/src/api/ops-booleans');
 const { union } = require('@jscad/csg/src/api/ops-booleans');
 const { translate, rotate, mirror, center } = require('@jscad/csg/src/api/ops-transformations');
 
-import { cloneDeep, flatMap, map } from 'lodash';
-import { Dimensions, RawShape, Util, Vector } from './util';
+import { cloneDeep, flatMap, map, random } from 'lodash';
+import { Util } from './util';
 
-let id = 1;
+export type NumbersDimensions = [number, number, number];
+export type WLHDimensions = { width: number; length: number; height: number };
+export type XYZDimensions = { x: number; y: number; z: number };
+
+export type Vector = NumbersDimensions | XYZDimensions;
+export type Dimensions = NumbersDimensions | WLHDimensions | XYZDimensions | number;
+
+export interface RawShape {
+  polygons: {
+    vertices: { pos: { _x: number; _y: number; _z: number }; tag: number }[];
+    shared: {
+      color: any;
+      tag: number;
+    };
+    plane: {
+      normal: { _x: number; _y: number; _z: number };
+      w: number;
+      tag: number;
+    };
+  }[];
+  properties: any;
+  isCanonicalized: boolean;
+  isRetesselated: boolean;
+}
 
 export abstract class Shape {
-  protected id: number = id++;
+  protected id: number = random(999999);
 
   protected rawShape: RawShape;
 
@@ -99,7 +122,7 @@ export abstract class Shape {
   clone(): Shape {
     const shape = cloneDeep(this);
 
-    shape.id = id++;
+    shape.id = random(999999);
 
     return shape;
   }

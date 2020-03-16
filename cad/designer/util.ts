@@ -1,30 +1,4 @@
-export type NumbersDimensions = [number, number, number];
-export type WLHDimensions = { width: number; length: number; height: number };
-export type XYZDimensions = { x: number; y: number; z: number };
-
-export type Dimensions = NumbersDimensions | WLHDimensions | XYZDimensions | number;
-
-export type Vector = Dimensions;
-
-interface Polygon {
-  vertices: { pos: { _x: number; _y: number; _z: number }; tag: number }[];
-  shared: {
-    color: any;
-    tag: number;
-  };
-  plane: {
-    normal: { _x: number; _y: number; _z: number };
-    w: number;
-    tag: number;
-  };
-}
-
-export interface RawShape {
-  polygons: Polygon[];
-  properties: any;
-  isCanonicalized: false;
-  isRetesselated: false;
-}
+import { Dimensions, NumbersDimensions, WLHDimensions, XYZDimensions } from './shape';
 
 /**
  * Library of useful utilities

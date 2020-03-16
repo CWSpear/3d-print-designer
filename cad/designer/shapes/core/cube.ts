@@ -1,7 +1,7 @@
 const { cube } = require('@jscad/csg/src/api/primitives3d-api');
 
-import { Shape } from '../../shape';
-import { Dimensions, Util } from '../../util';
+import { Dimensions, Shape } from '../../shape';
+import { Util } from '../../util';
 
 export interface CubeOptions {
   size: Dimensions;

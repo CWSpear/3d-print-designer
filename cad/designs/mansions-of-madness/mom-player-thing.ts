@@ -1,6 +1,6 @@
-import { Shape } from '../../designer/shape';
+import { Dimensions, Shape } from '../../designer/shape';
 import { Cube } from '../../designer/shapes/core/cube';
-import { Dimensions, Util } from '../../designer/util';
+import { Util } from '../../designer/util';
 import { sum } from 'lodash';
 
 const config: MomPlayerThingOptions = {
