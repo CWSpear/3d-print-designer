@@ -24,6 +24,7 @@ const urlHash = window.location.hash.replace(/^#/, '');
 
 const spinnerElem: HTMLDivElement = document.querySelector('#spinner-wrapper');
 const refreshBtn: HTMLButtonElement = document.querySelector('#refresh-button');
+const psychedelicModeCheckbox: HTMLInputElement = document.querySelector('#psychedelic-mode-checkbox');
 
 const socket = io('http://localhost:3333');
 
@@ -35,10 +36,16 @@ socket.on('connect', () => {
 
 socket.on('file-update-end', () => refreshItem());
 socket.on('file-update-start', () => startSpinner());
+socket.on('file-update-error', () => stopSpinner());
 
 refreshBtn.addEventListener('click', () => {
   console.log('Manual refresh triggered');
   socket.emit('client-triggered-reload');
+});
+
+psychedelicModeCheckbox.addEventListener('input', () => {
+  playground.useEasyToSeeMaterial = psychedelicModeCheckbox.checked;
+  playground.refreshObject();
 });
 
 async function refreshItem() {
@@ -65,12 +72,14 @@ function stopSpinner() {
 let playground: Playground;
 
 class Playground {
+  useEasyToSeeMaterial: boolean = psychedelicModeCheckbox.checked;
+
   private loader = new StlFileLoader();
   private scene: Scene = new Scene();
   private camera: PerspectiveCamera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 4000);
   private renderer: WebGLRenderer = new WebGLRenderer();
   private lights: Light[] = [];
-  // private material: MeshNormalMaterial = new MeshNormalMaterial({ flatShading: true });
+  private easyToSeeMaterial: MeshNormalMaterial = new MeshNormalMaterial({ flatShading: true });
   private material: MeshPhongMaterial = new MeshPhongMaterial({
     color: 0x0000aa,
     specular: 0x004444,
@@ -102,6 +111,10 @@ class Playground {
     this.geometry.computeBoundingBox();
     this.geometry.center();
 
+    this.refreshObject()
+  }
+
+  refreshObject() {
     if (this.mesh) {
       console.log('mesh remove');
       this.scene.remove(this.mesh);
@@ -113,7 +126,7 @@ class Playground {
       }
     }
 
-    this.mesh = new Mesh(this.geometry, this.material);
+    this.mesh = new Mesh(this.geometry, this.useEasyToSeeMaterial ? this.easyToSeeMaterial : this.material);
     this.mesh.castShadow = true;
 
     const xLength = this.geometry.boundingBox.max.x - this.geometry.boundingBox.min.x;

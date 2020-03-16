@@ -6,7 +6,25 @@ export type Dimensions = NumbersDimensions | WLHDimensions | XYZDimensions | num
 
 export type Vector = Dimensions;
 
-export type RawShape = 'Raw Shape Placeholder';
+interface Polygon {
+  vertices: { pos: { _x: number; _y: number; _z: number }; tag: number }[];
+  shared: {
+    color: any;
+    tag: number;
+  };
+  plane: {
+    normal: { _x: number; _y: number; _z: number };
+    w: number;
+    tag: number;
+  };
+}
+
+export interface RawShape {
+  polygons: Polygon[];
+  properties: any;
+  isCanonicalized: false;
+  isRetesselated: false;
+}
 
 /**
  * Library of useful utilities
