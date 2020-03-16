@@ -1,20 +1,20 @@
-import chalk from "chalk";
-import * as chokidar from "chokidar";
+import chalk from 'chalk';
+import * as chokidar from 'chokidar';
 
-import express from "express";
-import * as fs from "fs-extra";
-import { createServer } from "http";
-import notifier from "node-notifier";
-import Bundler from "parcel-bundler";
+import express from 'express';
+import * as fs from 'fs-extra';
+import { createServer } from 'http';
+import notifier from 'node-notifier';
+import Bundler from 'parcel-bundler';
 
-import * as path from "path";
-import * as shell from "shelljs";
-import socketio from "socket.io";
-import { Shape } from "../cad/designer/shape";
-import { exec } from "./util/shelljs-better";
-import { forEach } from "lodash";
+import * as path from 'path';
+import * as shell from 'shelljs';
+import socketio from 'socket.io';
+import { Shape } from '../cad/designer/shape';
+import { exec } from './util/shelljs-better';
+import { forEach } from 'lodash';
 
-const stlSerializer = require("@jscad/stl-serializer");
+const stlSerializer = require('@jscad/stl-serializer');
 
 /////// CONFIG ////////
 
@@ -23,19 +23,19 @@ const WORKING_ON_NEW_SITE = true;
 const PORT = 3333;
 
 // relative to project root (and run this command from root!)
-let WEB_ROOT_DIST = "./site/dist";
-let WEB_ROOT_SRC = "./site/src";
+let WEB_ROOT_DIST = './site/dist';
+let WEB_ROOT_SRC = './site/src';
 let DESIGN_DIR = `./cad/designs`;
 let DESIGN_BUILD_DIR = `./cad/build`;
 
 if (!WORKING_ON_NEW_SITE) {
-  WEB_ROOT_DIST = "./Online3DViewer/build/website";
-  WEB_ROOT_SRC = "./Online3DViewer/website";
+  WEB_ROOT_DIST = './Online3DViewer/build/website';
+  WEB_ROOT_SRC = './Online3DViewer/website';
   DESIGN_DIR = `./cad/designs`;
   DESIGN_BUILD_DIR = `./cad/build`;
 }
 
-const BUILD_URL = "build";
+const BUILD_URL = 'build';
 
 shell.config.silent = true;
 
@@ -57,7 +57,7 @@ const io = socketio(http);
 app.use(express.static(absoluteWebRootDirPath, { fallthrough: true }));
 
 app.get(`/${BUILD_URL}/*`, (req, res) => {
-  res.sendFile(path.join(absoluteDesignBuildDirPath, req.url.replace(new RegExp(`\/${BUILD_URL}`), "")));
+  res.sendFile(path.join(absoluteDesignBuildDirPath, req.url.replace(new RegExp(`\/${BUILD_URL}`), '')));
 });
 
 http.listen(PORT, () => {
@@ -66,12 +66,12 @@ http.listen(PORT, () => {
   console.log(chalk.magenta(`\n-----------\n`));
 
   ready().catch(err => {
-    console.error(chalk.red("Error on startup"), err);
+    console.error(chalk.red('Error on startup'), err);
   });
 });
 
-io.on("connection", socket => {
-  socket.on("join-room", room => {
+io.on('connection', socket => {
+  socket.on('join-room', room => {
     socket.join(room);
   });
 });
@@ -80,12 +80,12 @@ io.on("connection", socket => {
 
 // Initializes a bundler using the entrypoint location and options provided
 const bundler = new Bundler(`${absoluteWebRootSrcPath}/index.html`, {
-  outDir: "./site/dist",
-  sourceMaps: true
+  outDir: './site/dist',
+  sourceMaps: true,
 });
 
 async function ready() {
-  console.log(chalk.yellow("Existing compiled designs:\n"));
+  console.log(chalk.yellow('Existing compiled designs:\n'));
 
   await printExistingBuilds();
 
@@ -93,23 +93,23 @@ async function ready() {
 
   chokidar
     .watch(absoluteDesignDirPath)
-    .on("change", processDesignFileChange)
-    .on("ready", () => {
-      console.log(chalk.cyan(`Watching ${absoluteDesignDirPath.replace(process.cwd(), ".")} for changes...\n`));
+    .on('change', processDesignFileChange)
+    .on('ready', () => {
+      console.log(chalk.cyan(`Watching ${absoluteDesignDirPath.replace(process.cwd(), '.')} for changes...\n`));
     });
 
   if (WORKING_ON_NEW_SITE) {
     chokidar
       .watch(absoluteWebRootSrcPath)
-      .on("all", (event: "add" | "addDir" | "change" | "unlink" | "unlinkDir", path: string) => {
-        if (event !== "add" || "change") {
+      .on('all', (event: 'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir', path: string) => {
+        if (event !== 'add' || 'change') {
           return;
         }
 
         buildSite();
       })
-      .on("ready", () => {
-        console.log(chalk.cyan(`Watching ${absoluteWebRootSrcPath.replace(process.cwd(), ".")} for changes...\n`));
+      .on('ready', () => {
+        console.log(chalk.cyan(`Watching ${absoluteWebRootSrcPath.replace(process.cwd(), '.')} for changes...\n`));
       });
 
     await buildSite();
@@ -121,14 +121,14 @@ async function ready() {
 async function processDesignFileChange(filePath: string) {
   const baseName = path.basename(filePath);
   const dirName = path.dirname(filePath);
-  const relativeOutDir = dirName.replace(absoluteDesignDirPath, "");
+  const relativeOutDir = dirName.replace(absoluteDesignDirPath, '');
   const outputDir = path.join(absoluteDesignBuildDirPath, relativeOutDir);
-  const newName = baseName.replace(/\.[jt]s$/, ".stl");
+  const newName = baseName.replace(/\.[jt]s$/, '.stl');
   const outputFileName = path.join(outputDir, newName);
 
   const pathToIt = path.join(BUILD_URL, relativeOutDir, newName);
 
-  io.to(pathToIt).emit("file-update-start");
+  io.to(pathToIt).emit('file-update-start');
 
   await fs.mkdirp(outputDir);
 
@@ -146,34 +146,34 @@ async function processDesignFileChange(filePath: string) {
       const { default: shape }: { default: Shape } = require(filePath);
 
       const output: string[] | ArrayBuffer[] = stlSerializer.serialize(shape.render(), { binary: false });
-      await fs.writeFile(outputFileName, output, typeof output[0] === "string" ? "utf-8" : "binary");
+      await fs.writeFile(outputFileName, output, typeof output[0] === 'string' ? 'utf-8' : 'binary');
     } else {
       delete require.cache[require.resolve(filePath)];
       const render = require(filePath);
 
-      if (typeof render === "function") {
+      if (typeof render === 'function') {
         const output: string[] | ArrayBuffer[] = stlSerializer.serialize(render(), { binary: false });
-        await fs.writeFile(outputFileName, output, typeof output[0] === "string" ? "utf-8" : "binary");
+        await fs.writeFile(outputFileName, output, typeof output[0] === 'string' ? 'utf-8' : 'binary');
       } else {
         const output = await exec(`npx openjscad ${filePath} -o ${outputFileName}`);
         // first line is output from openjscad
         console.log(
           output
-            .split("\n")
+            .split('\n')
             .slice(1)
-            .join("\n")
+            .join('\n'),
         );
       }
     }
   } catch (err) {
-    console.error(chalk.red("[Error]\n\n", err, err.stack));
+    console.error(chalk.red('[Error]\n\n', err, err.stack));
 
     notifier.notify({
-      title: "3D Print Design",
+      title: '3D Print Design',
       message: `${newName} had an error.`,
       timeout: 4,
-      actions: ["Close"],
-      sound: "Basso"
+      actions: ['Close'],
+      sound: 'Basso',
     });
 
     return;
@@ -184,14 +184,14 @@ async function processDesignFileChange(filePath: string) {
 
   console.log(chalk.yellow(`\nNotifying...`));
 
-  io.to(pathToIt).emit("file-update-end");
+  io.to(pathToIt).emit('file-update-end');
 
   notifier.notify({
-    title: "3D Print Design",
+    title: '3D Print Design',
     message: `${newName} has finished compiling.`,
     timeout: 4,
     open: url,
-    actions: ["Close"]
+    actions: ['Close'],
   });
 
   console.log(chalk.green(`Notified`));
@@ -213,7 +213,7 @@ async function printExistingBuilds(dirPath: string = absoluteDesignBuildDirPath)
 
   await Promise.all(
     files.map(async file => {
-      if (file[0] === ".") {
+      if (file[0] === '.') {
         return;
       }
 
@@ -224,13 +224,13 @@ async function printExistingBuilds(dirPath: string = absoluteDesignBuildDirPath)
       if (stats.isDirectory()) {
         await printExistingBuilds(absolutePath);
       }
-    })
+    }),
   );
 
   const filteredFiles = files.filter(file => file.match(/\.stl$/));
 
   filteredFiles.forEach(file => {
-    const p = path.join(dirPath, file).replace(absoluteDesignBuildDirPath, "");
+    const p = path.join(dirPath, file).replace(absoluteDesignBuildDirPath, '');
     console.log(chalk.blue(`http://localhost:${PORT}#${BUILD_URL}${p}`));
   });
 }

@@ -1,5 +1,5 @@
-import { Cube } from "../../designer/shapes/core/cube";
-import { RightTriangularPrism } from "../../designer/shapes/custom/right-triangular-prism";
+import { Cube } from '../../designer/shapes/core/cube';
+import { RightTriangularPrism } from '../../designer/shapes/custom/right-triangular-prism';
 
 // const WIDTH = 20;
 // const HEIGHT = 12;
@@ -18,34 +18,31 @@ const cardBox = new Cube({
   size: {
     width: WIDTH + WALL_THICKNESS * 2,
     length: DECK_THICKNESS + WALL_THICKNESS * 2,
-    height: HEIGHT
-  }
+    height: HEIGHT,
+  },
 })
   .center()
   .subtractShapes(
     new Cube({ size: { width: WIDTH, length: DECK_THICKNESS, height: HEIGHT } })
       .translate(WALL_THICKNESS)
       .center()
-      .render()
+      .render(),
   );
 
 const edge = new RightTriangularPrism({
   xLegLength: DECK_THICKNESS + WALL_THICKNESS,
   yLegLength: TAB_HEIGHT,
-  length: WALL_THICKNESS
+  length: WALL_THICKNESS,
 }).translate({ y: WALL_THICKNESS });
 
 const backThing = new Cube({
   size: {
     width: WIDTH + WALL_THICKNESS * 2,
     length: WALL_THICKNESS,
-    height: TAB_HEIGHT
-  }
+    height: TAB_HEIGHT,
+  },
 })
-  .addShapes(
-    edge.render(),
-    edge.translate({ x: WIDTH + WALL_THICKNESS }).render()
-  )
+  .addShapes(edge.render(), edge.translate({ x: WIDTH + WALL_THICKNESS }).render())
   .center()
   .mirrorAcrossXPlane();
 

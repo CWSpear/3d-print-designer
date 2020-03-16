@@ -1,4 +1,4 @@
-import { Shape } from "./shape";
+import { Shape } from './shape';
 
 export type NumbersDimensions = [number, number, number];
 export type WLHDimensions = { width: number; length: number; height: number };
@@ -8,7 +8,7 @@ export type Dimensions = NumbersDimensions | WLHDimensions | XYZDimensions | num
 
 export type Vector = Dimensions;
 
-export type RawShape = "Raw Shape Placeholder";
+export type RawShape = 'Raw Shape Placeholder';
 
 export class Util {
   shapes: Shape[] = [];
@@ -38,7 +38,7 @@ export class Util {
   }
 
   static dimensionsIsNumber(dimensions: Partial<Dimensions>): dimensions is number {
-    return typeof dimensions === "number";
+    return typeof dimensions === 'number';
   }
 
   static dimensionsIsNumbers(dimensions: Partial<Dimensions>): dimensions is NumbersDimensions {
@@ -46,12 +46,12 @@ export class Util {
   }
 
   static dimensionsIsXYZ(dimensions: Partial<Dimensions>): dimensions is XYZDimensions {
-    return typeof dimensions === "object" && ("x" in dimensions || "y" in dimensions || "z" in dimensions);
+    return typeof dimensions === 'object' && ('x' in dimensions || 'y' in dimensions || 'z' in dimensions);
   }
 
   static dimensionsIsWLH(dimensions: Partial<Dimensions>): dimensions is WLHDimensions {
     return (
-      typeof dimensions === "object" && ("width" in dimensions || "length" in dimensions || "height" in dimensions)
+      typeof dimensions === 'object' && ('width' in dimensions || 'length' in dimensions || 'height' in dimensions)
     );
   }
 }

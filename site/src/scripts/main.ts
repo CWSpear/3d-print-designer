@@ -1,5 +1,5 @@
-import io from "socket.io-client";
-import * as THREE from "three";
+import io from 'socket.io-client';
+import * as THREE from 'three';
 import {
   AxesHelper,
   BufferGeometry,
@@ -12,44 +12,44 @@ import {
   PerspectiveCamera,
   Scene,
   Vector3,
-  WebGLRenderer
-} from "three";
-import { StlFileLoader } from "./util/stl-file-loader";
+  WebGLRenderer,
+} from 'three';
+import { StlFileLoader } from './util/stl-file-loader';
 
-const OrbitControls = require("three-orbit-controls")(THREE);
+const OrbitControls = require('three-orbit-controls')(THREE);
 
-const urlHash = window.location.hash.replace(/^#/, "");
+const urlHash = window.location.hash.replace(/^#/, '');
 
-const spinnerElem: HTMLDivElement = document.querySelector(".spinner-wrapper");
+const spinnerElem: HTMLDivElement = document.querySelector('.spinner-wrapper');
 
-const socket = io("http://localhost:3333");
+const socket = io('http://localhost:3333');
 
-socket.on("connect", () => {
-  console.log("Server online");
+socket.on('connect', () => {
+  console.log('Server online');
 
-  socket.emit("join-room", urlHash);
+  socket.emit('join-room', urlHash);
 });
 
-socket.on("file-update-end", () => refreshItem());
-socket.on("file-update-start", () => startSpinner());
+socket.on('file-update-end', () => refreshItem());
+socket.on('file-update-start', () => startSpinner());
 
 async function refreshItem() {
   if (!playground) {
     return;
   }
 
-  console.log("File Updated!");
+  console.log('File Updated!');
 
   await playground.load();
   stopSpinner();
 }
 
 function startSpinner() {
-  spinnerElem.style.opacity = "1";
+  spinnerElem.style.opacity = '1';
 }
 
 function stopSpinner() {
-  spinnerElem.style.opacity = "0";
+  spinnerElem.style.opacity = '0';
 }
 
 let playground: Playground;
@@ -77,7 +77,7 @@ class Playground {
 
     this.makeGrid();
 
-    window.addEventListener("resize", () => this.onWindowResize(), false);
+    window.addEventListener('resize', () => this.onWindowResize(), false);
 
     this.animate();
   }
@@ -88,7 +88,7 @@ class Playground {
     this.geometry.center();
 
     if (this.mesh) {
-      console.log("mesh remove");
+      console.log('mesh remove');
       this.scene.remove(this.mesh);
       this.mesh.geometry.dispose();
       if (Array.isArray(this.mesh.material)) {
@@ -112,7 +112,7 @@ class Playground {
   }
 
   private setupScene() {
-    this.loader.setResponseType("arraybuffer");
+    this.loader.setResponseType('arraybuffer');
 
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.setClearColor(0xcccccc, 1);

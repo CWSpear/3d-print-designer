@@ -20,8 +20,8 @@ function main() {
     roundedCube({ size: [width, len, height], center: false, radius: [0, 12, 0] }),
     translate(
       [wallThickness, wallThickness, floorThickness],
-      CSG.cube({ size: [width - (wallThickness * 2), len - (wallThickness * 2), height - floorThickness], center: false })
-    )
+      CSG.cube({ size: [width - wallThickness * 2, len - wallThickness * 2, height - floorThickness], center: false }),
+    ),
   );
 
   const container = union(
@@ -30,22 +30,20 @@ function main() {
     translate([roundiness + wallThickness, 0, floorThickness], rotate([0, 0, 90], makeRamp(len))),
     translate([width, roundiness + wallThickness, floorThickness], rotate([0, 0, 180], makeRamp(width))),
     translate([width - (roundiness + wallThickness), len, floorThickness], rotate([0, 0, 270], makeRamp(len))),
-    translate([0, len - (roundiness + wallThickness), floorThickness], rotate([0, 0, 0], makeRamp(width)))
+    translate([0, len - (roundiness + wallThickness), floorThickness], rotate([0, 0, 0], makeRamp(width))),
   );
 
   const ledge = difference(
     CSG.cube({ size: [width, len, clearance] }),
     translate(
       [wallThickness + fitTolerance, wallThickness + fitTolerance, 0],
-      CSG.cube({ size: [width - (wallThickness * 2) - (fitTolerance * 2), len - (wallThickness * 2) - (fitTolerance * 2), clearance] })
-    )
+      CSG.cube({
+        size: [width - wallThickness * 2 - fitTolerance * 2, len - wallThickness * 2 - fitTolerance * 2, clearance],
+      }),
+    ),
   );
 
-
-  const finalBase = difference(
-    container,
-    ledge
-  );
+  const finalBase = difference(container, ledge);
 
   const lidWidthOffset = 0;
   const lidLenOffset = -1.1 * len;
@@ -56,20 +54,16 @@ function main() {
     lid,
     translate(
       [lidWidthOffset + wallThickness, lidLenOffset + wallThickness, lidThickness],
-      CSG.cube({ size: [width - (wallThickness * 2), len - (wallThickness * 2), clearance] })
-    )
+      CSG.cube({ size: [width - wallThickness * 2, len - wallThickness * 2, clearance] }),
+    ),
   );
 
   // return finalBase;
 
   return finalLid;
 
-  return [
-    finalBase,
-    finalLid
-  ];
+  return [finalBase, finalLid];
 }
-
 
 function makeRamp(l) {
   return translate(
@@ -78,9 +72,9 @@ function makeRamp(l) {
       [-90, 0, 0],
       difference(
         CSG.cube({ size: [l, roundiness, roundiness] }),
-        rotate([0, 90, 0], cylinder({ r: roundiness, h: l, fn: 64 }))
-      )
-    )
+        rotate([0, 90, 0], cylinder({ r: roundiness, h: l, fn: 64 })),
+      ),
+    ),
   );
 }
 

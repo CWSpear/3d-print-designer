@@ -22,10 +22,10 @@ const CARD_SLOT_PADDING = 5;
 
 // END CONFIG
 
-
 const TOTAL_DEPTH = Math.max(CARD_SLOT_DEPTH, PLAYER_CARD_DEPTH, TOKEN_AREA_DEPTH) + EXTRA_HEIGHT;
 
-const TOTAL_WIDTH = CARD_SLOT_PADDING +
+const TOTAL_WIDTH =
+  CARD_SLOT_PADDING +
   OTHER_CARD_WIDTH +
   CARD_SLOT_PADDING +
   PLAYER_CARD_WIDTH +
@@ -33,7 +33,8 @@ const TOTAL_WIDTH = CARD_SLOT_PADDING +
   OTHER_CARD_WIDTH +
   CARD_SLOT_PADDING;
 
-const TOTAL_HEIGHT = PLAYER_CARD_HEIGHT +
+const TOTAL_HEIGHT =
+  PLAYER_CARD_HEIGHT +
   CARD_SLOT_PADDING +
   TOKEN_AREA_HEIGHT +
   CARD_SLOT_PADDING +
@@ -49,21 +50,18 @@ function main() {
   const negativeSpace = union(
     playerCardSlot(),
     ...makeSlots(9, CARD_SLOT_PADDING),
-    ...makeSlots(9, (TOTAL_WIDTH - CARD_SLOT_PADDING - OTHER_CARD_WIDTH)),
+    ...makeSlots(9, TOTAL_WIDTH - CARD_SLOT_PADDING - OTHER_CARD_WIDTH),
     makeTokenArea(),
-    ...makeLongSlots(3)
+    ...makeLongSlots(3),
   );
 
-  return difference(
-    mainCube(),
-    negativeSpace
-  );
+  return difference(mainCube(), negativeSpace);
 }
 
 function makeLongSlots(num) {
   const arr = [];
   for (let i = 0; i < num; i++) {
-    const y = TOTAL_HEIGHT - (CARD_SLOT_SPACING * i + CARD_SLOT_PADDING) + (CARD_SLOT_THICKNESS * i);
+    const y = TOTAL_HEIGHT - (CARD_SLOT_SPACING * i + CARD_SLOT_PADDING) + CARD_SLOT_THICKNESS * i;
 
     arr.push(makeLongSlot(y));
   }
@@ -72,7 +70,7 @@ function makeLongSlots(num) {
 }
 
 function makeLongSlot(y) {
-  const shape = cube({ size: [TOTAL_WIDTH - (CARD_SLOT_PADDING * 2), CARD_SLOT_THICKNESS, CARD_SLOT_DEPTH] });
+  const shape = cube({ size: [TOTAL_WIDTH - CARD_SLOT_PADDING * 2, CARD_SLOT_THICKNESS, CARD_SLOT_DEPTH] });
 
   return translate([CARD_SLOT_PADDING, y, TOTAL_DEPTH - CARD_SLOT_DEPTH], shape);
 }
@@ -80,17 +78,20 @@ function makeLongSlot(y) {
 function makeTokenArea() {
   const shape = cube({ size: [PLAYER_CARD_WIDTH, TOKEN_AREA_HEIGHT, TOKEN_AREA_DEPTH] });
 
-  return translate([
-    CARD_SLOT_PADDING + OTHER_CARD_WIDTH + CARD_SLOT_PADDING,
-    PLAYER_CARD_HEIGHT + CARD_SLOT_PADDING,
-    TOTAL_DEPTH - TOKEN_AREA_DEPTH
-  ], shape);
+  return translate(
+    [
+      CARD_SLOT_PADDING + OTHER_CARD_WIDTH + CARD_SLOT_PADDING,
+      PLAYER_CARD_HEIGHT + CARD_SLOT_PADDING,
+      TOTAL_DEPTH - TOKEN_AREA_DEPTH,
+    ],
+    shape,
+  );
 }
 
 function makeSlots(num, x) {
   const arr = [];
   for (let i = 0; i < num; i++) {
-    const y = (CARD_SLOT_SPACING * i + CARD_SLOT_PADDING) + (CARD_SLOT_THICKNESS * i);
+    const y = CARD_SLOT_SPACING * i + CARD_SLOT_PADDING + CARD_SLOT_THICKNESS * i;
 
     arr.push(makeSlot(x, y));
   }
@@ -114,7 +115,6 @@ function mainCube() {
   return cube({ size: [TOTAL_WIDTH, TOTAL_HEIGHT, TOTAL_DEPTH] });
 }
 
-
 function sampler() {
   const arr = [];
   const spacing = 4.5;
@@ -122,18 +122,13 @@ function sampler() {
   const width = 51;
 
   for (let i = 0; i < count; i++) {
-    const d = i === count - 1 ? 3 : (i === count - 2 ? 4 : 5);
-    arr.push(makeSamplerSlot(spacing, spacing * (i + 1), (i * .1) + .4, width, d));
+    const d = i === count - 1 ? 3 : i === count - 2 ? 4 : 5;
+    arr.push(makeSamplerSlot(spacing, spacing * (i + 1), i * 0.1 + 0.4, width, d));
   }
 
-  const negative = union(
-    ...arr
-  );
+  const negative = union(...arr);
 
-  return difference(
-    cube({ size: [width + (spacing * 2), count * spacing + spacing + 1, TOTAL_DEPTH] }),
-    negative
-  );
+  return difference(cube({ size: [width + spacing * 2, count * spacing + spacing + 1, TOTAL_DEPTH] }), negative);
 }
 
 function makeSamplerSlot(x, y, t, w, d) {

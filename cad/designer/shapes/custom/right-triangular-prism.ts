@@ -14,8 +14,12 @@ export class RightTriangularPrism extends Shape {
 
     this.csgShape = polyhedron({
       points: [
-        [0, 0, 0], [0, xLegLength, 0], [0, 0, yLegLength],
-        [length, 0, 0], [length, xLegLength, 0], [length, 0, yLegLength],
+        [0, 0, 0],
+        [0, xLegLength, 0],
+        [0, 0, yLegLength],
+        [length, 0, 0],
+        [length, xLegLength, 0],
+        [length, 0, yLegLength],
       ],
       polygons: [
         [2, 0, 1],
@@ -27,4 +31,3 @@ export class RightTriangularPrism extends Shape {
     });
   }
 }
-
