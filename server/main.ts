@@ -71,9 +71,26 @@ http.listen(PORT, () => {
 });
 
 io.on('connection', socket => {
-  socket.on('join-room', room => {
-    socket.join(room);
+  socket.on('join-room', id => {
+    socket.join(id);
+
+    socket.on('client-triggered-reload', async () => {
+      let filePath = path.join(absoluteDesignDirPath, id.replace(BUILD_URL, '').replace(/\.[^.]*?$/, ''));
+
+      if (await fs.pathExists(`${filePath}.ts`)) {
+        filePath += '.ts';
+      } else {
+        filePath += '.js';
+      }
+
+      await processDesignFileChange(filePath);
+    });
   });
+});
+
+io.on('client-triggered-reload', async (url: string) => {
+  console.log('banana');
+  // await processDesignFileChange(path.join(absoluteDesignBuildDirPath, '..', url));
 });
 
 /// INIT CODE ///
@@ -155,7 +172,7 @@ async function processDesignFileChange(filePath: string) {
         const output: string[] | ArrayBuffer[] = stlSerializer.serialize(render(), { binary: false });
         await fs.writeFile(outputFileName, output, typeof output[0] === 'string' ? 'utf-8' : 'binary');
       } else {
-        const output = await exec(`npx openjscad ${filePath} -o ${outputFileName}`);
+        const output = await exec(`npx openjscad ${filePath} -of stla -o ${outputFileName}`);
         // first line is output from openjscad
         console.log(
           output

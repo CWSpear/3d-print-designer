@@ -1,3 +1,9 @@
+const { difference } = require('@jscad/csg/src/api/ops-booleans');
+const { union } = require('@jscad/csg/src/api/ops-booleans');
+const { translate, rotate, mirror, center } = require('@jscad/csg/src/api/ops-transformations');
+const { cube, cylinder, polyhedron } = require('@jscad/csg/src/api/primitives3d-api');
+
+
 const CONTAINER_WIDTH = 240;
 
 const CONTAINER_LENGTH = 150;
@@ -10,7 +16,7 @@ const MAKE_LID = false;
 const GRID = [
   [5, 2, 2],
   [10, 11, 12],
-  [2, 2, 2, 1],
+  [2, 2, 2, 1]
 ];
 
 const USE_RAMPS = true;
@@ -21,7 +27,7 @@ const BORDER_AND_FLOOR_WIDTH = 1;
 const CONTAINER_EDGE_WIDTH = 3;
 const LID_HEIGHT = 2;
 const BUTTON_RADIUS = 6;
-const BUTTON_DISTANCE_FROM_EDGE = 15;
+const BUTTON_DISTANCE_FROM_EDGE = 15;//
 
 const SIDE_HOLE = false;
 
@@ -39,12 +45,12 @@ const LIP_HANG_ON_NESS = 1;
 const PRINTER_MAX_WIDTH = 250;
 const PRINTER_MAX_LENGTH = 210;
 
-const colCount = GRID.length;
+const COL_COUNT = GRID.length;
 const CELL_HEIGHT =
-  (CONTAINER_LENGTH - BORDER_AND_FLOOR_WIDTH - BORDER_AND_FLOOR_WIDTH - CONTAINER_EDGE_WIDTH) / colCount -
+  (CONTAINER_LENGTH - BORDER_AND_FLOOR_WIDTH - BORDER_AND_FLOOR_WIDTH - CONTAINER_EDGE_WIDTH) / COL_COUNT -
   BORDER_AND_FLOOR_WIDTH;
 
-function main() {
+module.exports = function main() {
   console.log(`Width:      ${CONTAINER_WIDTH}
 Length:     ${CONTAINER_LENGTH}
 Height:     ${CONTAINER_HEIGHT}
@@ -80,15 +86,15 @@ Cell Depth: ${CELL_DEPTH}`);
   const sideHoleSize = 20;
   const negative = union(
     ...holes,
-    ...(SIDE_HOLE ? [translate([0, CONTAINER_LENGTH / 2 - sideHoleSize / 2], makeSideHole(sideHoleSize))] : []),
+    ...(SIDE_HOLE ? [translate([0, CONTAINER_LENGTH / 2 - sideHoleSize / 2], makeSideHole(sideHoleSize))] : [])
   );
 
   return difference(
     union(
       cube({ size: [CONTAINER_WIDTH, CONTAINER_LENGTH, HEIGHT_LESS_LID] }),
-      translate([0, 0, HEIGHT_LESS_LID], makeLidLip()),
+      translate([0, 0, HEIGHT_LESS_LID], makeLidLip())
     ),
-    negative,
+    negative
   );
 }
 
@@ -99,14 +105,14 @@ function makeHole(x, y, size, rowUnitWidth) {
     [
       CONTAINER_EDGE_WIDTH + x * (rowUnitWidth + BORDER_AND_FLOOR_WIDTH),
       CONTAINER_EDGE_WIDTH + y * (CELL_HEIGHT + BORDER_AND_FLOOR_WIDTH),
-      BORDER_AND_FLOOR_WIDTH,
+      BORDER_AND_FLOOR_WIDTH
     ],
     difference(
       cube({
-        size: [width, CELL_HEIGHT, HEIGHT_LESS_LID],
+        size: [width, CELL_HEIGHT, HEIGHT_LESS_LID]
       }),
-      ...(USE_RAMPS ? addRamps(width) : []),
-    ),
+      ...(USE_RAMPS ? addRamps(width) : [])
+    )
   );
 }
 
@@ -115,7 +121,7 @@ function addRamps(width) {
     translate([RAMP_SIZE, 0, 0], rotate([0, 0, 90], makeRamp(CELL_HEIGHT))),
     translate([width, RAMP_SIZE, 0], rotate([0, 0, 180], makeRamp(width))),
     translate([width - RAMP_SIZE, CELL_HEIGHT, 0], rotate([0, 0, 270], makeRamp(CELL_HEIGHT))),
-    translate([0, CELL_HEIGHT - RAMP_SIZE, 0], rotate([0, 0, 0], makeRamp(width))),
+    translate([0, CELL_HEIGHT - RAMP_SIZE, 0], rotate([0, 0, 0], makeRamp(width)))
   ];
 }
 
@@ -126,15 +132,15 @@ function makeRamp(l) {
       [-90, 0, 0],
       difference(
         cube({ size: [l, RAMP_SIZE, RAMP_SIZE] }),
-        rotate([0, 90, 0], cylinder({ r: RAMP_SIZE, h: l, fn: 64 })),
-      ),
-    ),
+        rotate([0, 90, 0], cylinder({ r: RAMP_SIZE, h: l, fn: 64 }))
+      )
+    )
   );
 }
 
 function makeSideHole(size) {
   return cube({
-    size: [size / 2, size, HEIGHT_LESS_LID],
+    size: [size / 2, size, HEIGHT_LESS_LID]
   });
 }
 
@@ -147,13 +153,13 @@ function makeLidLip(offset = 0) {
     translate([0, CONTAINER_EDGE_WIDTH, 0], mirror([0, 1, 0], makeLipPart(CONTAINER_WIDTH - offset))),
     translate(
       [CONTAINER_WIDTH - CONTAINER_EDGE_WIDTH - offset, CONTAINER_LENGTH - offset, 0],
-      rotate([0, 0, -90], makeLipPart(CONTAINER_LENGTH - offset)),
-    ),
+      rotate([0, 0, -90], makeLipPart(CONTAINER_LENGTH - offset))
+    )
   ); //
 
   function makeLipPart(len) {
     const squareLip = cube({
-      size: [len, CONTAINER_EDGE_WIDTH, LID_HEIGHT + EXTRA_LIP_HEIGHT],
+      size: [len, CONTAINER_EDGE_WIDTH, LID_HEIGHT + EXTRA_LIP_HEIGHT]
     });
 
     const cutout = polyhedron({
@@ -163,7 +169,7 @@ function makeLidLip(offset = 0) {
         [0, 0, yLeg],
         [len, 0, 0],
         [len, xLeg, 0],
-        [len, 0, yLeg],
+        [len, 0, yLeg]
       ],
       triangles: [
         [2, 0, 1],
@@ -173,14 +179,14 @@ function makeLidLip(offset = 0) {
         [4, 0, 3],
         [4, 1, 0],
         [5, 1, 4],
-        [5, 2, 1],
-      ],
+        [5, 2, 1]
+      ]
     });
 
     return difference(
       squareLip,
       translate([0, 0, EXTRA_LIP_HEIGHT], cutout),
-      translate([0, -1 * LIP_HANG_ON_NESS, -1 * LID_HEIGHT], squareLip),
+      translate([0, -1 * LIP_HANG_ON_NESS, -1 * LID_HEIGHT], squareLip)
     );
   }
 }
@@ -195,20 +201,20 @@ function lid() {
           size: [
             CONTAINER_WIDTH - EXTRA_LIP_WIGGLE_ROOM,
             CONTAINER_LENGTH - EXTRA_LIP_WIGGLE_ROOM - EXTRA_LIP_WIGGLE_ROOM,
-            LID_HEIGHT,
-          ],
-        }),
+            LID_HEIGHT
+          ]
+        })
       ),
       makeLidLip(EXTRA_LIP_WIGGLE_ROOM),
       translate(
         [BUTTON_DISTANCE_FROM_EDGE, CONTAINER_LENGTH / 2 - BUTTON_RADIUS - 3, LID_HEIGHT - LID_HEIGHT * 0.6],
-        cylinder({ r: BUTTON_RADIUS, h: LID_HEIGHT, fn: 64 }),
+        cylinder({ r: BUTTON_RADIUS, h: LID_HEIGHT, fn: 64 })
       ),
       translate(
         [BUTTON_DISTANCE_FROM_EDGE, CONTAINER_LENGTH / 2 + BUTTON_RADIUS + 3, LID_HEIGHT - LID_HEIGHT * 0.6],
-        cylinder({ r: BUTTON_RADIUS, h: LID_HEIGHT, fn: 64 }),
-      ),
-    ),
+        cylinder({ r: BUTTON_RADIUS, h: LID_HEIGHT, fn: 64 })
+      )
+    )
   );
 }
 

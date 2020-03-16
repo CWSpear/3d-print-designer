@@ -1,4 +1,6 @@
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -17,7 +19,37 @@ canvas {
   height: 100%;
 }
 
-.spinner-wrapper {
+#refresh-button {
+  height: 20px;
+  width: 20px;
+  background: transparent;
+  border: 0 none;
+  padding: 0;
+  margin: 0;
+  position: fixed;
+  bottom: 25px;
+  right: 20px;
+  z-index: 1;
+  cursor: pointer;
+
+  &:hover {
+    svg {
+      position: relative;
+      top: -3px;
+      filter: drop-shadow(0 3px 1px rgba(0, 0, 0, 0.5));
+    }
+  }
+
+  &:active {
+    svg {
+      position: relative;
+      top: 0;
+      filter: none;
+    }
+  }
+}
+
+#spinner-wrapper {
   position: fixed;
   bottom: 10px;
   right: 10px;
@@ -40,12 +72,13 @@ $spinner-color: #333;
   height: $spinner-size;
 
   div {
-    transform-origin: (40px * ($spinner-size / $original-spinner-size)) (40px * ($spinner-size / $original-spinner-size));
+    transform-origin: (40px * ($spinner-size / $original-spinner-size))
+      (40px * ($spinner-size / $original-spinner-size));
     animation: spinner 1.2s linear infinite;
   }
 
   div::after {
-    content: " ";
+    content: ' ';
     display: block;
     position: absolute;
     top: 3px * ($spinner-size / $original-spinner-size);

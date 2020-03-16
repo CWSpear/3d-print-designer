@@ -18,7 +18,7 @@ export class Cylinder extends Shape {
       // r1: 1,
       // r2: 1,
       h: options.height,
-      fn: options.resolution,
+      fn: options.resolution || 64,
     });
   }
 }

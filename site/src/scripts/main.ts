@@ -12,7 +12,7 @@ import {
   PerspectiveCamera,
   Scene,
   Vector3,
-  WebGLRenderer,
+  WebGLRenderer
 } from 'three';
 import { StlFileLoader } from './util/stl-file-loader';
 
@@ -20,7 +20,8 @@ const OrbitControls = require('three-orbit-controls')(THREE);
 
 const urlHash = window.location.hash.replace(/^#/, '');
 
-const spinnerElem: HTMLDivElement = document.querySelector('.spinner-wrapper');
+const spinnerElem: HTMLDivElement = document.querySelector('#spinner-wrapper');
+const refreshBtn: HTMLButtonElement = document.querySelector('#refresh-button');
 
 const socket = io('http://localhost:3333');
 
@@ -32,6 +33,11 @@ socket.on('connect', () => {
 
 socket.on('file-update-end', () => refreshItem());
 socket.on('file-update-start', () => startSpinner());
+
+refreshBtn.addEventListener('click', () => {
+  console.log('Manual refresh triggered');
+  socket.emit('client-triggered-reload');
+});
 
 async function refreshItem() {
   if (!playground) {
@@ -46,10 +52,12 @@ async function refreshItem() {
 
 function startSpinner() {
   spinnerElem.style.opacity = '1';
+  refreshBtn.style.display = 'none';
 }
 
 function stopSpinner() {
   spinnerElem.style.opacity = '0';
+  refreshBtn.style.display = 'block';
 }
 
 let playground: Playground;
@@ -57,7 +65,7 @@ let playground: Playground;
 class Playground {
   private loader = new StlFileLoader();
   private scene: Scene = new Scene();
-  private camera: PerspectiveCamera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 4000);
+  private camera: PerspectiveCamera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 4000);
   private renderer: WebGLRenderer = new WebGLRenderer();
   private lights: Light[] = [];
   private material: MeshNormalMaterial = new MeshNormalMaterial({ flatShading: true });
