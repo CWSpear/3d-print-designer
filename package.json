@@ -9,7 +9,8 @@
     "build": "python Online3DViewer/tools/build.py",
     "watch": "node tools/watch",
     "docs": "typedoc --out docs cad/designer",
-    "format:quick": "pretty-quick --staged --pattern \"{server,site,cad}/**/*.{ts,html,scss}\"",
+    "format": "prettier --write \"{server,site/src,cad}/**/*.{ts,html,scss}\"",
+    "format:quick": "pretty-quick --staged --pattern \"{server,site/src,cad}/**/*.{ts,html,scss}\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
