@@ -115,12 +115,12 @@ export class LidLip extends Shape {
       }).render(),
     );
 
-    const button = new Cylinder({
-      height: 10000,
-      radius: buttonRadius,
-    });
-
     if (!noButtons) {
+      const button = new Cylinder({
+        height: 10000,
+        radius: buttonRadius,
+      });
+
       button.translate({
         x: buttonDistanceFromEdge,
         y: length / 2 - buttonRadius - buttonSpacing / 2,

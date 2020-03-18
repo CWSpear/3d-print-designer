@@ -1,4 +1,13 @@
-import { Dimensions, NumbersDimensions, WLHDimensions, XYZDimensions } from './shape';
+import {
+  AxesToggles,
+  BooleanAxesToggles,
+  Dimensions,
+  NumbersDimensions,
+  WLHAxesToggles,
+  WLHDimensions,
+  XYZAxesToggles,
+  XYZDimensions,
+} from './shape';
 
 /**
  * Library of useful utilities
@@ -6,6 +15,30 @@ import { Dimensions, NumbersDimensions, WLHDimensions, XYZDimensions } from './s
 export class Util {
   static readonly PrinterMaxWidth = 250;
   static readonly PrinterMaxLength = 210;
+
+  static normalizeAxesToggle(axes: AxesToggles): BooleanAxesToggles {
+    if (!axes) {
+      return undefined;
+    }
+
+    if (axes === true) {
+      return [true, true, true];
+    }
+
+    if (Util.axesTogglesIsNumbers(axes)) {
+      return axes;
+    }
+
+    if (Util.axesTogglesIsXYZ(axes)) {
+      return [axes.x || false, axes.y || false, axes.z || false];
+    }
+
+    if (Util.axesTogglesIsWLH(axes)) {
+      return [axes.width || false, axes.length || false, axes.height || false];
+    }
+
+    throw new Error(`Unexpected axes toggles format: ${JSON.stringify(axes)}`);
+  }
 
   static normalizeDimensions(dimensions: Partial<Dimensions>, defaultValue: number = 0): NumbersDimensions {
     if (!dimensions && dimensions !== 0) {
@@ -49,11 +82,33 @@ export class Util {
     );
   }
 
+  static axesTogglesIsNumbers(axesToggles: Partial<AxesToggles>): axesToggles is BooleanAxesToggles {
+    return Array.isArray(axesToggles);
+  }
+
+  static axesTogglesIsXYZ(axesToggles: Partial<AxesToggles>): axesToggles is XYZAxesToggles {
+    return typeof axesToggles === 'object' && ('x' in axesToggles || 'y' in axesToggles || 'z' in axesToggles);
+  }
+
+  static axesTogglesIsWLH(axesToggles: Partial<AxesToggles>): axesToggles is WLHAxesToggles {
+    return (
+      typeof axesToggles === 'object' && ('width' in axesToggles || 'length' in axesToggles || 'height' in axesToggles)
+    );
+  }
+
   static trimLines(str: string): string {
     return str
       .split('\n')
       .map(s => s.trim())
       .join('\n')
       .trim();
+  }
+
+  static inchesToMillimeters(inches: number) {
+    return inches * 25.4;
+  }
+
+  static millimetersToInches(millimeters: number): number {
+    return millimeters / 25.4;
   }
 }

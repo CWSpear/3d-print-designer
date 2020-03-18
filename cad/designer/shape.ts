@@ -12,6 +12,12 @@ export type XYZDimensions = { x: number; y: number; z: number };
 export type Vector = NumbersDimensions | XYZDimensions;
 export type Dimensions = NumbersDimensions | WLHDimensions | XYZDimensions | number;
 
+export type BooleanAxesToggles = [boolean, boolean, boolean];
+export type WLHAxesToggles = { width?: boolean; length?: boolean; height?: boolean };
+export type XYZAxesToggles = { x?: boolean; y?: boolean; z?: boolean };
+
+export type AxesToggles = BooleanAxesToggles | WLHAxesToggles | XYZAxesToggles | boolean;
+
 export interface RawShape {
   polygons: {
     vertices: { pos: { _x: number; _y: number; _z: number }; tag: number }[];
@@ -115,8 +121,8 @@ export abstract class Shape {
     return this.scale({ z: distance });
   }
 
-  center(): this {
-    this.rawShape = center(true, this.rawShape);
+  center(axesToggles: AxesToggles = true): this {
+    this.rawShape = center(Util.normalizeAxesToggle(axesToggles), this.rawShape);
 
     return this;
   }
