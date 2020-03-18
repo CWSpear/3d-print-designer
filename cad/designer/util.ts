@@ -16,6 +16,12 @@ export class Util {
   static readonly PrinterMaxWidth = 250;
   static readonly PrinterMaxLength = 210;
 
+  static magnetSize: WLHDimensions = {
+    width: 6.5 + 0.2,
+    length: 15 + 0.2,
+    height: 3 + 0.2,
+  };
+
   static normalizeAxesToggle(axes: AxesToggles): BooleanAxesToggles {
     if (!axes) {
       return undefined;

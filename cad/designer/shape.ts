@@ -121,8 +121,54 @@ export abstract class Shape {
     return this.scale({ z: distance });
   }
 
+  setPositionToZero(axesToggles: AxesToggles = true) {
+    const [centerX, centerY, centerZ] = Util.normalizeAxesToggle(axesToggles);
+
+    const translations: Partial<XYZDimensions> = {};
+
+    if (centerX) {
+      translations.x = -this.getPositionMinX();
+    }
+
+    if (centerY) {
+      translations.y = -this.getPositionMinY();
+    }
+
+    if (centerZ) {
+      translations.z = -this.getPositionMinZ();
+    }
+
+    this.translate(translations);
+
+    return this;
+  }
+
   center(axesToggles: AxesToggles = true): this {
     this.rawShape = center(Util.normalizeAxesToggle(axesToggles), this.rawShape);
+
+    return this;
+  }
+
+  centerOn(shape: Shape, axesToggles: AxesToggles = true): this {
+    const [centerX, centerY, centerZ] = Util.normalizeAxesToggle(axesToggles);
+
+    this.setPositionToZero(axesToggles);
+
+    const translations: Partial<XYZDimensions> = {};
+
+    if (centerX) {
+      translations.x = shape.getPositionMinX() + (shape.getWidth() - this.getWidth()) / 2;
+    }
+
+    if (centerY) {
+      translations.y = shape.getPositionMinY() + (shape.getLength() - this.getLength()) / 2;
+    }
+
+    if (centerZ) {
+      translations.z = shape.getPositionMinZ() + (shape.getHeight() - this.getHeight()) / 2;
+    }
+
+    this.translate(translations);
 
     return this;
   }
