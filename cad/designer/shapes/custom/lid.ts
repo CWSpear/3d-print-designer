@@ -136,7 +136,7 @@ export class LidLip extends Shape {
       );
     }
 
-    return lid;
+    return lid.setPositionToZero({ z: true });
   }
 
   getTotalHeight() {

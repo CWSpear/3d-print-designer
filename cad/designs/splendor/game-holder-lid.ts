@@ -13,7 +13,7 @@ class SplendorGameHolderLid extends Shape {
       extraWiggleRoom: 0.3,
     });
 
-    lid.setPositionToZero({ z: true });
+    splendorGameHolder.mainShape.setPositionToZero();
 
     const extraClearanceLid = new Cube({
       size: {
@@ -29,15 +29,15 @@ class SplendorGameHolderLid extends Shape {
 
     const extraLid = new Cube({
       size: {
-        width: lid.getWidth(),
-        length: lid.getLength(),
+        width: splendorGameHolder.getWidth(),
+        length: splendorGameHolder.getLength(),
         height: Util.magnetSize.height + magnetMinWall * 2 - lid.getHeight(),
       },
     })
       .centerOn(lid, { y: true })
       .translateZ(lid.getHeight());
 
-    lid.addShapes(extraLid.render());
+    lid.addShapes(extraLid.render()).setPositionToZero();
 
     const magnet1 = splendorGameHolder.magnet1.clone().centerOn(lid, { z: true });
     const magnet2 = splendorGameHolder.magnet2.clone().centerOn(lid, { z: true });
@@ -45,6 +45,18 @@ class SplendorGameHolderLid extends Shape {
     lid.subtractShapes(magnet1.render()); //, magnet2.translateZ(magnetMinWall).render());
 
     this.rawShape = lid.render();
+
+    /////
+    // this.rawShape = splendorGameHolder
+    //   .clone()
+    //   .addShapes(
+    //     lid
+    //       .clone()
+    //       .translateZ(splendorGameHolder.getHeight() - 2.1)
+    //       .render(),
+    //   )
+    //   .render();
+    /////
 
     console.log('\nLid:\n');
     console.log(
