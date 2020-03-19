@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 import { Shape } from '../../designer/shape';
 import { Cube } from '../../designer/shapes/core/cube';
+import { PlainText } from '../../designer/shapes/core/plain-text';
 import { Util } from '../../designer/util';
 import splendorGameHolder, { magnetMinWall } from './game-holder';
 
@@ -43,6 +44,12 @@ class SplendorGameHolderLid extends Shape {
     const magnet2 = splendorGameHolder.magnet2.clone().centerOn(lid, { z: true });
 
     lid.subtractShapes(magnet1.render()); //, magnet2.translateZ(magnetMinWall).render());
+
+    const text = new PlainText('Splendor', { height: 7 });
+    text.centerOn(lid, { x: true, y: true });
+
+    text.translateZ(lid.getHeight() - text.getHeight());
+    lid.subtractShapes(text.render());
 
     this.rawShape = lid.render();
 

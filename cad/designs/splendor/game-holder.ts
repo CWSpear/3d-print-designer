@@ -108,7 +108,7 @@ class SpendorGameHolder extends Shape {
           z: mainShape.getHeight() - (wiggleRoom + tilesHeight + wiggleRoom),
         })
         .centerOn(cardSlot, { y: true })
-        .render(),
+        .render(), //
 
       tokenSlot
         .translate({
@@ -322,7 +322,7 @@ export default new SpendorGameHolder({
   cardLength: 63,
   tileWidth: 60,
   tileLength: 60,
-  tokenDiameter: 43,
+  tokenDiameter: 45,
   slotDepth: 43,
 
   tilesHeight: 11,

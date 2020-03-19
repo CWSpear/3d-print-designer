@@ -80,7 +80,7 @@ Cell Depth: ${CELL_DEPTH}`);
       holes.push(makeHole(accum, r, col, rowUnitWidth));
       accum += col;
     });
-  });
+  }); //
 
   const sideHoleSize = 20;
   const negative = union(
