@@ -266,6 +266,19 @@ class SpendorGameHolder extends Shape {
 
     mainShape.subtractShapes(magnet1.render()); // , magnet2.render());
 
+    // mainShape.subtractShapes(
+    //   new Cylinder({
+    //     radius: 15,
+    //     height: 100,
+    //   })
+    //     .centerOn(cardSlot, { y: true })
+    //     .translate({
+    //       x: cardSlot.getPositionMaxX() + cardSlot.getPositionMinX() + (interiorWallWidth / 2),
+    //       z: floorWidth,
+    //     })
+    //     .render(),
+    // );
+
     this.lidLip = new LidLip({
       width: mainShape.getWidth(),
       length: mainShape.getLength(),
@@ -318,13 +331,13 @@ export default new SpendorGameHolder({
   // tokenDiameter: Util.inchesToMillimeters(1.75),
   // slotDepth: Util.inchesToMillimeters(1.7),
 
-  cardWidth: 88,
-  cardLength: 63,
+  cardWidth: 88 + 6,
+  cardLength: 63 + 6,
   tileWidth: 60,
   tileLength: 60,
   tokenDiameter: 45,
   slotDepth: 43,
 
-  tilesHeight: 11,
+  tilesHeight: 16,
   cardsHeight: 32,
 });
