@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>LidLipOptions | server</title>
+	<title>TextOptions | server</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_shapes_custom_lid_.html">&quot;shapes/custom/lid&quot;</a>
+					<a href="../modules/_shapes_core_plain_text_.html">&quot;shapes/core/plain-text&quot;</a>
 				</li>
 				<li>
-					<a href="_shapes_custom_lid_.lidlipoptions.html">LidLipOptions</a>
+					<a href="_shapes_core_plain_text_.textoptions.html">TextOptions</a>
 				</li>
 			</ul>
-			<h1>Interface LidLipOptions</h1>
+			<h1>Interface TextOptions</h1>
 		</div>
 	</div>
 </header>
@@ -73,7 +73,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">LidLipOptions</span>
+						<span class="target">TextOptions</span>
 					</li>
 				</ul>
 			</section>
@@ -84,12 +84,14 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shapes_custom_lid_.lidlipoptions.html#attachmentwidth" class="tsd-kind-icon">attachment<wbr>Width</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shapes_custom_lid_.lidlipoptions.html#extraclearance" class="tsd-kind-icon">extra<wbr>Clearance</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shapes_custom_lid_.lidlipoptions.html#height" class="tsd-kind-icon">height</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shapes_custom_lid_.lidlipoptions.html#length" class="tsd-kind-icon">length</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shapes_custom_lid_.lidlipoptions.html#lipwidth" class="tsd-kind-icon">lip<wbr>Width</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shapes_custom_lid_.lidlipoptions.html#width" class="tsd-kind-icon">width</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shapes_core_plain_text_.textoptions.html#align" class="tsd-kind-icon">align</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shapes_core_plain_text_.textoptions.html#extrudeoffset" class="tsd-kind-icon">extrude<wbr>Offset</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shapes_core_plain_text_.textoptions.html#font" class="tsd-kind-icon">font</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shapes_core_plain_text_.textoptions.html#height" class="tsd-kind-icon">height</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shapes_core_plain_text_.textoptions.html#letterspacing" class="tsd-kind-icon">letter<wbr>Spacing</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shapes_core_plain_text_.textoptions.html#linespacing" class="tsd-kind-icon">line<wbr>Spacing</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shapes_core_plain_text_.textoptions.html#xoffset" class="tsd-kind-icon">x<wbr>Offset</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shapes_core_plain_text_.textoptions.html#yoffset" class="tsd-kind-icon">y<wbr>Offset</a></li>
 							</ul>
 						</section>
 					</div>
@@ -98,22 +100,32 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="attachmentwidth" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> attachment<wbr>Width</h3>
-					<div class="tsd-signature tsd-kind-icon">attachment<wbr>Width<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="align" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> align</h3>
+					<div class="tsd-signature tsd-kind-icon">align<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"left"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"right"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"center"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shapes/custom/lid.ts#L13">shapes/custom/lid.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shapes/core/plain-text.ts#L17">shapes/core/plain-text.ts:17</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="extraclearance" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> extra<wbr>Clearance</h3>
-					<div class="tsd-signature tsd-kind-icon">extra<wbr>Clearance<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="extrudeoffset" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> extrude<wbr>Offset</h3>
+					<div class="tsd-signature tsd-kind-icon">extrude<wbr>Offset<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shapes/custom/lid.ts#L14">shapes/custom/lid.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shapes/core/plain-text.ts#L12">shapes/core/plain-text.ts:12</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="font" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> font</h3>
+					<div class="tsd-signature tsd-kind-icon">font<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shapes/core/plain-text.ts#L13">shapes/core/plain-text.ts:13</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -123,37 +135,47 @@
 					<div class="tsd-signature tsd-kind-icon">height<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shapes/custom/lid.ts#L11">shapes/custom/lid.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shapes/core/plain-text.ts#L11">shapes/core/plain-text.ts:11</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="length" class="tsd-anchor"></a>
-					<h3>length</h3>
-					<div class="tsd-signature tsd-kind-icon">length<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="letterspacing" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> letter<wbr>Spacing</h3>
+					<div class="tsd-signature tsd-kind-icon">letter<wbr>Spacing<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shapes/custom/lid.ts#L10">shapes/custom/lid.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shapes/core/plain-text.ts#L16">shapes/core/plain-text.ts:16</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="lipwidth" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> lip<wbr>Width</h3>
-					<div class="tsd-signature tsd-kind-icon">lip<wbr>Width<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="linespacing" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> line<wbr>Spacing</h3>
+					<div class="tsd-signature tsd-kind-icon">line<wbr>Spacing<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shapes/custom/lid.ts#L12">shapes/custom/lid.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shapes/core/plain-text.ts#L15">shapes/core/plain-text.ts:15</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="width" class="tsd-anchor"></a>
-					<h3>width</h3>
-					<div class="tsd-signature tsd-kind-icon">width<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="xoffset" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> x<wbr>Offset</h3>
+					<div class="tsd-signature tsd-kind-icon">x<wbr>Offset<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shapes/custom/lid.ts#L9">shapes/custom/lid.ts:9</a></li>
+							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shapes/core/plain-text.ts#L9">shapes/core/plain-text.ts:9</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="yoffset" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> y<wbr>Offset</h3>
+					<div class="tsd-signature tsd-kind-icon">y<wbr>Offset<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shapes/core/plain-text.ts#L10">shapes/core/plain-text.ts:10</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -174,13 +196,13 @@
 					<li class=" tsd-kind-module">
 						<a href="../modules/_shapes_core_cylinder_.html">&quot;shapes/core/cylinder&quot;</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="../modules/_shapes_core_plain_text_.html">&quot;shapes/core/plain-<wbr>text&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="../modules/_shapes_custom_equilateral_triangular_prism_.html">&quot;shapes/custom/equilateral-<wbr>triangular-<wbr>prism&quot;</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="../modules/_shapes_custom_lid_.html">&quot;shapes/custom/lid&quot;</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -200,40 +222,49 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="../classes/_shapes_custom_lid_.lidlip.html" class="tsd-kind-icon">Lid<wbr>Lip</a>
+						<a href="../classes/_shapes_core_plain_text_.plaintext.html" class="tsd-kind-icon">Plain<wbr>Text</a>
 					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module">
-						<a href="_shapes_custom_lid_.lidlipoptions.html" class="tsd-kind-icon">Lid<wbr>Lip<wbr>Options</a>
+						<a href="_shapes_core_plain_text_.textoptions.html" class="tsd-kind-icon">Text<wbr>Options</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_shapes_custom_lid_.lidlipoptions.html#attachmentwidth" class="tsd-kind-icon">attachment<wbr>Width</a>
+								<a href="_shapes_core_plain_text_.textoptions.html#align" class="tsd-kind-icon">align</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_shapes_custom_lid_.lidlipoptions.html#extraclearance" class="tsd-kind-icon">extra<wbr>Clearance</a>
+								<a href="_shapes_core_plain_text_.textoptions.html#extrudeoffset" class="tsd-kind-icon">extrude<wbr>Offset</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_shapes_custom_lid_.lidlipoptions.html#height" class="tsd-kind-icon">height</a>
+								<a href="_shapes_core_plain_text_.textoptions.html#font" class="tsd-kind-icon">font</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_shapes_custom_lid_.lidlipoptions.html#length" class="tsd-kind-icon">length</a>
+								<a href="_shapes_core_plain_text_.textoptions.html#height" class="tsd-kind-icon">height</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_shapes_custom_lid_.lidlipoptions.html#lipwidth" class="tsd-kind-icon">lip<wbr>Width</a>
+								<a href="_shapes_core_plain_text_.textoptions.html#letterspacing" class="tsd-kind-icon">letter<wbr>Spacing</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_shapes_custom_lid_.lidlipoptions.html#width" class="tsd-kind-icon">width</a>
+								<a href="_shapes_core_plain_text_.textoptions.html#linespacing" class="tsd-kind-icon">line<wbr>Spacing</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_shapes_core_plain_text_.textoptions.html#xoffset" class="tsd-kind-icon">x<wbr>Offset</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_shapes_core_plain_text_.textoptions.html#yoffset" class="tsd-kind-icon">y<wbr>Offset</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module">
-						<a href="_shapes_custom_lid_.lidoptions.html" class="tsd-kind-icon">Lid<wbr>Options</a>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="../modules/_shapes_core_plain_text_.html#rectangular_extrude" class="tsd-kind-icon">rectangular_<wbr>extrude</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/_shapes_custom_lid_.html#polyhedron" class="tsd-kind-icon">polyhedron</a>
+						<a href="../modules/_shapes_core_plain_text_.html#union" class="tsd-kind-icon">union</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module tsd-is-not-exported">
+						<a href="../modules/_shapes_core_plain_text_.html#vectortext" class="tsd-kind-icon">vector<wbr>Text</a>
 					</li>
 				</ul>
 			</nav>

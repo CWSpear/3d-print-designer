@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>RawShape | server</title>
+	<title>TranslateOperation | server</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -59,10 +59,10 @@
 					<a href="../modules/_shape_.html">&quot;shape&quot;</a>
 				</li>
 				<li>
-					<a href="_shape_.rawshape.html">RawShape</a>
+					<a href="_shape_.translateoperation.html">TranslateOperation</a>
 				</li>
 			</ul>
-			<h1>Interface RawShape</h1>
+			<h1>Interface TranslateOperation</h1>
 		</div>
 	</div>
 </header>
@@ -73,7 +73,12 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">RawShape</span>
+						<a href="_shape_.rawoperation.html" class="tsd-signature-type">RawOperation</a><span class="tsd-signature-symbol">&lt;</span><a href="../modules/_shape_.html#rawtranslateargs" class="tsd-signature-type">RawTranslateArgs</a><span class="tsd-signature-symbol">&gt;</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">TranslateOperation</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -81,57 +86,37 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-not-exported">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shape_.rawshape.html#iscanonicalized" class="tsd-kind-icon">is<wbr>Canonicalized</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shape_.rawshape.html#isretesselated" class="tsd-kind-icon">is<wbr>Retesselated</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shape_.rawshape.html#polygons" class="tsd-kind-icon">polygons</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_shape_.rawshape.html#properties" class="tsd-kind-icon">properties</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported"><a href="_shape_.translateoperation.html#args" class="tsd-kind-icon">args</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite tsd-is-not-exported"><a href="_shape_.translateoperation.html#type" class="tsd-kind-icon">type</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="iscanonicalized" class="tsd-anchor"></a>
-					<h3>is<wbr>Canonicalized</h3>
-					<div class="tsd-signature tsd-kind-icon">is<wbr>Canonicalized<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+					<a name="args" class="tsd-anchor"></a>
+					<h3>args</h3>
+					<div class="tsd-signature tsd-kind-icon">args<span class="tsd-signature-symbol">:</span> <a href="../modules/_shape_.html#rawtranslateargs" class="tsd-signature-type">RawTranslateArgs</a></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="_shape_.rawoperation.html">RawOperation</a>.<a href="_shape_.rawoperation.html#args">args</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L38">shape.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L68">shape.ts:68</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="isretesselated" class="tsd-anchor"></a>
-					<h3>is<wbr>Retesselated</h3>
-					<div class="tsd-signature tsd-kind-icon">is<wbr>Retesselated<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite tsd-is-not-exported">
+					<a name="type" class="tsd-anchor"></a>
+					<h3>type</h3>
+					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <a href="../enums/_shape_.operationtype.html#translate" class="tsd-signature-type">Translate</a></div>
 					<aside class="tsd-sources">
+						<p>Overrides <a href="_shape_.rawoperation.html">RawOperation</a>.<a href="_shape_.rawoperation.html#type">type</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L39">shape.ts:39</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="polygons" class="tsd-anchor"></a>
-					<h3>polygons</h3>
-					<div class="tsd-signature tsd-kind-icon">polygons<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>plane<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>normal<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>_x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>_y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>_z<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">; </span>tag<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>w<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">; </span>shared<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>color<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">; </span>tag<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">; </span>vertices<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>pos<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>_x<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>_y<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>_z<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">; </span>tag<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L25">shape.ts:25</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="properties" class="tsd-anchor"></a>
-					<h3>properties</h3>
-					<div class="tsd-signature tsd-kind-icon">properties<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L37">shape.ts:37</a></li>
+							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L72">shape.ts:72</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -195,27 +180,9 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
 						<a href="_shape_.rawoperation.html" class="tsd-kind-icon">Raw<wbr>Operation</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-module">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="_shape_.rawshape.html" class="tsd-kind-icon">Raw<wbr>Shape</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_shape_.rawshape.html#iscanonicalized" class="tsd-kind-icon">is<wbr>Canonicalized</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_shape_.rawshape.html#isretesselated" class="tsd-kind-icon">is<wbr>Retesselated</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_shape_.rawshape.html#polygons" class="tsd-kind-icon">polygons</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="_shape_.rawshape.html#properties" class="tsd-kind-icon">properties</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
 						<a href="_shape_.rotateoperation.html" class="tsd-kind-icon">Rotate<wbr>Operation</a>
 					</li>
@@ -225,9 +192,21 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
 						<a href="_shape_.scaleoperation.html" class="tsd-kind-icon">Scale<wbr>Operation</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
 						<a href="_shape_.translateoperation.html" class="tsd-kind-icon">Translate<wbr>Operation</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-not-exported">
+								<a href="_shape_.translateoperation.html#args" class="tsd-kind-icon">args</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite tsd-is-not-exported">
+								<a href="_shape_.translateoperation.html#type" class="tsd-kind-icon">type</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
 						<a href="_shape_.unionoperation.html" class="tsd-kind-icon">Union<wbr>Operation</a>
 					</li>
