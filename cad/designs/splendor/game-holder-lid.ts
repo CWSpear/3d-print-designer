@@ -1,15 +1,21 @@
 import * as _ from 'lodash';
-import { Shape } from '../../designer/shape';
+import { RawShape, Shape } from '../../designer/shape';
 import { Cube } from '../../designer/shapes/core/cube';
 import { PlainText } from '../../designer/shapes/core/plain-text';
 import { Util } from '../../designer/util';
 import splendorGameHolder, { magnetMinWall } from './game-holder';
 
-class SplendorGameHolderLid extends Shape {
-  constructor() {
-    super();
+splendorGameHolder.render();
 
-    const lid = splendorGameHolder.lidLip.makeLid({
+class SplendorGameHolderLid extends Shape {
+  inputOptions: null = null;
+
+  constructor(id?: string) {
+    super(id);
+  }
+
+  protected createInitialRawShape(): RawShape {
+    const lid: Shape = splendorGameHolder.lidLip.makeLid({
       noButtons: true,
       extraWiggleRoom: 0.3,
     });
@@ -26,7 +32,7 @@ class SplendorGameHolderLid extends Shape {
       .centerOn(lid, { y: true })
       .translateZ(lid.getHeight());
 
-    lid.addShapes(extraClearanceLid.render());
+    lid.addShapes(extraClearanceLid);
 
     const extraLid = new Cube({
       size: {
@@ -38,20 +44,20 @@ class SplendorGameHolderLid extends Shape {
       .centerOn(lid, { y: true })
       .translateZ(lid.getHeight());
 
-    lid.addShapes(extraLid.render()).setPositionToZero();
+    lid.addShapes(extraLid).setPositionToZero();
 
     const magnet1 = splendorGameHolder.magnet1.clone().centerOn(lid, { z: true });
     const magnet2 = splendorGameHolder.magnet2.clone().centerOn(lid, { z: true });
 
-    lid.subtractShapes(magnet1.render()); //, magnet2.translateZ(magnetMinWall).render());
+    lid.subtractShapes(magnet1); //, magnet2.translateZ(magnetMinWall));
 
     const text = new PlainText('Splendor', { height: 7 });
     text.centerOn(lid, { x: true, y: true });
 
     text.translateZ(lid.getHeight() - text.getHeight());
-    lid.subtractShapes(text.render());
+    lid.subtractShapes(text);
 
-    this.rawShape = lid.render();
+    // lid.roundCorners();
 
     /////
     // this.rawShape = splendorGameHolder
@@ -60,9 +66,9 @@ class SplendorGameHolderLid extends Shape {
     //     lid
     //       .clone()
     //       .translateZ(splendorGameHolder.getHeight() - 2.1)
-    //       .render(),
+    //       ,
     //   )
-    //   .render();
+    //   ;
     /////
 
     console.log('\nLid:\n');
@@ -81,6 +87,8 @@ class SplendorGameHolderLid extends Shape {
         Height: ${_.round(Util.millimetersToInches(lid.getHeight()), 3)} in
       `),
     );
+
+    return lid.render();
   }
 }
 

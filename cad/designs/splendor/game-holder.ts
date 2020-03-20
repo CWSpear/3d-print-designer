@@ -1,8 +1,10 @@
 import * as _ from 'lodash';
-import { Shape } from '../../designer/shape';
+import { RawShape, Shape } from '../../designer/shape';
 import { Cube } from '../../designer/shapes/core/cube';
 import { Cylinder } from '../../designer/shapes/core/cylinder';
+import { EquilateralTriangularPrism } from '../../designer/shapes/custom/equilateral-triangular-prism';
 import { LidLip } from '../../designer/shapes/custom/lid';
+import { RightTriangularPrism } from '../../designer/shapes/custom/right-triangular-prism';
 import { TriangularPrism } from '../../designer/shapes/custom/triangular-prism';
 import { Util } from '../../designer/util';
 
@@ -20,26 +22,30 @@ interface SpendorGameHolderConfig {
 export const magnetMinWall = 0.59999;
 
 class SpendorGameHolder extends Shape {
-  readonly mainShape: Shape;
-  readonly magnet1: Shape;
-  readonly magnet2: Shape;
-  readonly lidLip: LidLip;
+  mainShape: Shape;
+  magnet1: Shape;
+  magnet2: Shape;
+  lidLip: LidLip;
 
-  constructor({
-    cardWidth,
-    cardLength,
-    tileWidth,
-    tileLength,
-    tokenDiameter,
-    slotDepth,
-    tilesHeight,
-    cardsHeight,
-  }: SpendorGameHolderConfig) {
+  constructor(public readonly inputOptions: SpendorGameHolderConfig) {
     super();
+  }
+
+  protected createInitialRawShape(): RawShape {
+    const {
+      cardWidth,
+      cardLength,
+      tileWidth,
+      tileLength,
+      tokenDiameter,
+      slotDepth,
+      tilesHeight,
+      cardsHeight,
+    } = this.inputOptions;
 
     const exteriorWallWidth = 3;
-    const interiorWallWidth = 1.4;
-    const floorWidth = 1.4;
+    const interiorWallWidth = 2;
+    const floorWidth = 2;
     const wiggleRoom = 0.5;
 
     const mainShape = new Cube({
@@ -68,13 +74,16 @@ class SpendorGameHolder extends Shape {
       },
     });
 
-    const cardSlot = new Cube({
-      size: {
-        width: wiggleRoom + cardWidth + wiggleRoom,
-        length: wiggleRoom + cardLength + wiggleRoom,
-        height: 200,
+    const cardSlot = new Cube(
+      {
+        size: {
+          width: wiggleRoom + cardWidth + wiggleRoom,
+          length: wiggleRoom + cardLength + wiggleRoom,
+          height: 200,
+        },
       },
-    });
+      'Card Slot',
+    );
 
     const tileSlot = new Cube({
       size: {
@@ -90,34 +99,24 @@ class SpendorGameHolder extends Shape {
       resolution: 128,
     }).rotateY(90);
 
-    console.log('token stack height', tokenSlot.getWidth());
-
     // all (non-magnet) slot translations here:
     mainShape.subtractShapes(
-      cardSlot
-        .translate({
-          x: exteriorWallWidth,
-          y: exteriorWallWidth,
-          z: mainShape.getHeight() - (wiggleRoom + cardsHeight + wiggleRoom),
-        })
-        .render(),
-
+      cardSlot.translate({
+        x: exteriorWallWidth,
+        y: exteriorWallWidth,
+        z: mainShape.getHeight() - (wiggleRoom + cardsHeight + wiggleRoom),
+      }),
       tileSlot
         .translate({
           x: cardSlot.getPositionMaxX() + interiorWallWidth,
           z: mainShape.getHeight() - (wiggleRoom + tilesHeight + wiggleRoom),
         })
-        .centerOn(cardSlot, { y: true })
-        .render(), //
-
-      tokenSlot
-        .translate({
-          x: exteriorWallWidth,
-          y: cardSlot.getPositionMaxY() + interiorWallWidth + tokenSlot.getLength() / 2,
-          z: floorWidth + tokenSlot.getHeight() / 2,
-        })
-        .render(),
-
+        .centerOn(cardSlot, { y: true }),
+      tokenSlot.translate({
+        x: exteriorWallWidth,
+        y: cardSlot.getPositionMaxY() + interiorWallWidth + tokenSlot.getLength() / 2,
+        z: floorWidth + tokenSlot.getHeight() / 2,
+      }),
       // hole above token slots
       new Cube({
         size: {
@@ -125,13 +124,11 @@ class SpendorGameHolder extends Shape {
           length: tokenSlot.getLength(),
           height: 200,
         },
-      })
-        .translate({
-          x: tokenSlot.getPositionMinX(),
-          y: tokenSlot.getPositionMinY(),
-          z: tokenSlot.getPositionMinZ() + tokenSlot.getHeight() / 2,
-        })
-        .render(),
+      }).translate({
+        x: tokenSlot.getPositionMinX(),
+        y: tokenSlot.getPositionMinY(),
+        z: tokenSlot.getPositionMinZ() + tokenSlot.getHeight() / 2,
+      }),
 
       // new Cube({
       //   size: {
@@ -145,7 +142,7 @@ class SpendorGameHolder extends Shape {
       //     x: (cardSlot.getPositionMaxX() - cardSlot.getPositionMinX()) / 2,
       //     // y: cardSlot.getPositionMaxY() - cardSlot.getPositionMinY(),
       //   })
-      //   .render(),
+      //   ,
 
       // cut out to make cards easier to take out
       // new Cube({
@@ -161,13 +158,13 @@ class SpendorGameHolder extends Shape {
       //     y: (cardSlot.getPositionMaxY() - cardSlot.getPositionMinY()) / 2,
       //     z: floorWidth,
       //   })
-      //   .render(),
+      //   ,
     );
 
     const cardPushOut = new Cube({
       size: {
         width: cardSlot.getWidth(),
-        length: cardSlot.getLength() / 3,
+        length: cardSlot.getLength() * 0.42,
         height: cardSlot.getHeight(),
       },
     });
@@ -192,8 +189,24 @@ class SpendorGameHolder extends Shape {
       x: tileSlot.getPositionMinX(),
     });
 
-    mainShape.subtractShapes(cardPushOut.render(), tilePushOut.render());
+    mainShape.subtractShapes(cardPushOut, tilePushOut);
 
+    // console.log(cardSlot.getLength() - cardsHeight + wiggleRoom * 2);
+    // console.log(mainShape.getHeight() - floorWidth - wiggleRoom * 2);
+    // console.log(Math.sqrt(39 ** 2 + 43 ** 2))
+    //
+    // const cardRamp = new RightTriangularPrism({
+    //   xLegLength: cardSlot.getLength() - cardsHeight + wiggleRoom * 2,
+    //   yLegLength: mainShape.getHeight() - floorWidth - wiggleRoom * 2,
+    //   length: cardSlot.getWidth(),
+    // });
+    //
+    // mainShape.addShapes(cardRamp.translate({
+    //   x: cardSlot.getPositionMinX(),
+    //   y: cardSlot.getPositionMinY(),
+    //   z: cardSlot.getPositionMinZ(),
+    // }));
+    //
     // const cardCutout = new Cube({
     //   size: {
     //     width: 20,
@@ -218,7 +231,7 @@ class SpendorGameHolder extends Shape {
     //   .translateZ(tileSlot.getPositionMinZ())
     //   .translateX(tileSlot.getPositionMinX() + (tileSlot.getPositionMaxX() - tileSlot.getPositionMinX()) / 2);
     //
-    // mainShape.subtractShapes(cardCutout.render(), tileCutout.render());
+    // mainShape.subtractShapes(cardCutout, tileCutout);
 
     const magnetWall = new Cube({
       size: {
@@ -231,11 +244,11 @@ class SpendorGameHolder extends Shape {
     mainShape.translateX(magnetWall.getWidth() - exteriorWallWidth);
 
     mainShape.addShapes(
-      magnetWall.clone().render(),
+      magnetWall.clone(),
       // magnetWall
       //   .clone()
       //   .translateX(mainShape.getPositionMaxX())
-      //   .render(),
+      //   ,
     );
 
     const magnetHole = new Cube({
@@ -248,23 +261,11 @@ class SpendorGameHolder extends Shape {
 
     const magnet2 = magnet1.clone().translateX(mainShape.getWidth() - magnetWall.getWidth() / 2);
 
-    magnet1.addShapes(
-      magnet1
-        .clone()
-        .translateX(-magnet1.getWidth())
-        .render(),
-    );
+    magnet1.addShapes(magnet1.clone().translateX(-magnet1.getWidth()));
 
-    console.log('magnet1.getWidth()', magnet1.getWidth());
+    magnet2.addShapes(magnet2.clone().translateX(magnet2.getWidth()));
 
-    magnet2.addShapes(
-      magnet2
-        .clone()
-        .translateX(magnet2.getWidth())
-        .render(),
-    );
-
-    mainShape.subtractShapes(magnet1.render()); // , magnet2.render());
+    mainShape.subtractShapes(magnet1); // , magnet2);
 
     // mainShape.subtractShapes(
     //   new Cylinder({
@@ -276,7 +277,7 @@ class SpendorGameHolder extends Shape {
     //       x: cardSlot.getPositionMaxX() + cardSlot.getPositionMinX() + (interiorWallWidth / 2),
     //       z: floorWidth,
     //     })
-    //     .render(),
+    //     ,
     // );
 
     this.lidLip = new LidLip({
@@ -284,42 +285,57 @@ class SpendorGameHolder extends Shape {
       length: mainShape.getLength(),
     });
 
-    mainShape.addShapes(this.lidLip.translateZ(mainShape.getHeight()).render());
+    mainShape.addShapes(this.lidLip.translateZ(mainShape.getHeight()));
 
-    console.log('\nMain Box:\n');
-    console.log(
-      Util.trimLines(`
-        Width:  ${_.round(mainShape.getWidth(), 2)} mm
-        Length: ${_.round(mainShape.getLength(), 2)} mm
-        Height: ${_.round(mainShape.getHeight(), 2)} mm
-        
-        Card Hole Depth:  ${_.round(mainShape.getHeight() - cardSlot.getPositionMinZ(), 2)} mm
-        Card Hole Width:  ${_.round(cardSlot.getWidth(), 2)} mm
-        Card Hole Length: ${_.round(cardSlot.getLength(), 2)} mm
-        
-        Tile Hole Depth:  ${_.round(mainShape.getHeight() - tileSlot.getPositionMinZ(), 2)} mm
-        Tile Hole Width:  ${_.round(tileSlot.getWidth(), 2)} mm
-        Tile Hole Length: ${_.round(tileSlot.getLength(), 2)} mm
-        
-        Token Hole Depth:    ${_.round(mainShape.getHeight() - tokenSlot.getPositionMinZ(), 2)} mm
-        Token Hole Width:    ${_.round(tokenSlot.getWidth(), 2)} mm
-        Token Hole Diameter: ${_.round(tokenSlot.getLength(), 2)} mm
-      `),
-    );
-    console.log('');
-    console.log(
-      Util.trimLines(`
-        Width:  ${_.round(Util.millimetersToInches(mainShape.getWidth()), 3)} in
-        Length: ${_.round(Util.millimetersToInches(mainShape.getLength()), 3)} in
-        Height: ${_.round(Util.millimetersToInches(mainShape.getHeight()), 3)} in
-      `),
-    );
+    // mainShape.roundCorners();
+
+    // console.log('\nMain Box:\n');
+    // console.log(
+    //   Util.trimLines(`
+    //     Width:  ${_.round(mainShape.getWidth(), 2)} mm
+    //     Length: ${_.round(mainShape.getLength(), 2)} mm
+    //     Height: ${_.round(mainShape.getHeight(), 2)} mm
+    //
+    //     Card Hole Depth:  ${_.round(mainShape.getHeight() - cardSlot.getPositionMinZ(), 2)} mm
+    //     Card Hole Width:  ${_.round(cardSlot.getWidth(), 2)} mm
+    //     Card Hole Length: ${_.round(cardSlot.getLength(), 2)} mm
+    //
+    //     Tile Hole Depth:  ${_.round(mainShape.getHeight() - tileSlot.getPositionMinZ(), 2)} mm
+    //     Tile Hole Width:  ${_.round(tileSlot.getWidth(), 2)} mm
+    //     Tile Hole Length: ${_.round(tileSlot.getLength(), 2)} mm
+    //
+    //     Token Hole Depth:    ${_.round(mainShape.getHeight() - tokenSlot.getPositionMinZ(), 2)} mm
+    //     Token Hole Width:    ${_.round(tokenSlot.getWidth(), 2)} mm
+    //     Token Hole Diameter: ${_.round(tokenSlot.getLength(), 2)} mm
+    //   `),
+    // );
+    // console.log('');
+    // console.log(
+    //   Util.trimLines(`
+    //     Width:  ${_.round(Util.millimetersToInches(mainShape.getWidth()), 3)} in
+    //     Length: ${_.round(Util.millimetersToInches(mainShape.getLength()), 3)} in
+    //     Height: ${_.round(Util.millimetersToInches(mainShape.getHeight()), 3)} in
+    //   `),
+    // );
 
     this.mainShape = mainShape;
     this.magnet1 = magnet1;
     this.magnet2 = magnet2;
 
-    this.rawShape = mainShape.render();
+    // console.log(mainShape.render()); //
+
+    // mainShape.subtractShapes(
+    //   new Cube({
+    //     size: {
+    //       width: 30,
+    //       length: 30,
+    //       height: 200,
+    //     },
+    //   })
+    //     .alignWithBottom(cardSlot, { x: true, y: true }),
+    // );
+
+    return mainShape.render();
   }
 }
 
@@ -331,13 +347,13 @@ export default new SpendorGameHolder({
   // tokenDiameter: Util.inchesToMillimeters(1.75),
   // slotDepth: Util.inchesToMillimeters(1.7),
 
-  cardWidth: 88 + 6,
-  cardLength: 63 + 6,
+  cardWidth: 88 + 1.4,
+  cardLength: 63 + 1.4,
   tileWidth: 60,
   tileLength: 60,
   tokenDiameter: 45,
   slotDepth: 43,
 
-  tilesHeight: 16,
+  tilesHeight: 16.4,
   cardsHeight: 32,
 });

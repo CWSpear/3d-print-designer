@@ -22,7 +22,7 @@ export class Util {
     height: 3 + 0.2,
   };
 
-  static normalizeAxesToggle(axes: AxesToggles): BooleanAxesToggles {
+  static convertAxesTogglesToBooleans(axes: Partial<AxesToggles>): BooleanAxesToggles {
     if (!axes) {
       return undefined;
     }
@@ -46,7 +46,19 @@ export class Util {
     throw new Error(`Unexpected axes toggles format: ${JSON.stringify(axes)}`);
   }
 
-  static normalizeDimensions(dimensions: Partial<Dimensions>, defaultValue: number = 0): NumbersDimensions {
+  static convertAxesTogglesToWLH(dimensions: Partial<AxesToggles>): WLHAxesToggles {
+    const [width, length, height] = Util.convertAxesTogglesToBooleans(dimensions);
+
+    return { width, length, height };
+  }
+
+  static convertAxesTogglesToXYZ(dimensions: Partial<AxesToggles>): XYZAxesToggles {
+    const [x, y, z] = Util.convertAxesTogglesToBooleans(dimensions);
+
+    return { x, y, z };
+  }
+
+  static convertDimensionsToNumbers(dimensions: Partial<Dimensions>, defaultValue: number = 0): NumbersDimensions {
     if (!dimensions && dimensions !== 0) {
       return undefined;
     }
@@ -68,6 +80,18 @@ export class Util {
     }
 
     throw new Error(`Unexpected dimensions format: ${JSON.stringify(dimensions)}`);
+  }
+
+  static convertDimensionsToWLH(dimensions: Partial<Dimensions>, defaultValue: number = 0): WLHDimensions {
+    const [width, length, height] = Util.convertDimensionsToNumbers(dimensions, defaultValue);
+
+    return { width, length, height };
+  }
+
+  static convertDimensionsToXYZ(dimensions: Partial<Dimensions>, defaultValue: number = 0): XYZDimensions {
+    const [x, y, z] = Util.convertDimensionsToNumbers(dimensions, defaultValue);
+
+    return { x, y, z };
   }
 
   static dimensionsIsNumber(dimensions: Partial<Dimensions>): dimensions is number {

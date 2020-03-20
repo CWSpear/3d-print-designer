@@ -2,7 +2,8 @@ const { vectorText } = require('@jscad/csg/src/api/text');
 const { rectangular_extrude } = require('@jscad/csg/src/api/ops-extrusions');
 const { union } = require('@jscad/csg/src/api/ops-booleans');
 
-import { Shape } from '../../shape';
+import { RawShape, Shape } from '../../shape';
+import { CubeOptions } from './cube';
 
 export interface TextOptions {
   xOffset?: number;
@@ -17,14 +18,16 @@ export interface TextOptions {
 }
 
 export class PlainText extends Shape {
-  constructor(txt: string, options: TextOptions = {}) {
-    super();
+  constructor(public readonly text: string, public readonly inputOptions: TextOptions = {}, id?: string) {
+    super(id);
+  }
 
-    const letters = vectorText(options, txt);
+  protected createInitialRawShape(): RawShape {
+    const letters = vectorText(this.inputOptions, this.text);
 
     const letterRawShapes: any[] = [];
     letters.forEach((segment: any) => letterRawShapes.push(rectangular_extrude(segment, { w: 2, h: 1 })));
 
-    this.rawShape = union(letterRawShapes);
+    return union(letterRawShapes);
   }
 }

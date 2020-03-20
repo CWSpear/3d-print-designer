@@ -1,51 +1,65 @@
+import { RawShape, Shape } from '../../designer/shape';
 import { Cube } from '../../designer/shapes/core/cube';
 import { RightTriangularPrism } from '../../designer/shapes/custom/right-triangular-prism';
 
-// const WIDTH = 20;
-// const HEIGHT = 12;
-// const DECK_THICKNESS = 6;
-// const WALL_THICKNESS = 0.5;
-// const TAB_HEIGHT = 5;
+export interface CardBoxOptions {
+  width: number;
+  height: number;
+  deckThickness: number;
+  wallThickness: number;
+  tabHeight: number;
+}
 
-const WIDTH = 88.9 + 0.15;
-const HEIGHT = 63.5 + 0.15;
-// const HEIGHT = 100;
-const DECK_THICKNESS = 17;
-const WALL_THICKNESS = 0.5;
-const TAB_HEIGHT = 10;
+class CardBox extends Shape {
+  constructor(public readonly inputOptions: CardBoxOptions, id?: string) {
+    super(id);
+  }
 
-const cardBox = new Cube({
-  size: {
-    width: WIDTH + WALL_THICKNESS * 2,
-    length: DECK_THICKNESS + WALL_THICKNESS * 2,
-    height: HEIGHT,
-  },
-})
-  .center()
-  .subtractShapes(
-    new Cube({ size: { width: WIDTH, length: DECK_THICKNESS, height: HEIGHT } })
-      .translate(WALL_THICKNESS)
-      .center()
-      .render(),
-  );
+  protected createInitialRawShape(): RawShape {
+    const cardBox = new Cube({
+      size: {
+        width: this.inputOptions.width + this.inputOptions.wallThickness * 2,
+        length: this.inputOptions.deckThickness + this.inputOptions.wallThickness * 2,
+        height: this.inputOptions.height,
+      },
+    }).subtractShapes(
+      new Cube({
+        size: {
+          width: this.inputOptions.width,
+          length: this.inputOptions.deckThickness,
+          height: this.inputOptions.height,
+        },
+      }).translate(this.inputOptions.wallThickness),
+    );
 
-const edge = new RightTriangularPrism({
-  xLegLength: DECK_THICKNESS + WALL_THICKNESS,
-  yLegLength: TAB_HEIGHT,
-  length: WALL_THICKNESS,
-}).translate({ y: WALL_THICKNESS });
+    const edge = new RightTriangularPrism({
+      xLegLength: this.inputOptions.deckThickness + this.inputOptions.wallThickness,
+      yLegLength: this.inputOptions.tabHeight,
+      length: this.inputOptions.wallThickness,
+    })
+      .translate({ y: this.inputOptions.wallThickness })
+      .group();
 
-const backThing = new Cube({
-  size: {
-    width: WIDTH + WALL_THICKNESS * 2,
-    length: WALL_THICKNESS,
-    height: TAB_HEIGHT,
-  },
-})
-  .addShapes(edge.render(), edge.translate({ x: WIDTH + WALL_THICKNESS }).render())
-  .center()
-  .mirrorAcrossXPlane();
+    const backThing = new Cube({
+      size: {
+        width: this.inputOptions.width + this.inputOptions.wallThickness * 2,
+        length: this.inputOptions.wallThickness,
+        height: this.inputOptions.tabHeight,
+      },
+    }).addShapes(edge, edge.clone().translate({ x: this.inputOptions.width + this.inputOptions.wallThickness }));
 
-cardBox.addShapes(backThing.translate({ height: HEIGHT }).render());
+    cardBox.addShapes(backThing.translate({ height: this.inputOptions.height }));
+
+    return cardBox.rotateZ(5).render();
+  }
+}
+
 //
-export default cardBox;
+export default new CardBox({
+  // add a little wiggle room
+  width: 88.9 + 0.15,
+  height: 63.5 + 0.15,
+  deckThickness: 17,
+  wallThickness: 0.5,
+  tabHeight: 10,
+});

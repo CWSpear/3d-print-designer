@@ -1,6 +1,6 @@
 const { polyhedron } = require('@jscad/csg/src/api/primitives3d-api');
 
-import { Shape } from '../../shape';
+import { RawShape, Shape } from '../../shape';
 
 export interface RightTriangularPrismOptions {
   length: number;
@@ -9,17 +9,19 @@ export interface RightTriangularPrismOptions {
 }
 
 export class RightTriangularPrism extends Shape {
-  constructor({ length, xLegLength, yLegLength }: RightTriangularPrismOptions) {
-    super();
+  constructor(public readonly inputOptions: RightTriangularPrismOptions, id?: string) {
+    super(id);
+  }
 
-    this.rawShape = polyhedron({
+  protected createInitialRawShape(): RawShape {
+    return polyhedron({
       points: [
         [0, 0, 0],
-        [0, xLegLength, 0],
-        [0, 0, yLegLength],
-        [length, 0, 0],
-        [length, xLegLength, 0],
-        [length, 0, yLegLength],
+        [0, this.inputOptions.xLegLength, 0],
+        [0, 0, this.inputOptions.yLegLength],
+        [this.inputOptions.length, 0, 0],
+        [this.inputOptions.length, this.inputOptions.xLegLength, 0],
+        [this.inputOptions.length, 0, this.inputOptions.yLegLength],
       ],
       polygons: [
         [2, 0, 1],
@@ -31,3 +33,22 @@ export class RightTriangularPrism extends Shape {
     });
   }
 }
+
+// import { TriangularPrism } from './triangular-prism';
+//
+// export interface RightTriangularPrismOptions {
+//   readonly length: number;
+//   readonly yLegLength: number;
+//   readonly xLegLength: number;
+// }
+//
+// export class RightTriangularPrism extends TriangularPrism {
+//   constructor(options: RightTriangularPrismOptions, id?: string) {
+//     super({
+//       length: options.length,
+//       leftSideLength: options.yLegLength,
+//       rightSideLength: Math.sqrt(options.xLegLength ** 2 + options.yLegLength ** 2),
+//       bottomSideLength: options.xLegLength
+//     }, id);
+//   }
+// }

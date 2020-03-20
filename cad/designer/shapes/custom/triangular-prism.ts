@@ -1,21 +1,26 @@
 const { polyhedron } = require('@jscad/csg/src/api/primitives3d-api');
 
-import { Shape } from '../../shape';
+import { RawShape, Shape } from '../../shape';
+import { CubeOptions } from '../core/cube';
 
 export interface TriangularPrismOptions {
-  length: number;
-  leftSideLength: number;
-  rightSideLength: number;
-  bottomSideLength: number;
+  readonly length: number;
+  readonly leftSideLength: number;
+  readonly rightSideLength: number;
+  readonly bottomSideLength: number;
 }
 
 export class TriangularPrism extends Shape {
-  constructor({ length, leftSideLength, rightSideLength, bottomSideLength }: TriangularPrismOptions) {
-    super();
+  constructor(public readonly inputOptions: TriangularPrismOptions, id?: string) {
+    super(id);
+  }
 
-    const a = leftSideLength;
-    const b = rightSideLength;
-    const c = bottomSideLength;
+  protected createInitialRawShape(): RawShape {
+    const a = this.inputOptions.leftSideLength;
+    const b = this.inputOptions.rightSideLength;
+    const c = this.inputOptions.bottomSideLength;
+
+    // console.log({ a, b, c });
 
     const A = Math.acos((b ** 2 + c ** 2 - a ** 2) / (2 * b * c));
     const B = Math.acos((c ** 2 + a ** 2 - b ** 2) / (2 * c * a));
@@ -44,11 +49,13 @@ export class TriangularPrism extends Shape {
     const y2 = peakY; // y at triangle peak
     const y3 = 0;
 
-    this.rawShape = polyhedron({
+    // console.log([x1, y1], [x2, y2], [x3, y3]);
+
+    return polyhedron({
       points: [
-        [length, x1, y1],
-        [length, x2, y2],
-        [length, x3, y3],
+        [this.inputOptions.length, x1, y1],
+        [this.inputOptions.length, x2, y2],
+        [this.inputOptions.length, x3, y3],
         [0, x1, y1],
         [0, x2, y2],
         [0, x3, y3],

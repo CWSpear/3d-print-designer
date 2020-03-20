@@ -1,17 +1,17 @@
 const { polyhedron } = require('@jscad/csg/src/api/primitives3d-api');
 
-import { Shape } from '../../shape';
-import { Cube } from '../core/cube';
+import { RawShape, Shape } from '../../shape';
+import { Cube, CubeOptions } from '../core/cube';
 import { Cylinder } from '../core/cylinder';
 import { RightTriangularPrism } from './right-triangular-prism';
 
 export interface LidLipOptions {
-  width: number;
-  length: number;
-  height?: number;
-  lipWidth?: number;
-  attachmentWidth?: number;
-  extraClearance?: number;
+  readonly width: number;
+  readonly length: number;
+  readonly height?: number;
+  readonly lipWidth?: number;
+  readonly attachmentWidth?: number;
+  readonly extraClearance?: number;
 }
 
 export interface LidOptions {
@@ -24,58 +24,62 @@ export interface LidOptions {
 }
 
 export class LidLip extends Shape {
-  private readonly width: number;
-  private readonly length: number;
-  private readonly height: number;
-  private readonly lipWidth: number;
-  private readonly attachmentWidth: number;
-  private readonly extraClearance: number;
+  constructor(public readonly inputOptions: LidLipOptions, id?: string) {
+    super(id);
 
-  constructor({ width, length, height = 2, lipWidth = 3, attachmentWidth = 1, extraClearance = 0.2 }: LidLipOptions) {
-    super();
+    this.inputOptions = {
+      height: 2,
+      lipWidth: 3,
+      attachmentWidth: 1,
+      extraClearance: 0.2,
+      ...inputOptions,
+    };
+  }
 
-    this.width = width;
-    this.length = length;
-    this.height = height;
-    this.lipWidth = lipWidth;
-    this.attachmentWidth = attachmentWidth;
-    this.extraClearance = extraClearance;
-
-    this.rawShape = this.makeLip().render();
+  protected createInitialRawShape(): RawShape {
+    return this.makeLip().render();
   }
 
   private makeLip(extraWiggleRoom: number = 0): Shape {
-    const lipPartWest: Shape = this.makeLipPart(this.width - extraWiggleRoom).translateY(-this.lipWidth);
+    const lipPartWest: Shape = this.makeLipPart(this.inputOptions.width - extraWiggleRoom).translateY(
+      -this.inputOptions.lipWidth,
+    );
+
     const lipPartEast: Shape = lipPartWest.clone().mirrorAcrossXPlane();
-    lipPartWest.translateY(this.length - extraWiggleRoom);
-    const lipPartNorth: Shape = this.makeLipPart(this.length - extraWiggleRoom)
-      .translateY(this.width - this.lipWidth - extraWiggleRoom)
+    lipPartWest.translateY(this.inputOptions.length - extraWiggleRoom);
+    const lipPartNorth: Shape = this.makeLipPart(this.inputOptions.length - extraWiggleRoom)
+      .translateY(this.inputOptions.width - this.inputOptions.lipWidth - extraWiggleRoom)
       .rotateZ(90)
       .mirrorAcrossYPlane();
 
-    return lipPartWest.addShapes(lipPartEast.render(), lipPartNorth.render());
+    return lipPartWest.addShapes(lipPartEast, lipPartNorth);
   }
 
   private makeLipPart(partLength: number): Shape {
-    const lipPart = new Cube({
-      size: { width: partLength, length: this.lipWidth, height: this.height + this.extraClearance },
-    });
-
-    lipPart.subtractShapes(
-      new RightTriangularPrism({
-        xLegLength: this.lipWidth - this.attachmentWidth,
-        yLegLength: this.height,
-        length: partLength,
-      })
-        .translateZ(this.extraClearance)
-        .render(),
-      lipPart
-        .clone()
-        .translate({ y: -this.attachmentWidth, z: -this.height })
-        .render(),
+    const lipPart = new Cube(
+      {
+        size: {
+          width: partLength,
+          length: this.inputOptions.lipWidth,
+          height: this.inputOptions.height + this.inputOptions.extraClearance,
+        },
+      },
+      `${this.id}__CUBE`,
     );
 
-    return lipPart;
+    lipPart.subtractShapes(
+      new RightTriangularPrism(
+        {
+          xLegLength: this.inputOptions.lipWidth - this.inputOptions.attachmentWidth,
+          yLegLength: this.inputOptions.height,
+          length: partLength,
+        },
+        `${this.id}__RTP`,
+      ).translateZ(this.inputOptions.extraClearance),
+      lipPart.clone().translate({ y: -this.inputOptions.attachmentWidth, z: -this.inputOptions.height }),
+    );
+
+    return lipPart.group();
   }
 
   makeLid(
@@ -95,25 +99,27 @@ export class LidLip extends Shape {
       extraWiggleRoom: 0.2,
     },
   ): Shape {
-    const width = this.width - extraWiggleRoom;
-    const length = this.length - extraWiggleRoom;
+    const width = this.inputOptions.width - extraWiggleRoom;
+    const length = this.inputOptions.length - extraWiggleRoom;
 
     const lid = new Cube({
       size: {
         width,
         length,
-        height: this.height + this.extraClearance,
+        height: this.inputOptions.height + this.inputOptions.extraClearance,
       },
-    }).subtractShapes(
-      this.makeLip(extraWiggleRoom).render(),
-      new Cube({
-        size: {
-          width,
-          length,
-          height: this.extraClearance,
-        },
-      }).render(),
-    );
+    })
+      .group()
+      .subtractShapes(
+        this.makeLip(extraWiggleRoom),
+        new Cube({
+          size: {
+            width,
+            length,
+            height: this.inputOptions.extraClearance,
+          },
+        }),
+      );
 
     if (!noButtons) {
       const button = new Cylinder({
@@ -124,22 +130,17 @@ export class LidLip extends Shape {
       button.translate({
         x: buttonDistanceFromEdge,
         y: length / 2 - buttonRadius - buttonSpacing / 2,
-        z: this.height - buttonDepth,
+        z: this.inputOptions.height - buttonDepth,
       });
 
-      lid.subtractShapes(
-        button.render(),
-        button
-          .clone()
-          .translateY(buttonSpacing + buttonRadius * 2)
-          .render(),
-      );
+      lid.subtractShapes(button, button.clone().translateY(buttonSpacing + buttonRadius * 2));
     }
 
     return lid.setPositionToZero({ z: true });
   }
 
+  /** @deprecated */
   getTotalHeight() {
-    return this.height + this.extraClearance;
+    return this.inputOptions.height + this.inputOptions.extraClearance;
   }
 }

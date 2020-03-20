@@ -1,26 +1,28 @@
 const { cube } = require('@jscad/csg/src/api/primitives3d-api');
 
-import { Dimensions, Shape } from '../../shape';
+import { Dimensions, RawShape, Shape } from '../../shape';
 import { Util } from '../../util';
 
 export interface CubeOptions {
-  size: Dimensions;
-  offset?: Dimensions;
-  round?: boolean;
-  radius?: number;
-  resolution?: number;
-  center?: boolean;
+  readonly size: Dimensions;
+  // readonly offset?: Dimensions;
+  readonly round?: boolean;
+  readonly radius?: number;
+  readonly resolution?: number;
+  // readonly center?: boolean;
 }
 
 export class Cube extends Shape {
-  constructor(options: CubeOptions) {
-    super();
+  constructor(public readonly inputOptions: CubeOptions, id?: string) {
+    super(id);
+  }
 
-    this.rawShape = cube({
-      ...options,
-      size: Util.normalizeDimensions(options.size),
-      offset: Util.normalizeDimensions(options.offset),
-      fn: options.resolution,
+  protected createInitialRawShape(): RawShape {
+    return cube({
+      ...this.inputOptions,
+      size: Util.convertDimensionsToNumbers(this.inputOptions.size),
+      // offset: Util.normalizeDimensions(this.inputOptions.offset),
+      fn: this.inputOptions.resolution || 8,
     });
   }
 }

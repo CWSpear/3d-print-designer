@@ -150,6 +150,7 @@ async function processDesignFileChange(filePath: string) {
   await fs.mkdirp(outputDir);
 
   console.log(chalk.yellow(`Compiling ${newName}...\n`));
+  const start: number = Date.now();
 
   try {
     if (filePath.match(/\.ts$/)) {
@@ -203,7 +204,9 @@ async function processDesignFileChange(filePath: string) {
   }
 
   const url = `http://localhost:${PORT}#${pathToIt}`;
+  const end: number = Date.now();
   console.log(chalk.green(`Compiled ${pathToIt}`));
+  console.log(chalk.bgBlue(`Completed in ${end - start}ms`));
 
   console.log(chalk.yellow(`\nNotifying...`));
 
