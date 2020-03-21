@@ -62,13 +62,21 @@
 					<a href="_shape_.shape.html">Shape</a>
 				</li>
 			</ul>
-			<h1>Class Shape</h1>
+			<h1>Class Shape&lt;InputOptions&gt;</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-type-parameters">
+				<h3>Type parameters</h3>
+				<ul class="tsd-type-parameters">
+					<li>
+						<h4>InputOptions</h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -93,6 +101,9 @@
 							<li>
 								<a href="_shapes_custom_lid_.lidlip.html" class="tsd-signature-type">LidLip</a>
 							</li>
+							<li>
+								<a href="_shapes_custom_rounded_bottom_cube_.roundedbottomcube.html" class="tsd-signature-type">RoundedBottomCube</a>
+							</li>
 						</ul>
 					</li>
 				</ul>
@@ -107,14 +118,13 @@
 								<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-protected"><a href="_shape_.shape.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-private-protected">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_shape_.shape.html#groupshapes" class="tsd-kind-icon">group<wbr>Shapes</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_shape_.shape.html#id" class="tsd-kind-icon">id</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_shape_.shape.html#inputoptions" class="tsd-kind-icon">input<wbr>Options</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_shape_.shape.html#operations" class="tsd-kind-icon">operations</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_shape_.shape.html#rawshapecache" class="tsd-kind-icon">raw<wbr>Shape<wbr>Cache</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_shape_.shape.html#inputoptions" class="tsd-kind-icon">input<wbr>Options</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_shape_.shape.html#rawshape" class="tsd-kind-icon">raw<wbr>Shape</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_shape_.shape.html#shapegroup" class="tsd-kind-icon">shape<wbr>Group</a></li>
 							</ul>
 						</section>
@@ -137,12 +147,10 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_shape_.shape.html#getpositionminy" class="tsd-kind-icon">get<wbr>Position<wbr>MinY</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_shape_.shape.html#getpositionminz" class="tsd-kind-icon">get<wbr>Position<wbr>MinZ</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_shape_.shape.html#getwidth" class="tsd-kind-icon">get<wbr>Width</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_shape_.shape.html#group" class="tsd-kind-icon">group</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_shape_.shape.html#mirror" class="tsd-kind-icon">mirror</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_shape_.shape.html#mirroracrossxplane" class="tsd-kind-icon">mirror<wbr>AcrossXPlane</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_shape_.shape.html#mirroracrossyplane" class="tsd-kind-icon">mirror<wbr>AcrossYPlane</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_shape_.shape.html#mirroracrosszplane" class="tsd-kind-icon">mirror<wbr>AcrossZPlane</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-private"><a href="_shape_.shape.html#performoperation" class="tsd-kind-icon">perform<wbr>Operation</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_shape_.shape.html#render" class="tsd-kind-icon">render</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_shape_.shape.html#rotate" class="tsd-kind-icon">rotate</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_shape_.shape.html#rotatex" class="tsd-kind-icon">rotateX</a></li>
@@ -170,17 +178,20 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-protected">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Shape<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_shape_.shape.html" class="tsd-signature-type">Shape</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Shape<span class="tsd-signature-symbol">(</span>inputOptions<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">InputOptions</span>, id<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_shape_.shape.html" class="tsd-signature-type">Shape</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L119">shape.ts:119</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L54">shape.ts:54</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
+								<li>
+									<h5>inputOptions: <span class="tsd-signature-type">InputOptions</span></h5>
+								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> id: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &#x27;&#x27; + random(999999)</span></h5>
 								</li>
@@ -190,7 +201,7 @@
 					</ul>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-private-protected">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="groupshapes" class="tsd-anchor"></a>
@@ -198,7 +209,7 @@
 					<div class="tsd-signature tsd-kind-icon">group<wbr>Shapes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> = false</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L119">shape.ts:119</a></li>
+							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L54">shape.ts:54</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -208,37 +219,27 @@
 					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L121">shape.ts:121</a></li>
+							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L56">shape.ts:56</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 					<a name="inputoptions" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagAbstract">Abstract</span> input<wbr>Options</h3>
-					<div class="tsd-signature tsd-kind-icon">input<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> input<wbr>Options</h3>
+					<div class="tsd-signature tsd-kind-icon">input<wbr>Options<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">InputOptions</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L109">shape.ts:109</a></li>
+							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L56">shape.ts:56</a></li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-					<a name="operations" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> operations</h3>
-					<div class="tsd-signature tsd-kind-icon">operations<span class="tsd-signature-symbol">:</span> <a href="../modules/_shape_.html#operation" class="tsd-signature-type">Operation</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
+					<a name="rawshape" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> raw<wbr>Shape</h3>
+					<div class="tsd-signature tsd-kind-icon">raw<wbr>Shape<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_shape_.rawshape.html" class="tsd-signature-type">RawShape</a><span class="tsd-signature-symbol"> = this.createInitialRawShape()</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L111">shape.ts:111</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-					<a name="rawshapecache" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagProtected">Protected</span> raw<wbr>Shape<wbr>Cache</h3>
-					<div class="tsd-signature tsd-kind-icon">raw<wbr>Shape<wbr>Cache<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_shape_.rawshape.html" class="tsd-signature-type">RawShape</a><span class="tsd-signature-symbol"> = null</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L113">shape.ts:113</a></li>
+							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L48">shape.ts:48</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -248,7 +249,7 @@
 					<div class="tsd-signature tsd-kind-icon">shape<wbr>Group<span class="tsd-signature-symbol">:</span> <a href="_shape_.shape.html" class="tsd-signature-type">Shape</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = []</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L117">shape.ts:117</a></li>
+							<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L52">shape.ts:52</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -265,7 +266,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L405">shape.ts:405</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L284">shape.ts:284</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -288,7 +289,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L377">shape.ts:377</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L256">shape.ts:256</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -314,7 +315,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L353">shape.ts:353</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L232">shape.ts:232</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -340,7 +341,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L316">shape.ts:316</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L198">shape.ts:198</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -363,7 +364,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L329">shape.ts:329</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L208">shape.ts:208</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -389,7 +390,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L427">shape.ts:427</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L300">shape.ts:300</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="_shape_.shape.html" class="tsd-signature-type">Shape</a></h4>
@@ -406,7 +407,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L115">shape.ts:115</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L50">shape.ts:50</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_shape_.rawshape.html" class="tsd-signature-type">RawShape</a></h4>
@@ -423,7 +424,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L487">shape.ts:487</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L356">shape.ts:356</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -440,7 +441,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L483">shape.ts:483</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L352">shape.ts:352</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -457,7 +458,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L461">shape.ts:461</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L330">shape.ts:330</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -474,7 +475,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L467">shape.ts:467</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L336">shape.ts:336</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -491,7 +492,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L473">shape.ts:473</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L342">shape.ts:342</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -508,7 +509,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L443">shape.ts:443</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L312">shape.ts:312</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -525,7 +526,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L449">shape.ts:449</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L318">shape.ts:318</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -542,7 +543,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L455">shape.ts:455</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L324">shape.ts:324</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -559,27 +560,10 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L479">shape.ts:479</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L348">shape.ts:348</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="group" class="tsd-anchor"></a>
-					<h3>group</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">group<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L123">shape.ts:123</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -593,7 +577,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L194">shape.ts:194</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L88">shape.ts:88</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -616,7 +600,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L207">shape.ts:207</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L98">shape.ts:98</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -633,7 +617,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L211">shape.ts:211</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L102">shape.ts:102</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
@@ -650,42 +634,10 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L215">shape.ts:215</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L106">shape.ts:106</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-private">
-					<a name="performoperation" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> perform<wbr>Operation</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-private">
-						<li class="tsd-signature tsd-kind-icon">perform<wbr>Operation&lt;T&gt;<span class="tsd-signature-symbol">(</span>rawShape<span class="tsd-signature-symbol">: </span><a href="../interfaces/_shape_.rawshape.html" class="tsd-signature-type">RawShape</a>, operation<span class="tsd-signature-symbol">: </span><a href="../modules/_shape_.html#operation" class="tsd-signature-type">Operation</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_shape_.rawshape.html" class="tsd-signature-type">RawShape</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L149">shape.ts:149</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-type-parameters-title">Type parameters</h4>
-							<ul class="tsd-type-parameters">
-								<li>
-									<h4>T</h4>
-								</li>
-							</ul>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>rawShape: <a href="../interfaces/_shape_.rawshape.html" class="tsd-signature-type">RawShape</a></h5>
-								</li>
-								<li>
-									<h5>operation: <a href="../modules/_shape_.html#operation" class="tsd-signature-type">Operation</a></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_shape_.rawshape.html" class="tsd-signature-type">RawShape</a></h4>
 						</li>
 					</ul>
 				</section>
@@ -699,7 +651,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L129">shape.ts:129</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L58">shape.ts:58</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_shape_.rawshape.html" class="tsd-signature-type">RawShape</a></h4>
@@ -716,7 +668,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L219">shape.ts:219</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L110">shape.ts:110</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -739,7 +691,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L232">shape.ts:232</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L120">shape.ts:120</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -762,7 +714,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L236">shape.ts:236</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L124">shape.ts:124</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -785,7 +737,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L240">shape.ts:240</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L128">shape.ts:128</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -808,7 +760,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L173">shape.ts:173</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L67">shape.ts:67</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -831,7 +783,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L269">shape.ts:269</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L154">shape.ts:154</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -854,7 +806,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L282">shape.ts:282</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L164">shape.ts:164</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -877,7 +829,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L286">shape.ts:286</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L168">shape.ts:168</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -900,7 +852,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L290">shape.ts:290</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L172">shape.ts:172</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -923,7 +875,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L294">shape.ts:294</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L176">shape.ts:176</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -946,7 +898,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L416">shape.ts:416</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L292">shape.ts:292</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -969,7 +921,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L244">shape.ts:244</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L132">shape.ts:132</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -992,7 +944,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L257">shape.ts:257</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L142">shape.ts:142</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1015,7 +967,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L261">shape.ts:261</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L146">shape.ts:146</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1038,7 +990,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/b95f93e/cad/designer/shape.ts#L265">shape.ts:265</a></li>
+									<li>Defined in <a href="https://github.com/CWSpear/3d-print-designer/blob/d0a004e/cad/designer/shape.ts#L150">shape.ts:150</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1093,12 +1045,9 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-enum tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../enums/_shape_.operationtype.html" class="tsd-kind-icon">Operation<wbr>Type</a>
-					</li>
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-module">
+					<li class="current tsd-kind-class tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="_shape_.shape.html" class="tsd-kind-icon">Shape</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-protected">
@@ -1110,14 +1059,11 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 								<a href="_shape_.shape.html#id" class="tsd-kind-icon">id</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
 								<a href="_shape_.shape.html#inputoptions" class="tsd-kind-icon">input<wbr>Options</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="_shape_.shape.html#operations" class="tsd-kind-icon">operations</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
-								<a href="_shape_.shape.html#rawshapecache" class="tsd-kind-icon">raw<wbr>Shape<wbr>Cache</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
+								<a href="_shape_.shape.html#rawshape" class="tsd-kind-icon">raw<wbr>Shape</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="_shape_.shape.html#shapegroup" class="tsd-kind-icon">shape<wbr>Group</a>
@@ -1171,9 +1117,6 @@
 								<a href="_shape_.shape.html#getwidth" class="tsd-kind-icon">get<wbr>Width</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_shape_.shape.html#group" class="tsd-kind-icon">group</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_shape_.shape.html#mirror" class="tsd-kind-icon">mirror</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -1184,9 +1127,6 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_shape_.shape.html#mirroracrosszplane" class="tsd-kind-icon">mirror<wbr>AcrossZPlane</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-private">
-								<a href="_shape_.shape.html#performoperation" class="tsd-kind-icon">perform<wbr>Operation</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_shape_.shape.html#render" class="tsd-kind-icon">render</a>
@@ -1240,35 +1180,11 @@
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../interfaces/_shape_.centeroperation.html" class="tsd-kind-icon">Center<wbr>Operation</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../interfaces/_shape_.differenceoperation.html" class="tsd-kind-icon">Difference<wbr>Operation</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../interfaces/_shape_.mirroroperation.html" class="tsd-kind-icon">Mirror<wbr>Operation</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter tsd-is-not-exported">
-						<a href="../interfaces/_shape_.rawoperation.html" class="tsd-kind-icon">Raw<wbr>Operation</a>
-					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="../interfaces/_shape_.rawshape.html" class="tsd-kind-icon">Raw<wbr>Shape</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../interfaces/_shape_.rotateoperation.html" class="tsd-kind-icon">Rotate<wbr>Operation</a>
-					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module">
 						<a href="../interfaces/_shape_.roundcornersoptions.html" class="tsd-kind-icon">Round<wbr>Corners<wbr>Options</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../interfaces/_shape_.scaleoperation.html" class="tsd-kind-icon">Scale<wbr>Operation</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../interfaces/_shape_.translateoperation.html" class="tsd-kind-icon">Translate<wbr>Operation</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../interfaces/_shape_.unionoperation.html" class="tsd-kind-icon">Union<wbr>Operation</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="../modules/_shape_.html#axestoggles" class="tsd-kind-icon">Axes<wbr>Toggles</a>
@@ -1281,30 +1197,6 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="../modules/_shape_.html#numbersdimensions" class="tsd-kind-icon">Numbers<wbr>Dimensions</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/_shape_.html#operation" class="tsd-kind-icon">Operation</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/_shape_.html#rawcenterargs" class="tsd-kind-icon">Raw<wbr>Center<wbr>Args</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/_shape_.html#rawdifferenceargs" class="tsd-kind-icon">Raw<wbr>Difference<wbr>Args</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/_shape_.html#rawmirrorargs" class="tsd-kind-icon">Raw<wbr>Mirror<wbr>Args</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/_shape_.html#rawrotateargs" class="tsd-kind-icon">Raw<wbr>Rotate<wbr>Args</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/_shape_.html#rawscaleargs" class="tsd-kind-icon">Raw<wbr>Scale<wbr>Args</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/_shape_.html#rawtranslateargs" class="tsd-kind-icon">Raw<wbr>Translate<wbr>Args</a>
-					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-is-not-exported">
-						<a href="../modules/_shape_.html#rawunionargs" class="tsd-kind-icon">Raw<wbr>Union<wbr>Args</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="../modules/_shape_.html#vector" class="tsd-kind-icon">Vector</a>
@@ -1355,12 +1247,11 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
