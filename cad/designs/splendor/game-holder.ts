@@ -1,11 +1,7 @@
-import * as _ from 'lodash';
 import { RawShape, Shape } from '../../designer/shape';
 import { Cube } from '../../designer/shapes/core/cube';
 import { Cylinder } from '../../designer/shapes/core/cylinder';
-import { EquilateralTriangularPrism } from '../../designer/shapes/custom/equilateral-triangular-prism';
 import { LidLip } from '../../designer/shapes/custom/lid';
-import { RightTriangularPrism } from '../../designer/shapes/custom/right-triangular-prism';
-import { TriangularPrism } from '../../designer/shapes/custom/triangular-prism';
 import { Util } from '../../designer/util';
 
 interface SpendorGameHolderConfig {
@@ -21,14 +17,14 @@ interface SpendorGameHolderConfig {
 
 export const magnetMinWall = 0.59999;
 
-class SpendorGameHolder extends Shape {
+class SpendorGameHolder extends Shape<SpendorGameHolderConfig> {
   mainShape: Shape;
   magnet1: Shape;
   magnet2: Shape;
   lidLip: LidLip;
 
-  constructor(public readonly inputOptions: SpendorGameHolderConfig) {
-    super();
+  constructor(inputOptions: SpendorGameHolderConfig) {
+    super(inputOptions);
   }
 
   protected createInitialRawShape(): RawShape {
@@ -324,16 +320,15 @@ class SpendorGameHolder extends Shape {
 
     // console.log(mainShape.render()); //
 
-    // mainShape.subtractShapes(
-    //   new Cube({
-    //     size: {
-    //       width: 30,
-    //       length: 30,
-    //       height: 200,
-    //     },
-    //   })
-    //     .alignWithBottom(cardSlot, { x: true, y: true }),
-    // );
+    mainShape.subtractShapes(
+      new Cube({
+        size: {
+          width: 30,
+          length: 30,
+          height: 200,
+        },
+      }).alignWithBottom(cardSlot, { x: true, y: true }),
+    );
 
     return mainShape.render();
   }

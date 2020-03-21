@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { Shape } from '../../designer/shape';
+import { RawShape, Shape } from '../../designer/shape';
 import { Cube } from '../../designer/shapes/core/cube';
 import { Cylinder } from '../../designer/shapes/core/cylinder';
 import { Util } from '../../designer/util';
@@ -13,9 +13,13 @@ interface WirelessChargerAssistOptions {
   wallThickness: number;
 }
 
-export class WirelessChargerAssist extends Shape {
-  constructor({ lipWidth, lipLength, lipHeight, totalWidth, wallThickness }: WirelessChargerAssistOptions) {
-    super();
+export class WirelessChargerAssist extends Shape<WirelessChargerAssistOptions> {
+  constructor(options: WirelessChargerAssistOptions) {
+    super(options);
+  }
+
+  protected createInitialRawShape(): RawShape {
+    const { lipWidth, lipLength, lipHeight, totalWidth, wallThickness } = this.inputOptions;
 
     const hole = new Cube({
       size: {
@@ -34,7 +38,7 @@ export class WirelessChargerAssist extends Shape {
 
     const roundedSide2 = roundedSide.clone().translateX(hole.getWidth());
 
-    hole.addShapes(roundedSide.render(), roundedSide2.render());
+    hole.addShapes(roundedSide, roundedSide2);
 
     const mainShape = new Cube({
       size: {
@@ -43,18 +47,6 @@ export class WirelessChargerAssist extends Shape {
         height: lipHeight,
       },
     });
-
-    this.rawShape = mainShape
-      .subtractShapes(
-        hole
-          .center({ x: true })
-          .translate({
-            x: (mainShape.getPositionMaxX() - mainShape.getPositionMinX()) / 2,
-            y: wallThickness,
-          })
-          .render(),
-      )
-      .render();
 
     console.log('\nHole\n');
     console.log(
@@ -75,6 +67,8 @@ export class WirelessChargerAssist extends Shape {
       `),
     );
     console.log('');
+
+    return mainShape.subtractShapes(hole.centerOn(mainShape, { x: true, y: true })).render();
   }
 }
 

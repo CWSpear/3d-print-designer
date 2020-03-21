@@ -1,7 +1,5 @@
-const { polyhedron } = require('@jscad/csg/src/api/primitives3d-api');
-
 import { RawShape, Shape } from '../../shape';
-import { Cube, CubeOptions } from '../core/cube';
+import { Cube } from '../core/cube';
 import { Cylinder } from '../core/cylinder';
 import { RightTriangularPrism } from './right-triangular-prism';
 
@@ -23,17 +21,18 @@ export interface LidOptions {
   extraWiggleRoom?: number;
 }
 
-export class LidLip extends Shape {
-  constructor(public readonly inputOptions: LidLipOptions, id?: string) {
-    super(id);
-
-    this.inputOptions = {
-      height: 2,
-      lipWidth: 3,
-      attachmentWidth: 1,
-      extraClearance: 0.2,
-      ...inputOptions,
-    };
+export class LidLip extends Shape<LidLipOptions> {
+  constructor(inputOptions: LidLipOptions, id?: string) {
+    super(
+      {
+        height: 2,
+        lipWidth: 3,
+        attachmentWidth: 1,
+        extraClearance: 0.2,
+        ...inputOptions,
+      },
+      id,
+    );
   }
 
   protected createInitialRawShape(): RawShape {
@@ -79,7 +78,7 @@ export class LidLip extends Shape {
       lipPart.clone().translate({ y: -this.inputOptions.attachmentWidth, z: -this.inputOptions.height }),
     );
 
-    return lipPart.group();
+    return lipPart;
   }
 
   makeLid(
@@ -108,18 +107,16 @@ export class LidLip extends Shape {
         length,
         height: this.inputOptions.height + this.inputOptions.extraClearance,
       },
-    })
-      .group()
-      .subtractShapes(
-        this.makeLip(extraWiggleRoom),
-        new Cube({
-          size: {
-            width,
-            length,
-            height: this.inputOptions.extraClearance,
-          },
-        }),
-      );
+    }).subtractShapes(
+      this.makeLip(extraWiggleRoom),
+      new Cube({
+        size: {
+          width,
+          length,
+          height: this.inputOptions.extraClearance,
+        },
+      }),
+    );
 
     if (!noButtons) {
       const button = new Cylinder({

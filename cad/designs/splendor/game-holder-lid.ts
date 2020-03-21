@@ -7,11 +7,11 @@ import splendorGameHolder, { magnetMinWall } from './game-holder';
 
 splendorGameHolder.render();
 
-class SplendorGameHolderLid extends Shape {
+class SplendorGameHolderLid extends Shape<null> {
   inputOptions: null = null;
 
   constructor(id?: string) {
-    super(id);
+    super(null, id);
   }
 
   protected createInitialRawShape(): RawShape {

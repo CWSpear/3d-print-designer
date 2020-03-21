@@ -8,9 +8,11 @@ export interface RightTriangularPrismOptions {
   xLegLength: number;
 }
 
-export class RightTriangularPrism extends Shape {
-  constructor(public readonly inputOptions: RightTriangularPrismOptions, id?: string) {
-    super(id);
+import { TriangularPrism } from './triangular-prism';
+
+export class RightTriangularPrism extends Shape<RightTriangularPrismOptions> {
+  constructor(inputOptions: RightTriangularPrismOptions, id?: string) {
+    super(inputOptions, id);
   }
 
   protected createInitialRawShape(): RawShape {
@@ -34,14 +36,6 @@ export class RightTriangularPrism extends Shape {
   }
 }
 
-// import { TriangularPrism } from './triangular-prism';
-//
-// export interface RightTriangularPrismOptions {
-//   readonly length: number;
-//   readonly yLegLength: number;
-//   readonly xLegLength: number;
-// }
-//
 // export class RightTriangularPrism extends TriangularPrism {
 //   constructor(options: RightTriangularPrismOptions, id?: string) {
 //     super({

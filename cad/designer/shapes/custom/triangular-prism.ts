@@ -10,9 +10,9 @@ export interface TriangularPrismOptions {
   readonly bottomSideLength: number;
 }
 
-export class TriangularPrism extends Shape {
-  constructor(public readonly inputOptions: TriangularPrismOptions, id?: string) {
-    super(id);
+export class TriangularPrism extends Shape<TriangularPrismOptions> {
+  constructor(inputOptions: TriangularPrismOptions, id?: string) {
+    super(inputOptions, id);
   }
 
   protected createInitialRawShape(): RawShape {

@@ -10,9 +10,9 @@ export interface CardBoxOptions {
   tabHeight: number;
 }
 
-class CardBox extends Shape {
-  constructor(public readonly inputOptions: CardBoxOptions, id?: string) {
-    super(id);
+class CardBox extends Shape<CardBoxOptions> {
+  constructor(inputOptions: CardBoxOptions, id?: string) {
+    super(inputOptions, id);
   }
 
   protected createInitialRawShape(): RawShape {
@@ -36,9 +36,7 @@ class CardBox extends Shape {
       xLegLength: this.inputOptions.deckThickness + this.inputOptions.wallThickness,
       yLegLength: this.inputOptions.tabHeight,
       length: this.inputOptions.wallThickness,
-    })
-      .translate({ y: this.inputOptions.wallThickness })
-      .group();
+    }).translate({ y: this.inputOptions.wallThickness });
 
     const backThing = new Cube({
       size: {
@@ -50,16 +48,16 @@ class CardBox extends Shape {
 
     cardBox.addShapes(backThing.translate({ height: this.inputOptions.height }));
 
-    return cardBox.rotateZ(5).render();
+    return cardBox.rotateZ(90).render(); // .rotateZ(5).render();
   }
 }
 
 //
 export default new CardBox({
   // add a little wiggle room
-  width: 88.9 + 0.15,
-  height: 63.5 + 0.15,
+  width: 88.9 + 0.3,
+  height: 63.5 + 0.3,
   deckThickness: 17,
-  wallThickness: 0.5,
+  wallThickness: 0.8,
   tabHeight: 10,
 });

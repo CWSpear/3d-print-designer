@@ -1,14 +1,14 @@
-import { Shape } from '../../designer/shape';
+import { RawShape, Shape } from '../../designer/shape';
 import { Cube } from '../../designer/shapes/core/cube';
 import { LidLip } from '../../designer/shapes/custom/lid';
 
-// const config: CardHolderOptions = {
+// const options: CardHolderOptions = {
 //   width: 230,
 //   cardLength: 2.5 * 25.4,
 //   height: Math.sqrt(2.5 ^ (2 / 2)) * 25.4 + 2,
 // };
 
-const config: CardHolderOptions = {
+const options: CardHolderOptions = {
   width: 40,
   cardLength: 20,
   height: 30,
@@ -23,27 +23,27 @@ interface CardHolderOptions {
   slotSpacing?: number;
 }
 
-class CardHolder extends Shape {
+class CardHolder extends Shape<CardHolderOptions> {
   private lid: Shape;
 
-  constructor(config: CardHolderOptions) {
-    super();
-
-    const extraWiggleRoom = 0.2;
-
-    config = {
+  constructor(options: CardHolderOptions) {
+    super({
       // defaults
       wallWidth: 4,
       floorThickness: 1,
       slotSpacing: 1,
-      ...config,
-    };
+      ...options,
+    });
+  }
+
+  protected createInitialRawShape(): RawShape {
+    const extraWiggleRoom = 0.2;
 
     const mainShape = new Cube({
       size: {
-        width: config.width,
-        length: config.cardLength + (config.wallWidth + extraWiggleRoom) * 2,
-        height: (config.height * 2) / 3,
+        width: this.inputOptions.width,
+        length: this.inputOptions.cardLength + (this.inputOptions.wallWidth + extraWiggleRoom) * 2,
+        height: (this.inputOptions.height * 2) / 3,
       },
     });
 
@@ -56,7 +56,7 @@ class CardHolder extends Shape {
       size: {
         width: mainShape.getWidth(),
         length: mainShape.getLength(),
-        height: config.height / 3,
+        height: this.inputOptions.height / 3,
       },
     });
 
@@ -64,31 +64,28 @@ class CardHolder extends Shape {
 
     this.lid
       .translateZ(originalLid.getHeight() + extraWiggleRoom)
-      .addShapes(originalLid.render())
+      .addShapes(originalLid)
       .subtractShapes(
         new Cube({
           size: {
             width: this.lid.getWidth(),
-            length: mainShape.getLength() - (config.wallWidth + extraWiggleRoom) * 2,
-            height: this.lid.getHeight() - config.slotSpacing + 0.6,
+            length: mainShape.getLength() - (this.inputOptions.wallWidth + extraWiggleRoom) * 2,
+            height: this.lid.getHeight() - this.inputOptions.slotSpacing + 0.6,
           },
-        })
-          .translate({ x: config.floorThickness, y: config.wallWidth + extraWiggleRoom })
-          .render(),
-      )
-      .render();
+        }).translate({ x: this.inputOptions.floorThickness, y: this.inputOptions.wallWidth + extraWiggleRoom }),
+      );
 
     // const slot = new Cube({
     //   size: {
     //     width: 20,
-    //     length: config.cardLength,
+    //     length: this.inputOptions.cardLength,
     //     height: 200,
     //   },
-    // }).translate({ z: config.floorThickness, y: config.wallWidth, x: config.slotSpacing });
+    // }).translate({ z: this.inputOptions.floorThickness, y: this.inputOptions.wallWidth, x: this.inputOptions.slotSpacing });
     //
     // const slots: Shape[] = [];
     // for (let i = 0; i < 5; i++) {
-    //   console.log((slot.getWidth() + config.slotSpacing) * i);
+    //   console.log((slot.getWidth() + this.inputOptions.slotSpacing) * i);
     //   slots.push(
     //     slot
     //       .clone()
@@ -97,7 +94,7 @@ class CardHolder extends Shape {
     //   );
     // }
     //
-    // mainShape.subtractShapes(...slots.map(s => s.render()));
+    // mainShape.subtractShapes(...slots.map(s => s));
 
     mainShape.subtractShapes(
       new Cube({
@@ -106,13 +103,11 @@ class CardHolder extends Shape {
           length: mainShape.getLength() - 8,
           height: 100,
         },
-      })
-        .translate({
-          x: 4,
-          y: 4,
-          z: 1,
-        })
-        .render(),
+      }).translate({
+        x: 4,
+        y: 4,
+        z: 1,
+      }),
     );
 
     // add floor back in
@@ -120,12 +115,12 @@ class CardHolder extends Shape {
       size: {
         width: mainShape.getWidth(),
         length: mainShape.getLength(),
-        height: config.floorThickness,
+        height: this.inputOptions.floorThickness,
       },
     });
-    mainShape.addShapes(floor.render());
+    mainShape.addShapes(floor);
 
-    this.rawShape = mainShape.addShapes(lidLip.translateZ(mainShape.getHeight()).render()).render();
+    return mainShape.addShapes(lidLip.translateZ(mainShape.getHeight())).render();
   }
 
   makeLid(): Shape {
@@ -133,6 +128,6 @@ class CardHolder extends Shape {
   }
 }
 
-const cardHolder = new CardHolder(config);
+const cardHolder = new CardHolder(options);
 
 export default cardHolder;

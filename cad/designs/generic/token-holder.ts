@@ -1,4 +1,4 @@
-import { Shape } from '../../designer/shape';
+import { RawShape, Shape } from '../../designer/shape';
 import { Cube } from '../../designer/shapes/core/cube';
 import { LidLip } from '../../designer/shapes/custom/lid';
 import { RoundedBottomCube } from '../../designer/shapes/custom/rounded-bottom-cube';
@@ -7,11 +7,15 @@ import { Util } from '../../designer/util';
 //// CONFIG ////
 
 const config: TokenHolderOptions = {
-  width: 60,
-  length: 40,
-  height: 15,
-  grid: [[2, 2]],
-  useRamps: false,
+  width: 200,
+  length: 150,
+  height: 40,
+  grid: [
+    [5, 2, 2],
+    [1, 1],
+    [1, 1, 1, 1],
+  ],
+  // useRamps: false,
 };
 
 // END CONFIG //
@@ -27,20 +31,24 @@ interface TokenHolderOptions {
   outerWallThickness?: number;
 }
 
-class TokenHolder extends Shape {
+class TokenHolder extends Shape<TokenHolderOptions> {
   lidLip: LidLip;
 
-  constructor({
-    width,
-    length,
-    height,
-    grid,
-    useRamps = true,
-    rampSize = 8,
-    dividerThickness = 1,
-    outerWallThickness = 3,
-  }: TokenHolderOptions) {
-    super();
+  constructor(options: TokenHolderOptions) {
+    super(options);
+  }
+
+  protected createInitialRawShape(): RawShape {
+    const {
+      width,
+      length,
+      height,
+      grid,
+      useRamps = true,
+      rampSize = 8,
+      dividerThickness = 1,
+      outerWallThickness = 3,
+    } = this.inputOptions;
 
     const colCount = grid.length;
     const cellHeight =
@@ -98,15 +106,15 @@ class TokenHolder extends Shape {
             })
           : new Cube({ size });
 
-        mainShape.subtractShapes(shape.translate({ z: dividerThickness, x: offsetX, y: offsetY }).render());
+        mainShape.subtractShapes(shape.translate({ z: dividerThickness, x: offsetX, y: offsetY }));
 
         x += col;
       });
     });
 
-    mainShape.addShapes(this.lidLip.translateZ(heightWithoutLid).render());
+    mainShape.addShapes(this.lidLip.translateZ(heightWithoutLid));
 
-    this.rawShape = mainShape.render();
+    return mainShape.render();
   }
 }
 

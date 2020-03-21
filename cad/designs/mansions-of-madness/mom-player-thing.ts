@@ -1,4 +1,4 @@
-import { Shape } from '../../designer/shape';
+import { RawShape, Shape } from '../../designer/shape';
 import { Cube } from '../../designer/shapes/core/cube';
 import { TriangularPrism } from '../../designer/shapes/custom/triangular-prism';
 import { Util } from '../../designer/util';
@@ -33,52 +33,30 @@ interface MomPlayerThingOptions {
   outerPadding: number;
 }
 
-export class MomPlayerThing extends Shape {
-  private readonly playerCardLength: number;
-  private readonly playerCardWidth: number;
-  private readonly otherCardLength: number;
-  private readonly otherCardWidth: number;
-  private readonly tokenAreaLength: number;
-  private readonly cardSlotThickness: number;
-  private readonly cardSlotDepth: number;
-  private readonly playerCardDepth: number;
-  private readonly tokenAreaDepth: number;
-  private readonly extraHeight: number;
-  private readonly cardSlotSpacing: number;
-  private readonly outerPadding: number;
+export class MomPlayerThing extends Shape<MomPlayerThingOptions> {
+  private totalHeight: number;
+  private totalWidth: number;
+  private totalLength: number;
 
-  private readonly totalHeight: number;
-  private readonly totalWidth: number;
-  private readonly totalLength: number;
+  constructor(options: MomPlayerThingOptions) {
+    super(options);
+  }
 
-  constructor({
-    playerCardLength,
-    playerCardWidth,
-    otherCardLength,
-    otherCardWidth,
-    tokenAreaLength,
-    cardSlotThickness,
-    cardSlotDepth,
-    playerCardDepth,
-    tokenAreaDepth,
-    extraHeight,
-    cardSlotSpacing,
-    outerPadding,
-  }: MomPlayerThingOptions) {
-    super();
-
-    this.playerCardLength = playerCardLength;
-    this.playerCardWidth = playerCardWidth;
-    this.otherCardLength = otherCardLength;
-    this.otherCardWidth = otherCardWidth;
-    this.tokenAreaLength = tokenAreaLength;
-    this.cardSlotThickness = cardSlotThickness;
-    this.cardSlotDepth = cardSlotDepth;
-    this.playerCardDepth = playerCardDepth;
-    this.tokenAreaDepth = tokenAreaDepth;
-    this.extraHeight = extraHeight;
-    this.cardSlotSpacing = cardSlotSpacing;
-    this.outerPadding = outerPadding;
+  protected createInitialRawShape(): RawShape {
+    const {
+      playerCardLength,
+      playerCardWidth,
+      otherCardLength,
+      otherCardWidth,
+      tokenAreaLength,
+      cardSlotThickness,
+      cardSlotDepth,
+      playerCardDepth,
+      tokenAreaDepth,
+      extraHeight,
+      cardSlotSpacing,
+      outerPadding,
+    } = this.inputOptions;
 
     const totalHeight = Math.max(cardSlotDepth, playerCardDepth, tokenAreaDepth) + extraHeight;
     this.totalHeight = totalHeight;
@@ -116,12 +94,10 @@ export class MomPlayerThing extends Shape {
     });
 
     playerThing.subtractShapes(
-      playerCardSlot
-        .translate({
-          x: (totalWidth - playerCardWidth) / 2,
-          z: totalHeight - playerCardDepth,
-        })
-        .render(),
+      playerCardSlot.translate({
+        x: (totalWidth - playerCardWidth) / 2,
+        z: totalHeight - playerCardDepth,
+      }),
     );
 
     const tokenArea = new Cube({
@@ -129,13 +105,11 @@ export class MomPlayerThing extends Shape {
     });
 
     playerThing.subtractShapes(
-      tokenArea
-        .translate({
-          x: playerCardSlot.getPositionMinX(),
-          y: playerCardSlot.getLength() + outerPadding,
-          z: totalHeight - tokenAreaDepth,
-        })
-        .render(),
+      tokenArea.translate({
+        x: playerCardSlot.getPositionMinX(),
+        y: playerCardSlot.getLength() + outerPadding,
+        z: totalHeight - tokenAreaDepth,
+      }),
     );
 
     // const smallSlot = new Cube({
@@ -184,10 +158,10 @@ export class MomPlayerThing extends Shape {
         ...this.makeSlots(9, outerPadding, 0, smallSlot),
         ...this.makeSlots(9, totalWidth - outerPadding - smallSlot.getWidth(), 0, smallSlot),
         ...this.makeSlots(3, outerPadding, tokenArea.getPositionMaxY(), longSlot),
-      ].map(s => s.render()),
+      ],
     );
 
-    this.rawShape = playerThing.render();
+    return playerThing.render();
   }
 
   makeSlots(num: number, xOffset: number, yStart: number, slot: Shape): Shape[] {
@@ -197,7 +171,11 @@ export class MomPlayerThing extends Shape {
 
     const arr = [];
     for (let i = 0; i < num; i++) {
-      const y = yStart + this.cardSlotSpacing * i + this.outerPadding + this.cardSlotThickness * i;
+      const y =
+        yStart +
+        this.inputOptions.cardSlotSpacing * i +
+        this.inputOptions.outerPadding +
+        this.inputOptions.cardSlotThickness * i;
 
       arr.push(slot.clone().translateY(y));
     }
@@ -223,27 +201,27 @@ export class MomPlayerThing extends Shape {
         bottomSideLength: 6,
       })
         .translate({
-          x: this.outerPadding,
+          x: this.inputOptions.outerPadding,
           // need to try and offset the rotation
           y: -3.4,
-          z: this.totalHeight - this.cardSlotDepth,
+          z: this.totalHeight - this.inputOptions.cardSlotDepth,
         })
         .scale({ y: scale, z: scale });
 
-      const y = (this.cardSlotSpacing * i + this.outerPadding) * scale;
+      const y = (this.inputOptions.cardSlotSpacing * i + this.inputOptions.outerPadding) * scale;
 
       slots.push(slot.clone().translateY(y));
     }
 
     const sampler = new Cube({
       size: {
-        width: width + this.outerPadding * 2,
+        width: width + this.inputOptions.outerPadding * 2,
         length: slots[slots.length - 1].getPositionMaxY() + 1,
         height: this.totalHeight,
       },
     });
 
-    sampler.subtractShapes(...slots.map(s => s.render()));
+    sampler.subtractShapes(...slots);
 
     return sampler;
   }

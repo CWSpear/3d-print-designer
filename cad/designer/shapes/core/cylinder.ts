@@ -1,7 +1,6 @@
 const { cylinder } = require('@jscad/csg/src/api/primitives3d-api');
 
 import { RawShape, Shape } from '../../shape';
-import { CubeOptions } from './cube';
 
 export interface CylinderOptions {
   readonly radius: number;
@@ -9,9 +8,9 @@ export interface CylinderOptions {
   readonly resolution?: number;
 }
 
-export class Cylinder extends Shape {
-  constructor(public readonly inputOptions: CylinderOptions, id?: string) {
-    super(id);
+export class Cylinder extends Shape<CylinderOptions> {
+  constructor(inputOptions: CylinderOptions, id?: string) {
+    super(inputOptions, id);
   }
 
   protected createInitialRawShape(): RawShape {

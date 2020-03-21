@@ -44,73 +44,8 @@ export interface RoundCornersOptions {
   radius?: number;
 }
 
-enum OperationType {
-  Translate = 'Translate',
-  Rotate = 'Rotate',
-  Mirror = 'Mirror',
-  Center = 'Center',
-  Scale = 'Scale',
-  Difference = 'Difference',
-  Union = 'Union',
-}
-
-type RawTranslateArgs = [NumbersDimensions];
-type RawRotateArgs = [NumbersDimensions];
-type RawMirrorArgs = [NumbersDimensions];
-type RawScaleArgs = [NumbersDimensions];
-type RawCenterArgs = [BooleanAxesToggles];
-type RawDifferenceArgs = Shape[];
-type RawUnionArgs = Shape[];
-
-// don't use this, use `Operation`!
-interface RawOperation<T> {
-  type: OperationType;
-  args: T;
-}
-
-interface TranslateOperation extends RawOperation<RawTranslateArgs> {
-  type: OperationType.Translate;
-}
-
-interface RotateOperation extends RawOperation<RawRotateArgs> {
-  type: OperationType.Rotate;
-}
-
-interface MirrorOperation extends RawOperation<RawMirrorArgs> {
-  type: OperationType.Mirror;
-}
-
-interface CenterOperation extends RawOperation<RawCenterArgs> {
-  type: OperationType.Center;
-}
-
-interface ScaleOperation extends RawOperation<RawScaleArgs> {
-  type: OperationType.Scale;
-}
-
-interface DifferenceOperation extends RawOperation<RawDifferenceArgs> {
-  type: OperationType.Difference;
-}
-
-interface UnionOperation extends RawOperation<RawUnionArgs> {
-  type: OperationType.Union;
-}
-
-type Operation =
-  | TranslateOperation
-  | RotateOperation
-  | MirrorOperation
-  | CenterOperation
-  | ScaleOperation
-  | DifferenceOperation
-  | UnionOperation;
-
-export abstract class Shape {
-  abstract readonly inputOptions: any;
-
-  protected operations: Operation[] = [];
-
-  protected rawShapeCache: RawShape = null;
+export abstract class Shape<InputOptions = any> {
+  private rawShape: RawShape = this.createInitialRawShape();
 
   protected abstract createInitialRawShape(): RawShape;
 
@@ -118,51 +53,10 @@ export abstract class Shape {
 
   private groupShapes: boolean = false;
 
-  protected constructor(protected id: string = '' + random(999999)) {}
-
-  group(): this {
-    this.groupShapes = true;
-
-    return this;
-  }
+  protected constructor(protected readonly inputOptions: InputOptions, protected id: string = '' + random(999999)) {}
 
   render(): RawShape {
-    // console.log(this.constructor.name, this.inputOptions);
-
-    const previousShape = this.rawShapeCache || this.createInitialRawShape();
-
-    if (this.operations.length === 0) {
-      return previousShape;
-    }
-
-    this.rawShapeCache = this.operations.reduce(
-      (rawShape: RawShape, operation: Operation) => this.performOperation(rawShape, operation),
-      previousShape,
-    );
-
-    // reset operations so we only perform operations
-    this.operations = [];
-
-    return this.rawShapeCache;
-  }
-
-  private performOperation<T>(rawShape: RawShape, operation: Operation): RawShape {
-    switch (operation.type) {
-      case OperationType.Translate:
-        return translate(operation.args[0], rawShape);
-      case OperationType.Rotate:
-        return rotate(operation.args[0], rawShape);
-      case OperationType.Mirror:
-        return mirror(operation.args[0], rawShape);
-      case OperationType.Center:
-        return center(operation.args[0], rawShape);
-      case OperationType.Scale:
-        return scale(operation.args[0], rawShape);
-      case OperationType.Difference:
-        return difference(rawShape, ...operation.args.map(s => s.render()));
-      case OperationType.Union:
-        return union(rawShape, ...operation.args.map(s => s.render()));
-    }
+    return this.rawShape;
   }
 
   ///////////////////
@@ -192,14 +86,11 @@ export abstract class Shape {
   /////////////////////
 
   mirror(translation: Partial<Vector>): this {
-    if (!this.group) {
+    if (!this.groupShapes) {
       this.shapeGroup.forEach(s => s.mirror(translation));
     }
 
-    this.operations.push(<MirrorOperation>{
-      type: OperationType.Mirror,
-      args: [Util.convertDimensionsToNumbers(translation)],
-    });
+    this.rawShape = mirror(Util.convertDimensionsToNumbers(translation), this.rawShape);
 
     return this;
   }
@@ -217,14 +108,11 @@ export abstract class Shape {
   }
 
   rotate(rotations: Partial<Dimensions>): this {
-    if (!this.group) {
+    if (!this.groupShapes) {
       this.shapeGroup.forEach(s => s.rotate(rotations));
     }
 
-    this.operations.push(<RotateOperation>{
-      type: OperationType.Rotate,
-      args: [Util.convertDimensionsToNumbers(rotations)],
-    });
+    this.rawShape = rotate(Util.convertDimensionsToNumbers(rotations), this.rawShape);
 
     return this;
   }
@@ -242,14 +130,11 @@ export abstract class Shape {
   }
 
   translate(translation: Partial<Dimensions>): this {
-    if (!this.group) {
+    if (!this.groupShapes) {
       this.shapeGroup.forEach(s => s.translate(translation));
     }
 
-    this.operations.push(<TranslateOperation>{
-      type: OperationType.Translate,
-      args: [Util.convertDimensionsToNumbers(translation)],
-    });
+    this.rawShape = translate(Util.convertDimensionsToNumbers(translation), this.rawShape);
 
     return this;
   }
@@ -267,14 +152,11 @@ export abstract class Shape {
   }
 
   scale(translation: Partial<Dimensions>): this {
-    if (!this.group) {
+    if (!this.groupShapes) {
       this.shapeGroup.forEach(s => s.scale(translation));
     }
 
-    this.operations.push(<ScaleOperation>{
-      type: OperationType.Scale,
-      args: [Util.convertDimensionsToNumbers(translation, 1)],
-    });
+    this.rawShape = scale(Util.convertDimensionsToNumbers(translation, 1), this.rawShape);
 
     return this;
   }
@@ -314,14 +196,11 @@ export abstract class Shape {
   }
 
   center(axesToggles: AxesToggles = true): this {
-    if (!this.group) {
+    if (!this.groupShapes) {
       this.shapeGroup.forEach(s => s.center(axesToggles));
     }
 
-    this.operations.push(<CenterOperation>{
-      type: OperationType.Center,
-      args: [Util.convertAxesTogglesToBooleans(axesToggles)],
-    });
+    this.rawShape = center(Util.convertAxesTogglesToBooleans(axesToggles), this.rawShape);
 
     return this;
   }
@@ -405,10 +284,7 @@ export abstract class Shape {
   addShapes(...shapes: Shape[]): this {
     this.shapeGroup.push(...shapes);
 
-    this.operations.push(<UnionOperation>{
-      type: OperationType.Union,
-      args: shapes,
-    });
+    this.rawShape = union(this.rawShape, ...shapes.map(s => s.render()));
 
     return this;
   }
@@ -416,20 +292,13 @@ export abstract class Shape {
   subtractShapes(...shapes: Shape[]): this {
     this.shapeGroup.push(...shapes);
 
-    this.operations.push(<DifferenceOperation>{
-      type: OperationType.Difference,
-      args: shapes,
-    });
+    this.rawShape = difference(this.rawShape, ...shapes.map(s => s.render()));
 
     return this;
   }
 
   clone(): Shape {
     const shape = cloneDeep(this);
-
-    if (shape.operations.length > 1 && shape.operations[0] === this.operations[0]) {
-      debugger;
-    }
 
     shape.id = `${shape.id}__CLONE`;
 
@@ -441,37 +310,37 @@ export abstract class Shape {
   /////////////////////////////////////////////
 
   getPositionMinX(): number {
-    const allX: number[] = flatMap(this.render().polygons, polygon => map(polygon.vertices, vertex => vertex.pos._x));
+    const allX: number[] = flatMap(this.rawShape.polygons, polygon => map(polygon.vertices, vertex => vertex.pos._x));
 
     return Math.min(...allX);
   }
 
   getPositionMinY(): number {
-    const allY: number[] = flatMap(this.render().polygons, polygon => map(polygon.vertices, vertex => vertex.pos._y));
+    const allY: number[] = flatMap(this.rawShape.polygons, polygon => map(polygon.vertices, vertex => vertex.pos._y));
 
     return Math.min(...allY);
   }
 
   getPositionMinZ(): number {
-    const allZ: number[] = flatMap(this.render().polygons, polygon => map(polygon.vertices, vertex => vertex.pos._z));
+    const allZ: number[] = flatMap(this.rawShape.polygons, polygon => map(polygon.vertices, vertex => vertex.pos._z));
 
     return Math.min(...allZ);
   }
 
   getPositionMaxX(): number {
-    const allX: number[] = flatMap(this.render().polygons, polygon => map(polygon.vertices, vertex => vertex.pos._x));
+    const allX: number[] = flatMap(this.rawShape.polygons, polygon => map(polygon.vertices, vertex => vertex.pos._x));
 
     return Math.max(...allX);
   }
 
   getPositionMaxY(): number {
-    const allY: number[] = flatMap(this.render().polygons, polygon => map(polygon.vertices, vertex => vertex.pos._y));
+    const allY: number[] = flatMap(this.rawShape.polygons, polygon => map(polygon.vertices, vertex => vertex.pos._y));
 
     return Math.max(...allY);
   }
 
   getPositionMaxZ(): number {
-    const allZ: number[] = flatMap(this.render().polygons, polygon => map(polygon.vertices, vertex => vertex.pos._z));
+    const allZ: number[] = flatMap(this.rawShape.polygons, polygon => map(polygon.vertices, vertex => vertex.pos._z));
 
     return Math.max(...allZ);
   }

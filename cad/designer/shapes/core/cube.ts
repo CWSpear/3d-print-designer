@@ -12,9 +12,9 @@ export interface CubeOptions {
   // readonly center?: boolean;
 }
 
-export class Cube extends Shape {
-  constructor(public readonly inputOptions: CubeOptions, id?: string) {
-    super(id);
+export class Cube extends Shape<CubeOptions> {
+  constructor(inputOptions: CubeOptions, id?: string) {
+    super(inputOptions, id);
   }
 
   protected createInitialRawShape(): RawShape {

@@ -17,9 +17,9 @@ export interface TextOptions {
   align?: 'left' | 'right' | 'center';
 }
 
-export class PlainText extends Shape {
-  constructor(public readonly text: string, public readonly inputOptions: TextOptions = {}, id?: string) {
-    super(id);
+export class PlainText extends Shape<TextOptions> {
+  constructor(public readonly text: string, inputOptions: TextOptions = {}, id?: string) {
+    super(inputOptions, id);
   }
 
   protected createInitialRawShape(): RawShape {

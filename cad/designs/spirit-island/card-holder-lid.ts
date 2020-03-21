@@ -1,3 +1,3 @@
 import cardHolder from './card-holder';
 
-export default cardHolder.makeLid(); //
+export default cardHolder.makeLid();
