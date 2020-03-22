@@ -53,7 +53,7 @@ export abstract class Shape<InputOptions = any> {
 
   private groupShapes: boolean = false;
 
-  protected constructor(protected readonly inputOptions: InputOptions, protected id: string = '' + random(999999)) {}
+  protected constructor(public readonly inputOptions: InputOptions, protected id: string = '' + random(999999)) {}
 
   render(): RawShape {
     return this.rawShape;
