@@ -22,6 +22,8 @@ export class Util {
     height: 3 + 0.2,
   };
 
+  static magnetMinWall: number = 0.59999;
+
   static convertAxesTogglesToBooleans(axes: Partial<AxesToggles>): BooleanAxesToggles {
     if (!axes) {
       return undefined;

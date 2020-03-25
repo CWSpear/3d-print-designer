@@ -21,6 +21,10 @@ export interface LidOptions {
   extraWiggleRoom?: number;
 }
 
+export interface Lid extends Shape {
+  inputOptions: LidOptions;
+}
+
 export class LidLip extends Shape<LidLipOptions> {
   constructor(inputOptions: LidLipOptions, id?: string) {
     super(
@@ -81,23 +85,26 @@ export class LidLip extends Shape<LidLipOptions> {
     return lipPart;
   }
 
-  makeLid(
-    {
-      buttonDistanceFromEdge = 15,
-      buttonSpacing = 6,
-      buttonRadius = 6,
-      buttonDepth = 1.2,
-      noButtons = false,
-      extraWiggleRoom = 0.2,
-    }: LidOptions = {
+  makeLid(inputOptions: LidOptions = {}): Lid {
+    inputOptions = {
       buttonDistanceFromEdge: 15,
       buttonSpacing: 6,
       buttonRadius: 6,
       buttonDepth: 1.2,
       noButtons: false,
       extraWiggleRoom: 0.2,
-    },
-  ): Shape {
+      ...inputOptions,
+    };
+
+    const {
+      buttonDistanceFromEdge = 15,
+      buttonSpacing = 6,
+      buttonRadius = 6,
+      buttonDepth = 1.2,
+      noButtons = false,
+      extraWiggleRoom = 0.2,
+    } = inputOptions;
+
     const width = this.inputOptions.width - extraWiggleRoom;
     const length = this.inputOptions.length - extraWiggleRoom;
 
@@ -133,7 +140,11 @@ export class LidLip extends Shape<LidLipOptions> {
       lid.subtractShapes(button, button.clone().translateY(buttonSpacing + buttonRadius * 2));
     }
 
-    return lid.setPositionToZero({ z: true });
+    const clone = lid.clone();
+
+    (<Lid>clone).inputOptions = inputOptions;
+
+    return <Lid>clone.setPositionToZero({ z: true });
   }
 
   /** @deprecated */
