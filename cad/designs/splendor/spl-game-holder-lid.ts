@@ -3,7 +3,7 @@ import { RawShape, Shape } from '../../designer/shape';
 import { Cube } from '../../designer/shapes/core/cube';
 import { PlainText } from '../../designer/shapes/core/plain-text';
 import { Util } from '../../designer/util';
-import splendorGameHolder, { magnetMinWall } from './game-holder';
+import splendorGameHolder, { magnetMinWall } from './spl-game-holder';
 
 splendorGameHolder.render();
 

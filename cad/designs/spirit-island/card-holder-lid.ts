@@ -1,3 +1,3 @@
-import cardHolder from './card-holder';
+import cardHolder from './si-card-holder';
 
 export default cardHolder.makeLid();
