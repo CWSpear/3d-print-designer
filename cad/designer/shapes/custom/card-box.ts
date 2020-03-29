@@ -8,6 +8,7 @@ export interface CardBoxOptions {
   deckThickness: number;
   tabHeight?: number;
   wallThickness?: number;
+  wiggleRoom?: number;
 }
 
 export class CardBox extends Shape<CardBoxOptions> {
@@ -19,8 +20,12 @@ export class CardBox extends Shape<CardBoxOptions> {
     const options = {
       wallThickness: 0.8,
       tabHeight: 0,
+      wiggleRoom: 0.5,
       ...this.inputOptions,
     };
+
+    options.cardHeight += options.wiggleRoom;
+    options.cardWidth += options.wiggleRoom;
 
     const cardBox = new Cube({
       size: {
