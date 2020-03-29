@@ -1,24 +1,8 @@
-import { RawShape, Shape } from '../../designer/shape';
-import { Cube } from '../../designer/shapes/core/cube';
-import { LidLip } from '../../designer/shapes/custom/lid';
-import { RoundedBottomCube } from '../../designer/shapes/custom/rounded-bottom-cube';
-import { Util } from '../../designer/util';
-
-//// CONFIG ////
-
-const config: TokenHolderOptions = {
-  width: 200,
-  length: 150,
-  height: 40,
-  grid: [
-    [5, 2, 2],
-    [1, 1],
-    [1, 1, 1, 1],
-  ],
-  // useRamps: false,
-};
-
-// END CONFIG //
+import { RawShape, Shape } from '../../shape';
+import { Cube } from '../core/cube';
+import { LidLip } from './lid';
+import { RoundedBottomCube } from './rounded-bottom-cube';
+import { Util } from '../../util';
 
 export interface TokenHolderOptions {
   width: number;
@@ -150,5 +134,3 @@ export class TokenHolder extends Shape<TokenHolderOptions> {
     return mainShape.render();
   }
 }
-
-export default new TokenHolder(config);

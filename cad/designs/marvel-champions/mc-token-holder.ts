@@ -1,4 +1,4 @@
-import { TokenHolder } from '../generic/token-holder';
+import { TokenHolder } from '../../designer/shapes/custom/token-holder';
 
 // MC trays are 100x55x23mm
 // I think I'd prefer 100x60x20mm if we're gonna stack them.

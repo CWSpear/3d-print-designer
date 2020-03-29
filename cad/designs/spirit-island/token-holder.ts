@@ -1,4 +1,4 @@
-import { TokenHolder } from '../generic/token-holder';
+import { TokenHolder } from '../../designer/shapes/custom/token-holder';
 
 // box size = 284.1625
 // card size = 248 x 102 x 59
