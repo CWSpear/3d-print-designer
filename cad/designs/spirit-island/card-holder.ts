@@ -75,7 +75,7 @@ class CardHolder extends Shape<CardHolderOptions> {
       size: {
         width: mainShape.getWidth(),
         length: mainShape.getLength(),
-        height: height / 3,
+        height: height / 3 + 2,
       },
     });
 
@@ -97,8 +97,6 @@ class CardHolder extends Shape<CardHolderOptions> {
       );
 
     if (lidLip.inputOptions.extraClearance > 0) {
-      console.log(lidLip.inputOptions);
-
       const shapeToAdd = new Cube({
         size: {
           width: this.lid.getWidth() - lidLip.inputOptions.lipWidth - originalLid.inputOptions.extraWiggleRoom,
@@ -144,6 +142,9 @@ class CardHolder extends Shape<CardHolderOptions> {
     ];
 
     const thicknessSum = _.sum(cardThicknesses);
+
+    console.log('thicknessSum', thicknessSum);
+
     const extraSpace =
       mainShape.getWidth() -
       slotSpacing -

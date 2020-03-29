@@ -97,12 +97,12 @@ export class LidLip extends Shape<LidLipOptions> {
     };
 
     const {
-      buttonDistanceFromEdge = 15,
-      buttonSpacing = 6,
-      buttonRadius = 6,
-      buttonDepth = 1.2,
-      noButtons = false,
-      extraWiggleRoom = 0.2,
+      buttonDistanceFromEdge,
+      buttonSpacing,
+      buttonRadius,
+      buttonDepth,
+      noButtons,
+      extraWiggleRoom,
     } = inputOptions;
 
     const width = this.inputOptions.width - extraWiggleRoom;
@@ -114,16 +114,21 @@ export class LidLip extends Shape<LidLipOptions> {
         length,
         height: this.inputOptions.height + this.inputOptions.extraClearance,
       },
-    }).subtractShapes(
-      this.makeLip(extraWiggleRoom),
-      new Cube({
-        size: {
-          width,
-          length,
-          height: this.inputOptions.extraClearance,
-        },
-      }),
-    );
+    });
+
+    lid.subtractShapes(this.makeLip(extraWiggleRoom));
+
+    if (this.inputOptions.extraClearance > 0) {
+      lid.subtractShapes(
+        new Cube({
+          size: {
+            width,
+            length,
+            height: this.inputOptions.extraClearance,
+          },
+        }),
+      );
+    }
 
     if (!noButtons) {
       const button = new Cylinder({

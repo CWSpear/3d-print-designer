@@ -297,7 +297,7 @@ export abstract class Shape<InputOptions = any> {
     return this;
   }
 
-  clone(): Shape {
+  clone(): this {
     const shape = cloneDeep(this);
 
     shape.id = `${shape.id}__CLONE`;
@@ -355,5 +355,11 @@ export abstract class Shape<InputOptions = any> {
 
   getHeight(): number {
     return this.getPositionMaxZ() - this.getPositionMinZ();
+  }
+}
+
+export class ShapeContainer extends Shape<Shape[]> {
+  protected createInitialRawShape(): RawShape {
+    return union(...this.inputOptions.map(s => s.render()));
   }
 }

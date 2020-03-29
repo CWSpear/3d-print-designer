@@ -1,11 +1,12 @@
 // CONFIG
-const height = 4.6;
+const flr = 0.8;
+const height = 4.6 + flr;
 const radius = 13;
 const moonDepth = 1.6;
 const moonWidthPercent = 0.35;
 const gap = 0.3;
 const padding = 3;
-const rows = 9;
+const rows = 8;
 const cols = 7;
 
 const lipHeight = 2;
@@ -23,7 +24,7 @@ const len = cols * (radius * 2 + gap * 2) + padding * 2;
 function main() {
   console.log('Final Size:', width, len, height + lipHeight);
 
-  // return lid(); ///
+  return lid(); ///
 
   const holes = [];
 
@@ -50,9 +51,9 @@ function makeHole(gridX, gridY) {
   const [x, y] = convertToXY0([gridX, gridY]);
 
   return translate(
-    [x, y, 0],
+    [x, y, flr],
     difference(
-      cylinder({ r: radius, h: height, fn: 32 }),
+      cylinder({ r: radius, h: height, fn: 64 }),
       translate(
         [radius * 2 * moonWidthPercent, 0, 0],
         cube({ size: [radius * 2, radius * 2, moonDepth], center: [true, true, false] })

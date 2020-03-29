@@ -20,18 +20,19 @@ const config: TokenHolderOptions = {
 
 // END CONFIG //
 
-interface TokenHolderOptions {
+export interface TokenHolderOptions {
   width: number;
   length: number;
   height: number;
   grid: number[][];
+  stackable?: boolean;
   useRamps?: boolean;
   rampSize?: number;
   dividerThickness?: number;
   outerWallThickness?: number;
 }
 
-class TokenHolder extends Shape<TokenHolderOptions> {
+export class TokenHolder extends Shape<TokenHolderOptions> {
   lidLip: LidLip;
 
   constructor(options: TokenHolderOptions) {
@@ -44,6 +45,7 @@ class TokenHolder extends Shape<TokenHolderOptions> {
       length,
       height,
       grid,
+      stackable = false,
       useRamps = true,
       rampSize = 8,
       dividerThickness = 1,
@@ -68,6 +70,8 @@ class TokenHolder extends Shape<TokenHolderOptions> {
       lipWidth: outerWallThickness,
     });
 
+    const lidHeight = this.lidLip.inputOptions.height;
+
     const cellDepth = height - (dividerThickness + this.lidLip.getTotalHeight());
     const heightWithoutLid = height - this.lidLip.getTotalHeight();
 
@@ -80,11 +84,40 @@ class TokenHolder extends Shape<TokenHolderOptions> {
     `),
     );
 
-    console.log('');
-
     const mainShape = new Cube({
-      size: { width: width, length: length, height: heightWithoutLid },
+      size: {
+        width: width,
+        length: length,
+        height: heightWithoutLid - (stackable ? lidHeight + outerWallThickness : 0),
+      },
     });
+
+    if (stackable) {
+      const lid = this.lidLip.makeLid({ noButtons: true });
+
+      const extraLidLip = new LidLip({
+        width: width,
+        length: length,
+        lipWidth: outerWallThickness,
+        height: outerWallThickness, // so we have a 45° angle
+        attachmentWidth: 0,
+        extraClearance: 0,
+      });
+
+      const lid2 = extraLidLip.makeLid({ noButtons: true, extraWiggleRoom: 0 });
+
+      console.log('lid2.getHeight()', lid2.getHeight());
+
+      mainShape
+        .addShapes(
+          lid.translateZ(-lid.getHeight() - lid2.getHeight()),
+          lid2
+            .mirrorAcrossZPlane()
+            .setPositionToZero()
+            .translateZ(-lid2.getHeight()),
+        )
+        .setPositionToZero();
+    }
 
     grid.reverse().forEach((row, y) => {
       let x = 0;
