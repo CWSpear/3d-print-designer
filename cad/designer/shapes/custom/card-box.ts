@@ -30,8 +30,6 @@ export class CardBox extends Shape<CardBoxOptions> {
     options.cardHeight += options.wiggleRoom;
     options.cardWidth += options.wiggleRoom;
 
-    console.log(options);
-
     const cardBox = new Cube({
       size: {
         width: options.cardWidth + options.wallThickness * 2,
@@ -47,7 +45,6 @@ export class CardBox extends Shape<CardBoxOptions> {
         },
       }).translate(options.wallThickness),
     );
-    console.log('height', cardBox.getHeight());
 
     if (options.tabHeight > 0) {
       const edge = new RightTriangularPrism({
@@ -64,29 +61,7 @@ export class CardBox extends Shape<CardBoxOptions> {
         },
       }).addShapes(edge, edge.clone().translate({ x: options.cardWidth + options.wallThickness }));
 
-      // return backThing.render();
-
-      // cardBox.addShapes(backThing.translate({ height: options.cardHeight }));
-      cardBox.addShapes(backThing);
-
-      Util.log(
-        new Cube({
-          size: {
-            width: options.cardWidth + options.wallThickness * 2,
-            length: options.wallThickness,
-            height: options.tabHeight,
-          },
-        }).render().polygons,
-      );
-      Util.log(
-        new Cube({
-          size: {
-            width: options.cardWidth + options.wallThickness * 2,
-            length: options.deckThickness + options.wallThickness * 2,
-            height: options.cardHeight,
-          },
-        }).render().polygons,
-      );
+      cardBox.addShapes(backThing.translate({ height: options.cardHeight }));
     }
 
     if (options.withCutout) {
@@ -101,12 +76,13 @@ export class CardBox extends Shape<CardBoxOptions> {
             length: holeSize,
             height: options.deckThickness + options.wallThickness * 2,
           },
-        }).centerOn(cutout, { y: true }),
+        }), // .centerOn(cutout, { y: true }),
       );
 
-      cardBox.subtractShapes(cutout.rotateY(90).rotateZ(90).setPositionToZero().centerOn(cardBox, { x: true }));
+      cardBox.subtractShapes(cutout.rotateY(-90).rotateZ(-90).setPositionToZero().centerOn(cardBox, { x: true }));
     }
 
-    return cardBox.rotateZ(90).setPositionToZero().render();
+    // return cardBox.rotateZ(90).render();
+    return cardBox.rotateZ(-90).setPositionToZero().render();
   }
 }

@@ -86,7 +86,7 @@ export class Util {
     throw new Error(`Unexpected dimensions format: ${JSON.stringify(dimensions)}`);
   }
 
-  static convertToRadius<T extends number[]>(degrees: T): T {
+  static convertToRadian<T extends number[]>(degrees: T): T {
     return <T>degrees.map((degree) => degToRad(degree));
   }
 

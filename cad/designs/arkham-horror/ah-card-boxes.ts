@@ -23,6 +23,6 @@ export default new CardBoxes({
   // deckThicknesses: [11.5, 11.5, 12.5],
 
   // Dream-eaters (Silver)
-  deckThicknesses: [13.7], ////////////
+  deckThicknesses: [13.7], //////////////
   // deckThicknesses: [8.3, 8.3, 8.7, 11.3, 12.3, 12.7, 13.7, 14.3, 20],
 });

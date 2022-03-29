@@ -46,7 +46,9 @@ export abstract class Shape<InputOptions = any> {
   private shapeGroup: Shape[] = [];
   private groupShapes: boolean = false;
 
-  protected constructor(public readonly inputOptions: InputOptions, protected id: string = '' + random(999999)) {}
+  protected constructor(public readonly inputOptions: InputOptions, protected id: string = '' + random(999999)) {
+    this.setPositionToZero();
+  }
 
   render(): RawShape {
     return this.rawShape;
@@ -104,7 +106,7 @@ export abstract class Shape<InputOptions = any> {
       this.shapeGroup.forEach((s) => s.rotate(rotations));
     }
 
-    this.rawShape = rotate(Util.convertToRadius(Util.convertDimensionsToNumbers(rotations)), this.rawShape);
+    this.rawShape = rotate(Util.convertToRadian(Util.convertDimensionsToNumbers(rotations)), this.rawShape);
 
     return this;
   }
@@ -166,23 +168,12 @@ export abstract class Shape<InputOptions = any> {
   }
 
   setPositionToZero(axesToggles: AxesToggles = true) {
-    const [centerX, centerY, centerZ] = Util.convertAxesTogglesToBooleans(axesToggles);
+    const [x, y, z] = Util.convertAxesTogglesToBooleans(axesToggles);
 
-    const translations: Partial<XYZDimensions> = {};
-
-    if (centerX) {
-      translations.x = -this.getPositionMinX();
-    }
-
-    if (centerY) {
-      translations.y = -this.getPositionMinY();
-    }
-
-    if (centerZ) {
-      translations.z = -this.getPositionMinZ();
-    }
-
-    this.translate(translations);
+    this.rawShape = align(
+      { modes: [x ? 'min' : 'none', y ? 'min' : 'none', z ? 'min' : 'none'], relativeTo: [0, 0, 0] },
+      this.rawShape,
+    );
 
     return this;
   }
@@ -200,23 +191,11 @@ export abstract class Shape<InputOptions = any> {
   centerOn(shape: Shape, axesToggles: AxesToggles = true): this {
     const { x, y, z } = Util.convertAxesTogglesToXYZ(axesToggles);
 
-    this.setPositionToZero(axesToggles);
-
-    const translations: Partial<XYZDimensions> = {};
-
-    if (x) {
-      translations.x = shape.getPositionMinX() + (shape.getWidth() - this.getWidth()) / 2;
-    }
-
-    if (y) {
-      translations.y = shape.getPositionMinY() + (shape.getLength() - this.getLength()) / 2;
-    }
-
-    if (z) {
-      translations.z = shape.getPositionMinZ() + (shape.getHeight() - this.getHeight()) / 2;
-    }
-
-    this.translate(translations);
+    [shape.rawShape, this.rawShape] = align(
+      { modes: [x ? 'center' : 'none', y ? 'center' : 'none', z ? 'center' : 'none'] },
+      shape.render(),
+      this.rawShape,
+    );
 
     return this;
   }
@@ -245,15 +224,6 @@ export abstract class Shape<InputOptions = any> {
     return this;
   }
 
-  alignStarting(shape: Shape): this {
-    [shape.rawShape, this.rawShape] = align(
-      { modes: ['min', 'min', 'min'], grouped: true },
-      shape.render(),
-      this.render(),
-    ); // align shapes at the minimum X
-    return this;
-  }
-
   alignWithBottom(shape: Shape, axesToggles: AxesToggles = true): this {
     const { x, y, z } = Util.convertAxesTogglesToXYZ(axesToggles);
 
@@ -279,7 +249,7 @@ export abstract class Shape<InputOptions = any> {
   }
 
   addShapes(...shapes: Shape[]): this {
-    shapes = shapes.map((shape) => shape.alignStarting(this));
+    // shapes = shapes.map((shape) => shape.alignStarting(this));
     this.shapeGroup.push(...shapes);
 
     this.rawShape = union(this.rawShape, ...shapes.map((s) => s.render()));
@@ -310,41 +280,45 @@ export abstract class Shape<InputOptions = any> {
   /////////////////////////////////////////////
   // Helper methods to find where shapes are //
   /////////////////////////////////////////////
+  getTranslations(): XYZDimensions {
+    const [, , , , , , , , , , , , x, y, z] = this.rawShape.transforms;
+    return { x, y, z };
+  }
 
   getPositionMinX(): number {
     const allX: number[] = flatMap(this.rawShape.polygons, (polygon) => map(polygon.vertices, (vertex) => vertex[0]));
 
-    return Math.min(...allX);
+    return Math.min(...allX) + this.getTranslations().x;
   }
 
   getPositionMinY(): number {
     const allY: number[] = flatMap(this.rawShape.polygons, (polygon) => map(polygon.vertices, (vertex) => vertex[1]));
 
-    return Math.min(...allY);
+    return Math.min(...allY) + this.getTranslations().y;
   }
 
   getPositionMinZ(): number {
     const allZ: number[] = flatMap(this.rawShape.polygons, (polygon) => map(polygon.vertices, (vertex) => vertex[2]));
 
-    return Math.min(...allZ);
+    return Math.min(...allZ) + this.getTranslations().z;
   }
 
   getPositionMaxX(): number {
     const allX: number[] = flatMap(this.rawShape.polygons, (polygon) => map(polygon.vertices, (vertex) => vertex[0]));
 
-    return Math.max(...allX);
+    return Math.max(...allX) + this.getTranslations().x;
   }
 
   getPositionMaxY(): number {
     const allY: number[] = flatMap(this.rawShape.polygons, (polygon) => map(polygon.vertices, (vertex) => vertex[1]));
 
-    return Math.max(...allY);
+    return Math.max(...allY) + this.getTranslations().y;
   }
 
   getPositionMaxZ(): number {
     const allZ: number[] = flatMap(this.rawShape.polygons, (polygon) => map(polygon.vertices, (vertex) => vertex[2]));
 
-    return Math.max(...allZ);
+    return Math.max(...allZ) + this.getTranslations().z;
   }
 
   getWidth(): number {

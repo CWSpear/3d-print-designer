@@ -116,7 +116,6 @@ class Playground {
 
   refreshObject() {
     if (this.mesh) {
-      console.log('mesh remove');
       this.scene.remove(this.mesh);
       this.mesh.geometry.dispose();
       if (Array.isArray(this.mesh.material)) {

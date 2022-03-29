@@ -5,7 +5,7 @@
   "main": "server/main.ts",
   "scripts": {
     "start": "ts-node server/main",
-    "dev": "ts-node-dev --exit-child server/main",
+    "dev": "ts-node-dev --exit-child --ignore-watch=designs server/main",
     "build": "python Online3DViewer/tools/build.py",
     "watch": "node tools/watch",
     "docs": "typedoc --out docs cad/designer",

@@ -67,6 +67,7 @@ export class TriangularPrism extends Shape<TriangularPrismOptions> {
         [3, 4, 1, 0],
         [0, 2, 5, 3],
       ],
+      orientation: 'inward',
     });
   }
 }
