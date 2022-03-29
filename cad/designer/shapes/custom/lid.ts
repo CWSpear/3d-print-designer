@@ -96,14 +96,8 @@ export class LidLip extends Shape<LidLipOptions> {
       ...inputOptions,
     };
 
-    const {
-      buttonDistanceFromEdge,
-      buttonSpacing,
-      buttonRadius,
-      buttonDepth,
-      noButtons,
-      extraWiggleRoom,
-    } = inputOptions;
+    const { buttonDistanceFromEdge, buttonSpacing, buttonRadius, buttonDepth, noButtons, extraWiggleRoom } =
+      inputOptions;
 
     const width = this.inputOptions.width - extraWiggleRoom;
     const length = this.inputOptions.length - extraWiggleRoom;

@@ -19,7 +19,7 @@ export class CardBoxes extends Shape<CardBoxesOptions> {
 
     let row = 0;
 
-    options.deckThicknesses.forEach(width => {
+    options.deckThicknesses.forEach((width) => {
       const card = new CardBox({
         ...options,
         deckThickness: width,
@@ -55,6 +55,6 @@ export class CardBoxes extends Shape<CardBoxesOptions> {
   }
 
   private runningWidth(shapes: Shape[]): number {
-    return _.sumBy(shapes, s => s.getWidth() + this.inputOptions.spacing) - this.inputOptions.spacing;
+    return _.sumBy(shapes, (s) => s.getWidth() + this.inputOptions.spacing) - this.inputOptions.spacing;
   }
 }

@@ -120,7 +120,7 @@ class Playground {
       this.scene.remove(this.mesh);
       this.mesh.geometry.dispose();
       if (Array.isArray(this.mesh.material)) {
-        this.mesh.material.forEach(mat => mat.dispose());
+        this.mesh.material.forEach((mat) => mat.dispose());
       } else {
         this.mesh.material.dispose();
       }

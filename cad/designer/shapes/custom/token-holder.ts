@@ -95,17 +95,14 @@ export class TokenHolder extends Shape<TokenHolderOptions> {
       mainShape
         .addShapes(
           lid.translateZ(-lid.getHeight() - lid2.getHeight()),
-          lid2
-            .mirrorAcrossZPlane()
-            .setPositionToZero()
-            .translateZ(-lid2.getHeight()),
+          lid2.mirrorAcrossZPlane().setPositionToZero().translateZ(-lid2.getHeight()),
         )
         .setPositionToZero();
     }
 
     grid.reverse().forEach((row, y) => {
       let x = 0;
-      row.forEach(col => {
+      row.forEach((col) => {
         const rowCount = row.reduce((total, v) => total + v, 0);
         const rowUnitWidth: number =
           (width - dividerThickness - dividerThickness - outerWallThickness) / rowCount - dividerThickness;

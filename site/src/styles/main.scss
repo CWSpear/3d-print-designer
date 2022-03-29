@@ -1,3 +1,5 @@
+@use 'sass:math';
+
 *,
 *::before,
 *::after {
@@ -101,8 +103,8 @@ $spinner-color: #333;
   height: $spinner-size;
 
   div {
-    transform-origin: (40px * ($spinner-size / $original-spinner-size))
-      (40px * ($spinner-size / $original-spinner-size));
+    transform-origin: (40px * math.div($spinner-size, $original-spinner-size))
+      (40px * math.div($spinner-size, $original-spinner-size));
     animation: spinner 1.2s linear infinite;
   }
 
@@ -110,10 +112,10 @@ $spinner-color: #333;
     content: ' ';
     display: block;
     position: absolute;
-    top: 3px * ($spinner-size / $original-spinner-size);
-    left: 37px * ($spinner-size / $original-spinner-size);
-    width: 6px * ($spinner-size / $original-spinner-size);
-    height: 18px * ($spinner-size / $original-spinner-size);
+    top: 3px * math.div($spinner-size, $original-spinner-size);
+    left: 37px * math.div($spinner-size, $original-spinner-size);
+    width: 6px * math.div($spinner-size, $original-spinner-size);
+    height: 18px * math.div($spinner-size, $original-spinner-size);
     border-radius: 20%;
     background: $spinner-color;
   }

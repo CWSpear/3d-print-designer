@@ -28,16 +28,8 @@ class SpendorGameHolder extends Shape<SpendorGameHolderConfig> {
   }
 
   protected createInitialRawShape(): RawShape {
-    const {
-      cardWidth,
-      cardLength,
-      tileWidth,
-      tileLength,
-      tokenDiameter,
-      slotDepth,
-      tilesHeight,
-      cardsHeight,
-    } = this.inputOptions;
+    const { cardWidth, cardLength, tileWidth, tileLength, tokenDiameter, slotDepth, tilesHeight, cardsHeight } =
+      this.inputOptions;
 
     const exteriorWallWidth = 3;
     const interiorWallWidth = 2;

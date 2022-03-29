@@ -1,5 +1,7 @@
 import { RawShape, Shape } from '../../shape';
+import { Util } from '../../util';
 import { Cube } from '../core/cube';
+import { Cylinder } from '../core/cylinder';
 import { RightTriangularPrism } from './right-triangular-prism';
 
 export interface CardBoxOptions {
@@ -9,6 +11,7 @@ export interface CardBoxOptions {
   tabHeight?: number;
   wallThickness?: number;
   wiggleRoom?: number;
+  withCutout?: boolean;
 }
 
 export class CardBox extends Shape<CardBoxOptions> {
@@ -27,6 +30,8 @@ export class CardBox extends Shape<CardBoxOptions> {
     options.cardHeight += options.wiggleRoom;
     options.cardWidth += options.wiggleRoom;
 
+    console.log(options);
+
     const cardBox = new Cube({
       size: {
         width: options.cardWidth + options.wallThickness * 2,
@@ -42,6 +47,7 @@ export class CardBox extends Shape<CardBoxOptions> {
         },
       }).translate(options.wallThickness),
     );
+    console.log('height', cardBox.getHeight());
 
     if (options.tabHeight > 0) {
       const edge = new RightTriangularPrism({
@@ -58,12 +64,49 @@ export class CardBox extends Shape<CardBoxOptions> {
         },
       }).addShapes(edge, edge.clone().translate({ x: options.cardWidth + options.wallThickness }));
 
-      cardBox.addShapes(backThing.translate({ height: options.cardHeight }));
+      // return backThing.render();
+
+      // cardBox.addShapes(backThing.translate({ height: options.cardHeight }));
+      cardBox.addShapes(backThing);
+
+      Util.log(
+        new Cube({
+          size: {
+            width: options.cardWidth + options.wallThickness * 2,
+            length: options.wallThickness,
+            height: options.tabHeight,
+          },
+        }).render().polygons,
+      );
+      Util.log(
+        new Cube({
+          size: {
+            width: options.cardWidth + options.wallThickness * 2,
+            length: options.deckThickness + options.wallThickness * 2,
+            height: options.cardHeight,
+          },
+        }).render().polygons,
+      );
     }
 
-    return cardBox
-      .rotateZ(90)
-      .setPositionToZero()
-      .render();
+    if (options.withCutout) {
+      const holeSize = 18;
+      const height = 20;
+
+      const cutout = new Cylinder({ radius: holeSize / 2, height: options.deckThickness + options.wallThickness * 2 });
+      cutout.addShapes(
+        new Cube({
+          size: {
+            width: height - holeSize / 2,
+            length: holeSize,
+            height: options.deckThickness + options.wallThickness * 2,
+          },
+        }).centerOn(cutout, { y: true }),
+      );
+
+      cardBox.subtractShapes(cutout.rotateY(90).rotateZ(90).setPositionToZero().centerOn(cardBox, { x: true }));
+    }
+
+    return cardBox.rotateZ(90).setPositionToZero().render();
   }
 }

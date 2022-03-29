@@ -1,5 +1,4 @@
-const { cylinder } = require('@jscad/csg/src/api/primitives3d-api');
-
+import { cylinder } from '@jscad/modeling/src/primitives/index';
 import { RawShape, Shape } from '../../shape';
 
 export interface CylinderOptions {
@@ -16,11 +15,9 @@ export class Cylinder extends Shape<CylinderOptions> {
   protected createInitialRawShape(): RawShape {
     return cylinder({
       ...this.inputOptions,
-      r: this.inputOptions.radius,
-      // r1: 1,
-      // r2: 1,
-      h: this.inputOptions.height,
-      fn: this.inputOptions.resolution || 64,
+      radius: this.inputOptions.radius,
+      height: this.inputOptions.height,
+      segments: this.inputOptions.resolution || 64,
     });
   }
 }

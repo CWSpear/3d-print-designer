@@ -1,5 +1,4 @@
-const { polyhedron } = require('@jscad/csg/src/api/primitives3d-api');
-
+import { polyhedron } from '@jscad/modeling/src/primitives';
 import { RawShape, Shape } from '../../shape';
 
 export interface RightTriangularPrismOptions {
@@ -25,7 +24,7 @@ export class RightTriangularPrism extends Shape<RightTriangularPrismOptions> {
         [this.inputOptions.length, this.inputOptions.xLegLength, 0],
         [this.inputOptions.length, 0, this.inputOptions.yLegLength],
       ],
-      polygons: [
+      faces: [
         [2, 0, 1],
         [3, 5, 4],
         [2, 1, 4, 5],

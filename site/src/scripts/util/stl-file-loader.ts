@@ -13,14 +13,14 @@ export class StlFileLoader extends FileLoader {
     return new Promise((resolve, reject) => {
       super.load(
         url,
-        strOrBuffer => {
+        (strOrBuffer) => {
           const binData = ensureBinary(strOrBuffer);
           const geo = isBinary(binData) ? parseBinary(binData) : parseAscii(ensureString(strOrBuffer));
 
           resolve(<Geometry & BufferGeometry & { hasColors: boolean; alpha: number }>geo);
         },
         undefined,
-        err => {
+        (err) => {
           reject(err);
         },
       );
@@ -31,11 +31,11 @@ export class StlFileLoader extends FileLoader {
     return new Promise((resolve, reject) => {
       super.load(
         url,
-        strOrBuffer => {
+        (strOrBuffer) => {
           resolve(parseAscii(ensureString(strOrBuffer)));
         },
         undefined,
-        err => {
+        (err) => {
           reject(err);
         },
       );
@@ -46,11 +46,11 @@ export class StlFileLoader extends FileLoader {
     return new Promise((resolve, reject) => {
       super.load(
         url,
-        strOrBuffer => {
+        (strOrBuffer) => {
           resolve(parseBinary(<ArrayBuffer>strOrBuffer));
         },
         undefined,
-        err => {
+        (err) => {
           reject(err);
         },
       );

@@ -1,11 +1,7 @@
-const { difference } = require('@jscad/csg/src/api/ops-booleans');
-const { union } = require('@jscad/csg/src/api/ops-booleans');
-const { translate, rotate, mirror, center, scale } = require('@jscad/csg/src/api/ops-transformations');
-const { cube } = require('@jscad/csg/src/api/primitives3d-api');
-
-import { raw } from 'express';
+import { Geom3 } from '@jscad/modeling/src/geometries/types';
+import { subtract, union } from '@jscad/modeling/src/operations/booleans';
+import { align, center, mirror, rotate, scale, translate } from '@jscad/modeling/src/operations/transforms';
 import { cloneDeep, flatMap, map, random } from 'lodash';
-import { Cube, CubeOptions } from './shapes/core/cube';
 import { Util } from './util';
 
 export type NumbersDimensions = [number, number, number];
@@ -21,23 +17,24 @@ export type XYZAxesToggles = { x?: boolean; y?: boolean; z?: boolean };
 
 export type AxesToggles = BooleanAxesToggles | WLHAxesToggles | XYZAxesToggles | boolean;
 
-export interface RawShape {
-  polygons: {
-    vertices: { pos: { _x: number; _y: number; _z: number }; tag: number }[];
-    shared: {
-      color: any;
-      tag: number;
-    };
-    plane: {
-      normal: { _x: number; _y: number; _z: number };
-      w: number;
-      tag: number;
-    };
-  }[];
-  properties: any;
-  isCanonicalized: boolean;
-  isRetesselated: boolean;
-}
+export type RawShape = Geom3;
+// export interface RawShape {
+//   polygons: {
+//     vertices: { pos: { _x: number; _y: number; _z: number }; tag: number }[];
+//     shared: {
+//       color: any;
+//       tag: number;
+//     };
+//     plane: {
+//       normal: { _x: number; _y: number; _z: number };
+//       w: number;
+//       tag: number;
+//     };
+//   }[];
+//   properties: any;
+//   isCanonicalized: boolean;
+//   isRetesselated: boolean;
+// }
 
 export interface RoundCornersOptions {
   resolution?: number;
@@ -46,11 +43,7 @@ export interface RoundCornersOptions {
 
 export abstract class Shape<InputOptions = any> {
   private rawShape: RawShape = this.createInitialRawShape();
-
-  protected abstract createInitialRawShape(): RawShape;
-
   private shapeGroup: Shape[] = [];
-
   private groupShapes: boolean = false;
 
   protected constructor(public readonly inputOptions: InputOptions, protected id: string = '' + random(999999)) {}
@@ -59,24 +52,33 @@ export abstract class Shape<InputOptions = any> {
     return this.rawShape;
   }
 
+  // roundCorners(options: RoundCornersOptions = {}): this {
+  //   const roundTheCorners: RawShape = cuboid({
+  //     size: [this.getWidth(), this.getLength(), this.getHeight()]
+  //   });
+  //
+  //   const roundedCube: RawShape = roundedCuboid({
+  //     roundRadius: options.radius || 0.8,
+  //     segments: options.resolution || 32,
+  //     size: [this.getWidth(), this.getLength(), this.getHeight()]
+  //   });
+  //
+  //   this.subtractShapes((roundTheCorners, roundedCube));
+  //
+  //   return this;
+  // }
+
   ///////////////////
   // Manipulations //
   ///////////////////
 
-  // TODO does not support new thing
-  roundCorners(options: RoundCornersOptions = {}): this {
-    const roundTheCorners: RawShape = cube({
-      size: [this.getWidth(), this.getLength(), this.getHeight()],
-    });
+  mirror(translation: Partial<Vector>): this {
+    if (!this.groupShapes) {
+      this.shapeGroup.forEach((s) => s.mirror(translation));
+    }
 
-    const roundedCube: RawShape = cube({
-      round: true,
-      radius: options.radius || 0.8,
-      fn: options.resolution || 32,
-      size: [this.getWidth(), this.getLength(), this.getHeight()],
-    });
-
-    this.subtractShapes(difference(roundTheCorners, roundedCube));
+    this.rawShape = mirror({ normal: Util.convertDimensionsToNumbers(translation) }, this.rawShape);
+    // this.rawShape = mirror({ origin: Util.convertDimensionsToNumbers(translation) }, this.rawShape);
 
     return this;
   }
@@ -84,16 +86,6 @@ export abstract class Shape<InputOptions = any> {
   /////////////////////
   // Transformations //
   /////////////////////
-
-  mirror(translation: Partial<Vector>): this {
-    if (!this.groupShapes) {
-      this.shapeGroup.forEach(s => s.mirror(translation));
-    }
-
-    this.rawShape = mirror(Util.convertDimensionsToNumbers(translation), this.rawShape);
-
-    return this;
-  }
 
   mirrorAcrossXPlane(): this {
     return this.mirror({ y: 1 });
@@ -109,10 +101,10 @@ export abstract class Shape<InputOptions = any> {
 
   rotate(rotations: Partial<Dimensions>): this {
     if (!this.groupShapes) {
-      this.shapeGroup.forEach(s => s.rotate(rotations));
+      this.shapeGroup.forEach((s) => s.rotate(rotations));
     }
 
-    this.rawShape = rotate(Util.convertDimensionsToNumbers(rotations), this.rawShape);
+    this.rawShape = rotate(Util.convertToRadius(Util.convertDimensionsToNumbers(rotations)), this.rawShape);
 
     return this;
   }
@@ -131,7 +123,7 @@ export abstract class Shape<InputOptions = any> {
 
   translate(translation: Partial<Dimensions>): this {
     if (!this.groupShapes) {
-      this.shapeGroup.forEach(s => s.translate(translation));
+      this.shapeGroup.forEach((s) => s.translate(translation));
     }
 
     this.rawShape = translate(Util.convertDimensionsToNumbers(translation), this.rawShape);
@@ -153,7 +145,7 @@ export abstract class Shape<InputOptions = any> {
 
   scale(translation: Partial<Dimensions>): this {
     if (!this.groupShapes) {
-      this.shapeGroup.forEach(s => s.scale(translation));
+      this.shapeGroup.forEach((s) => s.scale(translation));
     }
 
     this.rawShape = scale(Util.convertDimensionsToNumbers(translation, 1), this.rawShape);
@@ -197,10 +189,10 @@ export abstract class Shape<InputOptions = any> {
 
   center(axesToggles: AxesToggles = true): this {
     if (!this.groupShapes) {
-      this.shapeGroup.forEach(s => s.center(axesToggles));
+      this.shapeGroup.forEach((s) => s.center(axesToggles));
     }
 
-    this.rawShape = center(Util.convertAxesTogglesToBooleans(axesToggles), this.rawShape);
+    this.rawShape = center({ axes: Util.convertAxesTogglesToBooleans(axesToggles) }, this.rawShape);
 
     return this;
   }
@@ -253,6 +245,15 @@ export abstract class Shape<InputOptions = any> {
     return this;
   }
 
+  alignStarting(shape: Shape): this {
+    [shape.rawShape, this.rawShape] = align(
+      { modes: ['min', 'min', 'min'], grouped: true },
+      shape.render(),
+      this.render(),
+    ); // align shapes at the minimum X
+    return this;
+  }
+
   alignWithBottom(shape: Shape, axesToggles: AxesToggles = true): this {
     const { x, y, z } = Util.convertAxesTogglesToXYZ(axesToggles);
 
@@ -277,22 +278,23 @@ export abstract class Shape<InputOptions = any> {
     return this;
   }
 
-  //////////////////////
-  // Combining Shapes //
-  //////////////////////
-
   addShapes(...shapes: Shape[]): this {
+    shapes = shapes.map((shape) => shape.alignStarting(this));
     this.shapeGroup.push(...shapes);
 
-    this.rawShape = union(this.rawShape, ...shapes.map(s => s.render()));
+    this.rawShape = union(this.rawShape, ...shapes.map((s) => s.render()));
 
     return this;
   }
 
+  //////////////////////
+  // Combining Shapes //
+  //////////////////////
+
   subtractShapes(...shapes: Shape[]): this {
     this.shapeGroup.push(...shapes);
 
-    this.rawShape = difference(this.rawShape, ...shapes.map(s => s.render()));
+    this.rawShape = subtract(this.rawShape, ...shapes.map((s) => s.render()));
 
     return this;
   }
@@ -310,37 +312,37 @@ export abstract class Shape<InputOptions = any> {
   /////////////////////////////////////////////
 
   getPositionMinX(): number {
-    const allX: number[] = flatMap(this.rawShape.polygons, polygon => map(polygon.vertices, vertex => vertex.pos._x));
+    const allX: number[] = flatMap(this.rawShape.polygons, (polygon) => map(polygon.vertices, (vertex) => vertex[0]));
 
     return Math.min(...allX);
   }
 
   getPositionMinY(): number {
-    const allY: number[] = flatMap(this.rawShape.polygons, polygon => map(polygon.vertices, vertex => vertex.pos._y));
+    const allY: number[] = flatMap(this.rawShape.polygons, (polygon) => map(polygon.vertices, (vertex) => vertex[1]));
 
     return Math.min(...allY);
   }
 
   getPositionMinZ(): number {
-    const allZ: number[] = flatMap(this.rawShape.polygons, polygon => map(polygon.vertices, vertex => vertex.pos._z));
+    const allZ: number[] = flatMap(this.rawShape.polygons, (polygon) => map(polygon.vertices, (vertex) => vertex[2]));
 
     return Math.min(...allZ);
   }
 
   getPositionMaxX(): number {
-    const allX: number[] = flatMap(this.rawShape.polygons, polygon => map(polygon.vertices, vertex => vertex.pos._x));
+    const allX: number[] = flatMap(this.rawShape.polygons, (polygon) => map(polygon.vertices, (vertex) => vertex[0]));
 
     return Math.max(...allX);
   }
 
   getPositionMaxY(): number {
-    const allY: number[] = flatMap(this.rawShape.polygons, polygon => map(polygon.vertices, vertex => vertex.pos._y));
+    const allY: number[] = flatMap(this.rawShape.polygons, (polygon) => map(polygon.vertices, (vertex) => vertex[1]));
 
     return Math.max(...allY);
   }
 
   getPositionMaxZ(): number {
-    const allZ: number[] = flatMap(this.rawShape.polygons, polygon => map(polygon.vertices, vertex => vertex.pos._z));
+    const allZ: number[] = flatMap(this.rawShape.polygons, (polygon) => map(polygon.vertices, (vertex) => vertex[2]));
 
     return Math.max(...allZ);
   }
@@ -356,10 +358,12 @@ export abstract class Shape<InputOptions = any> {
   getHeight(): number {
     return this.getPositionMaxZ() - this.getPositionMinZ();
   }
+
+  protected abstract createInitialRawShape(): RawShape;
 }
 
 export class ShapeContainer extends Shape<Shape[]> {
   protected createInitialRawShape(): RawShape {
-    return union(...this.inputOptions.map(s => s.render()));
+    return union(...this.inputOptions.map((s) => s.render()));
   }
 }

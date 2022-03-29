@@ -20,15 +20,9 @@ export class RoundedBottomCube extends Shape<RoundedBottomCubeOptions> {
     return cube
       .subtractShapes(
         this.makeRamp(width).alignWithTop(cube, { x: true, y: true }),
-        this.makeRamp(height)
-          .rotateZ(90)
-          .alignWithBottom(cube, { x: true, y: true }),
-        this.makeRamp(width)
-          .rotateZ(180)
-          .alignWithBottom(cube, { x: true, y: true }),
-        this.makeRamp(height)
-          .rotateZ(270)
-          .alignWithTop(cube, { x: true, y: true }),
+        this.makeRamp(height).rotateZ(90).alignWithBottom(cube, { x: true, y: true }),
+        this.makeRamp(width).rotateZ(180).alignWithBottom(cube, { x: true, y: true }),
+        this.makeRamp(height).rotateZ(270).alignWithTop(cube, { x: true, y: true }),
       )
       .render();
   }

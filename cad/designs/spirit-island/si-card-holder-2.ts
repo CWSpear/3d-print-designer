@@ -95,9 +95,9 @@ class CardHolder extends Shape<CardHolderOptions> {
     const { cardSizes, arrangement, outerWallWidth, floorThickness, slotSpacing } = this.inputOptions;
 
     let xOffset = slotSpacing;
-    const cardSlots = arrangement.flatMap(row => {
+    const cardSlots = arrangement.flatMap((row) => {
       let yOffset = slotSpacing;
-      const cardShapes = row.map(card => {
+      const cardShapes = row.map((card) => {
         const cardSize = cardSizes[card.type];
 
         const cardShape = new Cube({
@@ -117,7 +117,7 @@ class CardHolder extends Shape<CardHolderOptions> {
         return cardShape;
       });
 
-      xOffset += cardSizes[_.maxBy(row, card => cardSizes[card.type].width).type].width + slotSpacing;
+      xOffset += cardSizes[_.maxBy(row, (card) => cardSizes[card.type].width).type].width + slotSpacing;
 
       return cardShapes;
     });

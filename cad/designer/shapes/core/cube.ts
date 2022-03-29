@@ -1,5 +1,4 @@
-const { cube } = require('@jscad/csg/src/api/primitives3d-api');
-
+import { cuboid, roundedCuboid } from '@jscad/modeling/src/primitives/index';
 import { Dimensions, RawShape, Shape } from '../../shape';
 import { Util } from '../../util';
 
@@ -17,12 +16,27 @@ export class Cube extends Shape<CubeOptions> {
     super(inputOptions, id);
   }
 
+  // TODO will this work if rounded if false?
   protected createInitialRawShape(): RawShape {
-    return cube({
+    const size = Util.convertDimensionsToNumbers(this.inputOptions.size);
+
+    console.log('this.inputOptions', this.inputOptions);
+
+    if (!this.inputOptions.round) {
+      return cuboid({
+        ...this.inputOptions,
+        size,
+        center: [(-1 * size[0]) / 2, (-1 * size[1]) / 2, (-1 * size[2]) / 2],
+      });
+    }
+
+    return roundedCuboid({
       ...this.inputOptions,
-      size: Util.convertDimensionsToNumbers(this.inputOptions.size),
+      size,
+      center: [0, 0, 0],
       // offset: Util.normalizeDimensions(this.inputOptions.offset),
-      fn: this.inputOptions.resolution || 8,
+      roundRadius: this.inputOptions.radius ?? 0,
+      segments: this.inputOptions.resolution || 8,
     });
   }
 }

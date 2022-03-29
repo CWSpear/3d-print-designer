@@ -9,7 +9,7 @@ import Bundler from 'parcel-bundler';
 
 import * as path from 'path';
 import * as shell from 'shelljs';
-import socketio from 'socket.io';
+import { Server as SocketServer, Socket } from 'socket.io';
 import { Shape } from '../cad/designer/shape';
 import { exec } from './util/shelljs-better';
 import { forEach } from 'lodash';
@@ -52,7 +52,7 @@ console.log(chalk.magenta(`\n-----------\n`));
 
 const app = express();
 const http = createServer(app);
-const io = socketio(http);
+const io: SocketServer = new SocketServer(http);
 
 app.use(express.static(absoluteWebRootDirPath, { fallthrough: true }));
 
@@ -65,13 +65,13 @@ http.listen(PORT, () => {
 
   console.log(chalk.magenta(`\n-----------\n`));
 
-  ready().catch(err => {
+  ready().catch((err) => {
     console.error(chalk.red('Error on startup'), err);
   });
 });
 
-io.on('connection', socket => {
-  socket.on('join-room', id => {
+io.on('connection', (socket: Socket) => {
+  socket.on('join-room', (id: string) => {
     socket.join(id);
 
     socket.on('client-triggered-reload', async () => {
@@ -167,24 +167,19 @@ async function processDesignFileChange(filePath: string) {
 
       const { default: shape }: { default: Shape } = require(filePath);
 
-      const output: string[] | ArrayBuffer[] = stlSerializer.serialize(shape.render(), { binary: false });
-      await fs.writeFile(outputFileName, output, typeof output[0] === 'string' ? 'utf-8' : 'binary');
+      const output: string[] | ArrayBuffer[] = stlSerializer.serialize({ binary: false }, shape.render());
+      await fs.writeFile(outputFileName, output.join(''), typeof output[0] === 'string' ? 'utf-8' : 'binary');
     } else {
       delete require.cache[require.resolve(filePath)];
       const render = require(filePath);
 
       if (typeof render === 'function') {
-        const output: string[] | ArrayBuffer[] = stlSerializer.serialize(render(), { binary: false });
+        const output: string[] | ArrayBuffer[] = stlSerializer.serialize({ binary: false }, render());
         await fs.writeFile(outputFileName, output, typeof output[0] === 'string' ? 'utf-8' : 'binary');
       } else {
         const output = await exec(`npx openjscad ${filePath} -of stla -o ${outputFileName}`);
         // first line is output from openjscad
-        console.log(
-          output
-            .split('\n')
-            .slice(1)
-            .join('\n'),
-        );
+        console.log(output.split('\n').slice(1).join('\n'));
       }
     }
   } catch (err) {
@@ -238,7 +233,7 @@ async function printExistingBuilds(dirPath: string = absoluteDesignBuildDirPath)
   const files = await fs.readdir(dirPath);
 
   await Promise.all(
-    files.map(async file => {
+    files.map(async (file) => {
       if (file[0] === '.') {
         return;
       }
@@ -253,9 +248,9 @@ async function printExistingBuilds(dirPath: string = absoluteDesignBuildDirPath)
     }),
   );
 
-  const filteredFiles = files.filter(file => file.match(/\.stl$/));
+  const filteredFiles = files.filter((file) => file.match(/\.stl$/));
 
-  filteredFiles.forEach(file => {
+  filteredFiles.forEach((file) => {
     const p = path.join(dirPath, file).replace(absoluteDesignBuildDirPath, '');
     console.log(chalk.blue(`http://localhost:${PORT}#${BUILD_URL}${p}`));
   });

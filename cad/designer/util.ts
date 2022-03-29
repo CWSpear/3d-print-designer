@@ -1,3 +1,5 @@
+import { degToRad } from '@jscad/modeling/src/utils';
+import * as util from 'util';
 import {
   AxesToggles,
   BooleanAxesToggles,
@@ -84,6 +86,10 @@ export class Util {
     throw new Error(`Unexpected dimensions format: ${JSON.stringify(dimensions)}`);
   }
 
+  static convertToRadius<T extends number[]>(degrees: T): T {
+    return <T>degrees.map((degree) => degToRad(degree));
+  }
+
   static convertDimensionsToWLH(dimensions: Partial<Dimensions>, defaultValue: number = 0): WLHDimensions {
     const [width, length, height] = Util.convertDimensionsToNumbers(dimensions, defaultValue);
 
@@ -131,7 +137,7 @@ export class Util {
   static trimLines(str: string): string {
     return str
       .split('\n')
-      .map(s => s.trim())
+      .map((s) => s.trim())
       .join('\n')
       .trim();
   }
@@ -142,5 +148,16 @@ export class Util {
 
   static millimetersToInches(millimeters: number): number {
     return millimeters / 25.4;
+  }
+
+  static log(...args: any[]): void {
+    console.log(
+      ...args.map((arg) => {
+        if (typeof arg === 'string') {
+          return arg;
+        }
+        return util.inspect(arg, { depth: 10, colors: true });
+      }),
+    );
   }
 }

@@ -170,17 +170,12 @@ class CardHolder extends Shape<CardHolderOptions> {
         y: wallWidth,
       });
 
-      slots.push(
-        slot
-          .clone()
-          .translateX(xOffset)
-          .rotateY(45),
-      );
+      slots.push(slot.clone().translateX(xOffset).rotateY(45));
 
       xOffset += slot.getWidth() + slotSpacing;
     });
 
-    mainShape.subtractShapes(...slots.map(s => s));
+    mainShape.subtractShapes(...slots.map((s) => s));
 
     const heightBeforeLid = mainShape.getHeight();
 

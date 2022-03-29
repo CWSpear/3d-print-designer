@@ -13,4 +13,4 @@ const mainShape = new TokenHolder({
   stackable: true,
 });
 
-export default mainShape; //
+export default mainShape;
