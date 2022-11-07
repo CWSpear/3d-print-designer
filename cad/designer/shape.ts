@@ -1,6 +1,13 @@
 import { Geom3 } from '@jscad/modeling/src/geometries/types';
 import { subtract, union } from '@jscad/modeling/src/operations/booleans';
-import { align, center, mirror, rotate, scale, translate } from '@jscad/modeling/src/operations/transforms';
+import {
+  align,
+  center,
+  mirror,
+  rotate,
+  scale,
+  translate,
+} from '@jscad/modeling/src/operations/transforms';
 import { cloneDeep, flatMap, map, random } from 'lodash';
 import { Util } from './util';
 
@@ -15,7 +22,11 @@ export type BooleanAxesToggles = [boolean, boolean, boolean];
 export type WLHAxesToggles = { width?: boolean; length?: boolean; height?: boolean };
 export type XYZAxesToggles = { x?: boolean; y?: boolean; z?: boolean };
 
-export type AxesToggles = BooleanAxesToggles | WLHAxesToggles | XYZAxesToggles | boolean;
+export type AxesToggles =
+  | BooleanAxesToggles
+  | WLHAxesToggles
+  | XYZAxesToggles
+  | boolean;
 
 export type RawShape = Geom3;
 // export interface RawShape {
@@ -41,13 +52,20 @@ export interface RoundCornersOptions {
   radius?: number;
 }
 
-export abstract class Shape<InputOptions = any> {
+// this should be abstract, but TypeScript was freaking out
+export class Shape<InputOptions = any> {
   private rawShape: RawShape = this.createInitialRawShape();
   private shapeGroup: Shape[] = [];
   private groupShapes: boolean = false;
+  public readonly inputOptions: Required<InputOptions>;
 
-  protected constructor(public readonly inputOptions: InputOptions, protected id: string = '' + random(999999)) {
+  constructor(inputOptions: InputOptions, protected id: string = '' + random(999999)) {
     this.setPositionToZero();
+    this.inputOptions = this.setDefaultOptions(inputOptions);
+  }
+
+  setDefaultOptions(options: InputOptions): Required<InputOptions> {
+    return <Required<InputOptions>>options;
   }
 
   render(): RawShape {
@@ -79,7 +97,10 @@ export abstract class Shape<InputOptions = any> {
       this.shapeGroup.forEach((s) => s.mirror(translation));
     }
 
-    this.rawShape = mirror({ normal: Util.convertDimensionsToNumbers(translation) }, this.rawShape);
+    this.rawShape = mirror(
+      { normal: Util.convertDimensionsToNumbers(translation) },
+      this.rawShape,
+    );
     // this.rawShape = mirror({ origin: Util.convertDimensionsToNumbers(translation) }, this.rawShape);
 
     return this;
@@ -106,7 +127,10 @@ export abstract class Shape<InputOptions = any> {
       this.shapeGroup.forEach((s) => s.rotate(rotations));
     }
 
-    this.rawShape = rotate(Util.convertToRadian(Util.convertDimensionsToNumbers(rotations)), this.rawShape);
+    this.rawShape = rotate(
+      Util.convertToRadian(Util.convertDimensionsToNumbers(rotations)),
+      this.rawShape,
+    );
 
     return this;
   }
@@ -128,7 +152,10 @@ export abstract class Shape<InputOptions = any> {
       this.shapeGroup.forEach((s) => s.translate(translation));
     }
 
-    this.rawShape = translate(Util.convertDimensionsToNumbers(translation), this.rawShape);
+    this.rawShape = translate(
+      Util.convertDimensionsToNumbers(translation),
+      this.rawShape,
+    );
 
     return this;
   }
@@ -150,7 +177,10 @@ export abstract class Shape<InputOptions = any> {
       this.shapeGroup.forEach((s) => s.scale(translation));
     }
 
-    this.rawShape = scale(Util.convertDimensionsToNumbers(translation, 1), this.rawShape);
+    this.rawShape = scale(
+      Util.convertDimensionsToNumbers(translation, 1),
+      this.rawShape,
+    );
 
     return this;
   }
@@ -171,7 +201,10 @@ export abstract class Shape<InputOptions = any> {
     const [x, y, z] = Util.convertAxesTogglesToBooleans(axesToggles);
 
     this.rawShape = align(
-      { modes: [x ? 'min' : 'none', y ? 'min' : 'none', z ? 'min' : 'none'], relativeTo: [0, 0, 0] },
+      {
+        modes: [x ? 'min' : 'none', y ? 'min' : 'none', z ? 'min' : 'none'],
+        relativeTo: [0, 0, 0],
+      },
       this.rawShape,
     );
 
@@ -183,7 +216,10 @@ export abstract class Shape<InputOptions = any> {
       this.shapeGroup.forEach((s) => s.center(axesToggles));
     }
 
-    this.rawShape = center({ axes: Util.convertAxesTogglesToBooleans(axesToggles) }, this.rawShape);
+    this.rawShape = center(
+      { axes: Util.convertAxesTogglesToBooleans(axesToggles) },
+      this.rawShape,
+    );
 
     return this;
   }
@@ -286,37 +322,49 @@ export abstract class Shape<InputOptions = any> {
   }
 
   getPositionMinX(): number {
-    const allX: number[] = flatMap(this.rawShape.polygons, (polygon) => map(polygon.vertices, (vertex) => vertex[0]));
+    const allX: number[] = flatMap(this.rawShape.polygons, (polygon) =>
+      map(polygon.vertices, (vertex) => vertex[0]),
+    );
 
     return Math.min(...allX) + this.getTranslations().x;
   }
 
   getPositionMinY(): number {
-    const allY: number[] = flatMap(this.rawShape.polygons, (polygon) => map(polygon.vertices, (vertex) => vertex[1]));
+    const allY: number[] = flatMap(this.rawShape.polygons, (polygon) =>
+      map(polygon.vertices, (vertex) => vertex[1]),
+    );
 
     return Math.min(...allY) + this.getTranslations().y;
   }
 
   getPositionMinZ(): number {
-    const allZ: number[] = flatMap(this.rawShape.polygons, (polygon) => map(polygon.vertices, (vertex) => vertex[2]));
+    const allZ: number[] = flatMap(this.rawShape.polygons, (polygon) =>
+      map(polygon.vertices, (vertex) => vertex[2]),
+    );
 
     return Math.min(...allZ) + this.getTranslations().z;
   }
 
   getPositionMaxX(): number {
-    const allX: number[] = flatMap(this.rawShape.polygons, (polygon) => map(polygon.vertices, (vertex) => vertex[0]));
+    const allX: number[] = flatMap(this.rawShape.polygons, (polygon) =>
+      map(polygon.vertices, (vertex) => vertex[0]),
+    );
 
     return Math.max(...allX) + this.getTranslations().x;
   }
 
   getPositionMaxY(): number {
-    const allY: number[] = flatMap(this.rawShape.polygons, (polygon) => map(polygon.vertices, (vertex) => vertex[1]));
+    const allY: number[] = flatMap(this.rawShape.polygons, (polygon) =>
+      map(polygon.vertices, (vertex) => vertex[1]),
+    );
 
     return Math.max(...allY) + this.getTranslations().y;
   }
 
   getPositionMaxZ(): number {
-    const allZ: number[] = flatMap(this.rawShape.polygons, (polygon) => map(polygon.vertices, (vertex) => vertex[2]));
+    const allZ: number[] = flatMap(this.rawShape.polygons, (polygon) =>
+      map(polygon.vertices, (vertex) => vertex[2]),
+    );
 
     return Math.max(...allZ) + this.getTranslations().z;
   }
@@ -333,7 +381,9 @@ export abstract class Shape<InputOptions = any> {
     return this.getPositionMaxZ() - this.getPositionMinZ();
   }
 
-  protected abstract createInitialRawShape(): RawShape;
+  protected createInitialRawShape(): RawShape {
+    throw new Error('You must override `createInitialRawShape`');
+  }
 }
 
 export class ShapeContainer extends Shape<Shape[]> {

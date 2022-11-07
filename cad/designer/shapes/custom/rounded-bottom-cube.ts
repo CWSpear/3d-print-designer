@@ -12,8 +12,21 @@ export class RoundedBottomCube extends Shape<RoundedBottomCubeOptions> {
     super(inputOptions, id);
   }
 
+  setDefaultOptions(
+    options: RoundedBottomCubeOptions,
+  ): Required<RoundedBottomCubeOptions> {
+    return super.setDefaultOptions({
+      round: false,
+      radius: 0,
+      resolution: 8,
+      ...options,
+    });
+  }
+
   protected createInitialRawShape(): RawShape {
-    const { width, length: height } = Util.convertDimensionsToWLH(this.inputOptions.size);
+    const { width, length: height } = Util.convertDimensionsToWLH(
+      this.inputOptions.size,
+    );
 
     const cube = new Cube(this.inputOptions);
 
@@ -28,7 +41,13 @@ export class RoundedBottomCube extends Shape<RoundedBottomCubeOptions> {
   }
 
   private makeRamp(length: number): Shape {
-    return new Cube({ size: { width: length, length: this.inputOptions.rampSize, height: this.inputOptions.rampSize } })
+    return new Cube({
+      size: {
+        width: length,
+        length: this.inputOptions.rampSize,
+        height: this.inputOptions.rampSize,
+      },
+    })
       .subtractShapes(
         new Cylinder({
           radius: this.inputOptions.rampSize,

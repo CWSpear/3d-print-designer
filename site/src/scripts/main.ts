@@ -22,9 +22,11 @@ const OrbitControls = require('three-orbit-controls')(THREE);
 
 const urlHash = window.location.hash.replace(/^#/, '');
 
-const spinnerElem: HTMLDivElement = document.querySelector('#spinner-wrapper');
-const refreshBtn: HTMLButtonElement = document.querySelector('#refresh-button');
-const psychedelicModeCheckbox: HTMLInputElement = document.querySelector('#psychedelic-mode-checkbox');
+const spinnerElem: HTMLDivElement = document.querySelector('#spinner-wrapper')!;
+const refreshBtn: HTMLButtonElement = document.querySelector('#refresh-button')!;
+const psychedelicModeCheckbox: HTMLInputElement = document.querySelector(
+  '#psychedelic-mode-checkbox',
+)!;
 
 const socket = io('http://localhost:3333');
 
@@ -76,10 +78,17 @@ class Playground {
 
   private loader = new StlFileLoader();
   private scene: Scene = new Scene();
-  private camera: PerspectiveCamera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 4000);
+  private camera: PerspectiveCamera = new PerspectiveCamera(
+    45,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    4000,
+  );
   private renderer: WebGLRenderer = new WebGLRenderer();
   private lights: Light[] = [];
-  private easyToSeeMaterial: MeshNormalMaterial = new MeshNormalMaterial({ flatShading: true });
+  private easyToSeeMaterial: MeshNormalMaterial = new MeshNormalMaterial({
+    flatShading: true,
+  });
   private material: MeshPhongMaterial = new MeshPhongMaterial({
     color: 0x0000aa,
     specular: 0x004444,
@@ -125,7 +134,10 @@ class Playground {
       }
     }
 
-    this.mesh = new Mesh(this.geometry, this.useEasyToSeeMaterial ? this.easyToSeeMaterial : this.material);
+    this.mesh = new Mesh(
+      this.geometry,
+      this.useEasyToSeeMaterial ? this.easyToSeeMaterial : this.material,
+    );
     this.mesh.castShadow = true;
 
     const xLength = this.geometry.boundingBox.max.x - this.geometry.boundingBox.min.x;
@@ -155,8 +167,18 @@ class Playground {
     const longerAxis = Math.max(x, y);
     const shorterAxis = Math.min(x, y);
 
-    const longerAxisGrid: GridHelper = new GridHelper(shorterAxis, shorterAxis / 10, 0x3f3f3f, 0x3f3f3f);
-    const shorterAxisGrid: GridHelper = new GridHelper(shorterAxis, shorterAxis / 10, 0x3f3f3f, 0x3f3f3f);
+    const longerAxisGrid: GridHelper = new GridHelper(
+      shorterAxis,
+      shorterAxis / 10,
+      0x3f3f3f,
+      0x3f3f3f,
+    );
+    const shorterAxisGrid: GridHelper = new GridHelper(
+      shorterAxis,
+      shorterAxis / 10,
+      0x3f3f3f,
+      0x3f3f3f,
+    );
 
     longerAxisGrid.translateX(shorterAxis / 2);
     longerAxisGrid.translateY(shorterAxis / 2);
@@ -204,7 +226,11 @@ class Playground {
     this.scene.add(this.camera);
 
     this.camera.up = new Vector3(0, 0, 1);
-    this.camera.position.set(-this.maxX / 4, -this.maxY / 4, (this.maxX + this.maxY) / 2);
+    this.camera.position.set(
+      -this.maxX / 4,
+      -this.maxY / 4,
+      (this.maxX + this.maxY) / 2,
+    );
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.target = new Vector3(this.maxX / 2, this.maxY / 2, 0);
@@ -235,4 +261,6 @@ class Playground {
 
 playground = new Playground(urlHash, 250, 210);
 
-playground.load();
+playground.load().catch((err) => {
+  console.error(err);
+});

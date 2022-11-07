@@ -17,6 +17,15 @@ export class Cube extends Shape<CubeOptions> {
     super(inputOptions, id);
   }
 
+  setDefaultOptions(options: CubeOptions): Required<CubeOptions> {
+    return super.setDefaultOptions({
+      round: false,
+      radius: 0,
+      resolution: 8,
+      ...options,
+    });
+  }
+
   protected createInitialRawShape(): RawShape {
     const size = Util.convertDimensionsToNumbers(this.inputOptions.size);
     const center: Vec3 = [0, 0, 0]; // [size[0] / 2, size[1] / 2, size[2] / 2];
@@ -35,8 +44,8 @@ export class Cube extends Shape<CubeOptions> {
       size,
       center,
       // offset: Util.normalizeDimensions(this.inputOptions.offset),
-      roundRadius: this.inputOptions.radius ?? 0,
-      segments: this.inputOptions.resolution || 8,
+      roundRadius: this.inputOptions.radius,
+      segments: this.inputOptions.resolution,
     });
   }
 }

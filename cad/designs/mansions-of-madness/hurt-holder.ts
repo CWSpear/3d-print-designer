@@ -22,7 +22,7 @@ const config: StatiiHolderOptions = {
 };
 
 export class HurtHolder extends Shape<StatiiHolderOptions> {
-  private lidLip: LidLip; //
+  private lidLip!: LidLip; //
 
   constructor(config: StatiiHolderOptions) {
     super(config);
@@ -33,9 +33,17 @@ export class HurtHolder extends Shape<StatiiHolderOptions> {
   }
 
   protected createInitialRawShape(): RawShape {
-    const { cardLength, cardWidth, wallThickness, damageThickness, horrorThickness, notchSize } = this.inputOptions;
+    const {
+      cardLength,
+      cardWidth,
+      wallThickness,
+      damageThickness,
+      horrorThickness,
+      notchSize,
+    } = this.inputOptions;
 
-    const totalWidth = wallThickness + damageThickness + wallThickness + horrorThickness + wallThickness;
+    const totalWidth =
+      wallThickness + damageThickness + wallThickness + horrorThickness + wallThickness;
     const totalLength = wallThickness + cardLength + wallThickness;
     const totalHeight = wallThickness + cardWidth;
 
@@ -109,7 +117,10 @@ export class HurtHolder extends Shape<StatiiHolderOptions> {
 
     base.addShapes(this.lidLip.translateZ(base.getHeight()));
 
-    base.subtractShapes(sideNotch, sideNotch.clone().translateX(base.getWidth() - sideNotch.getWidth()));
+    base.subtractShapes(
+      sideNotch,
+      sideNotch.clone().translateX(base.getWidth() - sideNotch.getWidth()),
+    );
 
     return base.render();
   }

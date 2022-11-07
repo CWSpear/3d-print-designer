@@ -17,7 +17,7 @@ export interface OwlGameHolderOptions {
 }
 
 export class OwlGameHolder extends Shape<OwlGameHolderOptions> {
-  lidLip: LidLip;
+  lidLip!: LidLip;
 
   constructor(options: OwlGameHolderOptions) {
     super(options);
@@ -49,7 +49,12 @@ export class OwlGameHolder extends Shape<OwlGameHolderOptions> {
           owlTokenDiameter +
           wiggleRoom +
           exteriorWallThickness,
-        length: exteriorWallThickness + wiggleRoom + cardWidth + wiggleRoom + exteriorWallThickness,
+        length:
+          exteriorWallThickness +
+          wiggleRoom +
+          cardWidth +
+          wiggleRoom +
+          exteriorWallThickness,
         height: floorThickness + cardsThickness,
       },
     });

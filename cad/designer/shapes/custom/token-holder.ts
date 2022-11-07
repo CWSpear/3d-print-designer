@@ -17,10 +17,17 @@ export interface TokenHolderOptions {
 }
 
 export class TokenHolder extends Shape<TokenHolderOptions> {
-  lidLip: LidLip;
+  lidLip!: LidLip;
 
-  constructor(options: TokenHolderOptions) {
-    super(options);
+  setDefaultOptions(options: TokenHolderOptions): Required<TokenHolderOptions> {
+    return super.setDefaultOptions({
+      stackable: false,
+      useRamps: false,
+      rampSize: 0,
+      dividerThickness: 0,
+      outerWallThickness: 0,
+      ...options,
+    });
   }
 
   protected createInitialRawShape(): RawShape {
@@ -38,14 +45,19 @@ export class TokenHolder extends Shape<TokenHolderOptions> {
 
     const colCount = grid.length;
     const cellHeight =
-      (length - dividerThickness - dividerThickness - outerWallThickness) / colCount - dividerThickness;
+      (length - dividerThickness - dividerThickness - outerWallThickness) / colCount -
+      dividerThickness;
 
     if (width > Util.PrinterMaxWidth) {
-      throw new Error(`Container is too big! Max width is: ${Util.PrinterMaxWidth}. Width provided: ${width}`);
+      throw new Error(
+        `Container is too big! Max width is: ${Util.PrinterMaxWidth}. Width provided: ${width}`,
+      );
     }
 
     if (length > Util.PrinterMaxLength) {
-      throw new Error(`Container is too big! Max length is: ${Util.PrinterMaxLength}. Length provided: ${length}`);
+      throw new Error(
+        `Container is too big! Max length is: ${Util.PrinterMaxLength}. Length provided: ${length}`,
+      );
     }
 
     this.lidLip = new LidLip({
@@ -105,7 +117,9 @@ export class TokenHolder extends Shape<TokenHolderOptions> {
       row.forEach((col) => {
         const rowCount = row.reduce((total, v) => total + v, 0);
         const rowUnitWidth: number =
-          (width - dividerThickness - dividerThickness - outerWallThickness) / rowCount - dividerThickness;
+          (width - dividerThickness - dividerThickness - outerWallThickness) /
+            rowCount -
+          dividerThickness;
 
         const cellWidth = (rowUnitWidth + dividerThickness) * col - dividerThickness;
         const offsetX = outerWallThickness + x * (rowUnitWidth + dividerThickness);
@@ -120,7 +134,9 @@ export class TokenHolder extends Shape<TokenHolderOptions> {
             })
           : new Cube({ size });
 
-        mainShape.subtractShapes(shape.translate({ z: dividerThickness, x: offsetX, y: offsetY }));
+        mainShape.subtractShapes(
+          shape.translate({ z: dividerThickness, x: offsetX, y: offsetY }),
+        );
 
         x += col;
       });

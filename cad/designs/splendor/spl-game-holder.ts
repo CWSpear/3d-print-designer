@@ -18,18 +18,26 @@ interface SpendorGameHolderConfig {
 export const magnetMinWall = 0.59999;
 
 class SpendorGameHolder extends Shape<SpendorGameHolderConfig> {
-  mainShape: Shape;
-  magnet1: Shape;
-  magnet2: Shape;
-  lidLip: LidLip;
+  mainShape!: Shape;
+  magnet1!: Shape;
+  magnet2!: Shape;
+  lidLip!: LidLip;
 
   constructor(inputOptions: SpendorGameHolderConfig) {
     super(inputOptions);
   }
 
   protected createInitialRawShape(): RawShape {
-    const { cardWidth, cardLength, tileWidth, tileLength, tokenDiameter, slotDepth, tilesHeight, cardsHeight } =
-      this.inputOptions;
+    const {
+      cardWidth,
+      cardLength,
+      tileWidth,
+      tileLength,
+      tokenDiameter,
+      slotDepth,
+      tilesHeight,
+      cardsHeight,
+    } = this.inputOptions;
 
     const exteriorWallWidth = 3;
     const interiorWallWidth = 2;
@@ -247,7 +255,9 @@ class SpendorGameHolder extends Shape<SpendorGameHolderConfig> {
       z: magnetWall.getHeight() - magnetHole.getHeight() - magnetMinWall,
     });
 
-    const magnet2 = magnet1.clone().translateX(mainShape.getWidth() - magnetWall.getWidth() / 2);
+    const magnet2 = magnet1
+      .clone()
+      .translateX(mainShape.getWidth() - magnetWall.getWidth() / 2);
 
     magnet1.addShapes(magnet1.clone().translateX(-magnet1.getWidth()));
 

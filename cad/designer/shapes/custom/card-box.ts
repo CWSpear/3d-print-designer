@@ -15,15 +15,18 @@ export interface CardBoxOptions {
 }
 
 export class CardBox extends Shape<CardBoxOptions> {
-  constructor(inputOptions: CardBoxOptions, id?: string) {
-    super(inputOptions, id);
-  }
-
-  protected createInitialRawShape(): RawShape {
-    const options = {
+  setDefaultOptions(options: CardBoxOptions): Required<CardBoxOptions> {
+    return {
       wallThickness: 0.8,
       tabHeight: 0,
       wiggleRoom: 0.5,
+      withCutout: false,
+      ...options,
+    };
+  }
+
+  protected createInitialRawShape(): RawShape {
+    const options: Required<CardBoxOptions> = {
       ...this.inputOptions,
     };
 
@@ -59,7 +62,10 @@ export class CardBox extends Shape<CardBoxOptions> {
           length: options.wallThickness,
           height: options.tabHeight,
         },
-      }).addShapes(edge, edge.clone().translate({ x: options.cardWidth + options.wallThickness }));
+      }).addShapes(
+        edge,
+        edge.clone().translate({ x: options.cardWidth + options.wallThickness }),
+      );
 
       cardBox.addShapes(backThing.translate({ height: options.cardHeight }));
     }
@@ -68,7 +74,10 @@ export class CardBox extends Shape<CardBoxOptions> {
       const holeSize = 18;
       const height = 20;
 
-      const cutout = new Cylinder({ radius: holeSize / 2, height: options.deckThickness + options.wallThickness * 2 });
+      const cutout = new Cylinder({
+        radius: holeSize / 2,
+        height: options.deckThickness + options.wallThickness * 2,
+      });
       cutout.addShapes(
         new Cube({
           size: {
@@ -79,7 +88,13 @@ export class CardBox extends Shape<CardBoxOptions> {
         }), // .centerOn(cutout, { y: true }),
       );
 
-      cardBox.subtractShapes(cutout.rotateY(-90).rotateZ(-90).setPositionToZero().centerOn(cardBox, { x: true }));
+      cardBox.subtractShapes(
+        cutout
+          .rotateY(-90)
+          .rotateZ(-90)
+          .setPositionToZero()
+          .centerOn(cardBox, { x: true }),
+      );
     }
 
     // return cardBox.rotateZ(90).render();

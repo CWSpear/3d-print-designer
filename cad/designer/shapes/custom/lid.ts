@@ -21,9 +21,7 @@ export interface LidOptions {
   extraWiggleRoom?: number;
 }
 
-export interface Lid extends Shape {
-  inputOptions: LidOptions;
-}
+export interface Lid extends Shape {}
 
 export class LidLip extends Shape<LidLipOptions> {
   constructor(inputOptions: LidLipOptions, id?: string) {
@@ -44,14 +42,18 @@ export class LidLip extends Shape<LidLipOptions> {
   }
 
   private makeLip(extraWiggleRoom: number = 0): Shape {
-    const lipPartWest: Shape = this.makeLipPart(this.inputOptions.width - extraWiggleRoom).translateY(
-      -this.inputOptions.lipWidth,
-    );
+    const lipPartWest: Shape = this.makeLipPart(
+      this.inputOptions.width - extraWiggleRoom,
+    ).translateY(-this.inputOptions.lipWidth!);
 
     const lipPartEast: Shape = lipPartWest.clone().mirrorAcrossXPlane();
     lipPartWest.translateY(this.inputOptions.length - extraWiggleRoom);
-    const lipPartNorth: Shape = this.makeLipPart(this.inputOptions.length - extraWiggleRoom)
-      .translateY(this.inputOptions.width - this.inputOptions.lipWidth - extraWiggleRoom)
+    const lipPartNorth: Shape = this.makeLipPart(
+      this.inputOptions.length - extraWiggleRoom,
+    )
+      .translateY(
+        this.inputOptions.width - this.inputOptions.lipWidth - extraWiggleRoom,
+      )
       .rotateZ(90)
       .mirrorAcrossYPlane();
 
@@ -79,25 +81,36 @@ export class LidLip extends Shape<LidLipOptions> {
         },
         `${this.id}__RTP`,
       ).translateZ(this.inputOptions.extraClearance),
-      lipPart.clone().translate({ y: -this.inputOptions.attachmentWidth, z: -this.inputOptions.height }),
+      lipPart
+        .clone()
+        .translate({
+          y: -this.inputOptions.attachmentWidth,
+          z: -this.inputOptions.height,
+        }),
     );
 
     return lipPart;
   }
 
-  makeLid(inputOptions: LidOptions = {}): Lid {
-    inputOptions = {
+  makeLid(_inputOptions: LidOptions = {}): Lid {
+    const inputOptions: Required<LidOptions> = {
       buttonDistanceFromEdge: 15,
       buttonSpacing: 6,
       buttonRadius: 6,
       buttonDepth: 1.2,
       noButtons: false,
       extraWiggleRoom: 0.2,
-      ...inputOptions,
+      ..._inputOptions,
     };
 
-    const { buttonDistanceFromEdge, buttonSpacing, buttonRadius, buttonDepth, noButtons, extraWiggleRoom } =
-      inputOptions;
+    const {
+      buttonDistanceFromEdge,
+      buttonSpacing,
+      buttonRadius,
+      buttonDepth,
+      noButtons,
+      extraWiggleRoom,
+    } = inputOptions;
 
     const width = this.inputOptions.width - extraWiggleRoom;
     const length = this.inputOptions.length - extraWiggleRoom;
@@ -130,18 +143,22 @@ export class LidLip extends Shape<LidLipOptions> {
         radius: buttonRadius,
       });
 
-      button.translate({
-        x: buttonDistanceFromEdge,
-        y: length / 2 - buttonRadius - buttonSpacing / 2,
-        z: this.inputOptions.height - buttonDepth,
-      });
+      button
+        .translate({
+          x: buttonDistanceFromEdge,
+          z: this.inputOptions.height - buttonDepth,
+        })
+        .centerOn(lid, { y: true });
 
-      lid.subtractShapes(button, button.clone().translateY(buttonSpacing + buttonRadius * 2));
+      lid.subtractShapes(
+        button.clone().translateY((buttonSpacing + buttonRadius * 2) / 2),
+        button.clone().translateY(-(buttonSpacing + buttonRadius * 2) / 2),
+      );
     }
 
     const clone = lid.clone();
 
-    (<Lid>clone).inputOptions = inputOptions;
+    (<any>(<Lid>clone).inputOptions) = inputOptions;
 
     return <Lid>clone.setPositionToZero({ z: true });
   }

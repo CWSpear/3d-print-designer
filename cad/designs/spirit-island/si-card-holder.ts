@@ -43,10 +43,10 @@ interface CardHolderOptions {
 }
 
 class CardHolder extends Shape<CardHolderOptions> {
-  private lid: Shape;
+  private lid!: Shape;
 
-  constructor(options: CardHolderOptions) {
-    super({
+  setDefaultOptions(options: CardHolderOptions): Required<CardHolderOptions> {
+    return super.setDefaultOptions({
       // defaults
       wallWidth: 5,
       floorThickness: 1,
@@ -56,7 +56,15 @@ class CardHolder extends Shape<CardHolderOptions> {
   }
 
   protected createInitialRawShape(): RawShape {
-    const { width, cardLength, miniCardLength, height, wallWidth, floorThickness, slotSpacing } = this.inputOptions;
+    const {
+      width,
+      cardLength,
+      miniCardLength,
+      height,
+      wallWidth,
+      floorThickness,
+      slotSpacing,
+    } = this.inputOptions;
 
     const mainShape = new Cube({
       size: {
@@ -99,8 +107,14 @@ class CardHolder extends Shape<CardHolderOptions> {
     if (lidLip.inputOptions.extraClearance > 0) {
       const shapeToAdd = new Cube({
         size: {
-          width: this.lid.getWidth() - lidLip.inputOptions.lipWidth - originalLid.inputOptions.extraWiggleRoom,
-          length: this.lid.getLength() - lidLip.inputOptions.lipWidth * 2 - originalLid.inputOptions.extraWiggleRoom,
+          width:
+            this.lid.getWidth() -
+            lidLip.inputOptions.lipWidth -
+            originalLid.inputOptions.extraWiggleRoom,
+          length:
+            this.lid.getLength() -
+            lidLip.inputOptions.lipWidth * 2 -
+            originalLid.inputOptions.extraWiggleRoom,
           height: lidLip.inputOptions.extraClearance,
         },
       });
@@ -221,7 +235,12 @@ class CardHolder extends Shape<CardHolderOptions> {
     mainShape.subtractShapes(
       magnetHole
         .centerOn(mainShape, { y: true })
-        .translateZ(mainShape.getHeight() - lidLip.inputOptions.height - magnetHole.getHeight() - Util.magnetMinWall),
+        .translateZ(
+          mainShape.getHeight() -
+            lidLip.inputOptions.height -
+            magnetHole.getHeight() -
+            Util.magnetMinWall,
+        ),
     );
 
     // back thingy
@@ -230,7 +249,11 @@ class CardHolder extends Shape<CardHolderOptions> {
       new Cube({
         size: {
           width: 3,
-          length: mainShape.getLength() - wallWidth * 2 - originalLid.inputOptions.extraWiggleRoom * 2 + 2,
+          length:
+            mainShape.getLength() -
+            wallWidth * 2 -
+            originalLid.inputOptions.extraWiggleRoom * 2 +
+            2,
           height: this.lid.getHeight() - originalLid.inputOptions.extraWiggleRoom - 3,
         },
       })

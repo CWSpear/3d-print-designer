@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { RawShape, Shape, ShapeContainer } from '../../designer/shape';
 import { Cube } from '../../designer/shapes/core/cube';
-import { LidLip } from '../../designer/shapes/custom/lid';
+import { Lid, LidLip } from '../../designer/shapes/custom/lid';
 import { RightTriangularPrism } from '../../designer/shapes/custom/right-triangular-prism';
 import { Util } from '../../designer/util';
 
@@ -75,10 +75,10 @@ interface CardHolderOptions {
 }
 
 class CardHolder extends Shape<CardHolderOptions> {
-  private lid: Shape;
+  private lid!: Lid;
 
-  constructor(options: CardHolderOptions) {
-    super({
+  setDefaultOptions(options: CardHolderOptions): Required<CardHolderOptions> {
+    return super.setDefaultOptions({
       // defaults
       outerWallWidth: 5,
       floorThickness: 1,
@@ -92,7 +92,8 @@ class CardHolder extends Shape<CardHolderOptions> {
   }
 
   protected createInitialRawShape(): RawShape {
-    const { cardSizes, arrangement, outerWallWidth, floorThickness, slotSpacing } = this.inputOptions;
+    const { cardSizes, arrangement, outerWallWidth, floorThickness, slotSpacing } =
+      this.inputOptions;
 
     let xOffset = slotSpacing;
     const cardSlots = arrangement.flatMap((row) => {
@@ -117,7 +118,9 @@ class CardHolder extends Shape<CardHolderOptions> {
         return cardShape;
       });
 
-      xOffset += cardSizes[_.maxBy(row, (card) => cardSizes[card.type].width).type].width + slotSpacing;
+      xOffset +=
+        cardSizes[_.maxBy(row, (card) => cardSizes[card.type].width)!.type].width +
+        slotSpacing;
 
       return cardShapes;
     });

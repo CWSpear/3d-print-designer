@@ -26,7 +26,7 @@ const config: StatiiHolderOptions = {
 };
 
 export class StatiiHolder extends Shape<StatiiHolderOptions> {
-  private lidLip: LidLip;
+  private lidLip!: LidLip;
 
   constructor(config: StatiiHolderOptions) {
     super(config);
@@ -100,11 +100,22 @@ export class StatiiHolder extends Shape<StatiiHolderOptions> {
       slots.push(statusSlot.clone().translate({ length: i * step }));
     }
     for (let i = 0; i < 5; i++) {
-      slots.push(statusSlot.clone().translate({ length: i * step, width: wallThickness + cardWidth }));
+      slots.push(
+        statusSlot
+          .clone()
+          .translate({ length: i * step, width: wallThickness + cardWidth }),
+      );
     }
 
     const insaneOffset = manualInsanityOffset;
-    slots.push(insaneSlot.clone().translate({ length: 5 * step - insaneOffset, width: wallThickness + cardWidth }));
+    slots.push(
+      insaneSlot
+        .clone()
+        .translate({
+          length: 5 * step - insaneOffset,
+          width: wallThickness + cardWidth,
+        }),
+    );
 
     const statii = new ShapeContainer(slots);
 

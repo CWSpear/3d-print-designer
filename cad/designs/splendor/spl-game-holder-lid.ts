@@ -2,20 +2,19 @@ import * as _ from 'lodash';
 import { RawShape, Shape } from '../../designer/shape';
 import { Cube } from '../../designer/shapes/core/cube';
 import { PlainText } from '../../designer/shapes/core/plain-text';
+import { Lid } from '../../designer/shapes/custom/lid';
 import { Util } from '../../designer/util';
 import splendorGameHolder, { magnetMinWall } from './spl-game-holder';
 
 splendorGameHolder.render();
 
-class SplendorGameHolderLid extends Shape<null> {
-  inputOptions: null = null;
-
+class SplendorGameHolderLid extends Shape<{}> {
   constructor(id?: string) {
-    super(null, id);
+    super({}, id);
   }
 
   protected createInitialRawShape(): RawShape {
-    const lid: Shape = splendorGameHolder.lidLip.makeLid({
+    const lid: Lid = splendorGameHolder.lidLip.makeLid({
       noButtons: true,
       extraWiggleRoom: 0.3,
     });

@@ -13,15 +13,16 @@ export class CardBoxes extends Shape<CardBoxesOptions> {
   }
 
   protected createInitialRawShape(): RawShape {
-    const options: CardBoxesOptions = { ...this.inputOptions };
+    const options: Required<CardBoxesOptions> = { ...this.inputOptions };
 
     const cards: CardBox[][] = [[]];
 
     let row = 0;
 
     options.deckThicknesses.forEach((width) => {
+      const { deckThicknesses, ...opts } = options;
       const card = new CardBox({
-        ...options,
+        ...opts,
         deckThickness: width,
       });
 
@@ -55,6 +56,9 @@ export class CardBoxes extends Shape<CardBoxesOptions> {
   }
 
   private runningWidth(shapes: Shape[]): number {
-    return _.sumBy(shapes, (s) => s.getWidth() + this.inputOptions.spacing) - this.inputOptions.spacing;
+    return (
+      _.sumBy(shapes, (s) => s.getWidth() + this.inputOptions.spacing) -
+      this.inputOptions.spacing
+    );
   }
 }

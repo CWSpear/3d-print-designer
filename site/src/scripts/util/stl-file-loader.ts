@@ -9,15 +9,21 @@ import {
 } from 'three';
 
 export class StlFileLoader extends FileLoader {
-  loadAndParse(url: string): Promise<Geometry & BufferGeometry & { hasColors: boolean; alpha: number }> {
+  loadAndParse(
+    url: string,
+  ): Promise<Geometry & BufferGeometry & { hasColors: boolean; alpha: number }> {
     return new Promise((resolve, reject) => {
       super.load(
         url,
         (strOrBuffer) => {
           const binData = ensureBinary(strOrBuffer);
-          const geo = isBinary(binData) ? parseBinary(binData) : parseAscii(ensureString(strOrBuffer));
+          const geo = isBinary(binData)
+            ? parseBinary(binData)
+            : parseAscii(ensureString(strOrBuffer));
 
-          resolve(<Geometry & BufferGeometry & { hasColors: boolean; alpha: number }>geo);
+          resolve(
+            <Geometry & BufferGeometry & { hasColors: boolean; alpha: number }>geo,
+          );
         },
         undefined,
         (err) => {
@@ -73,8 +79,14 @@ function parseAscii(data: string): BufferGeometry {
   let faceCounter = 0;
 
   const patternFloat = /[\s]+([+-]?(?:\d*)(?:\.\d*)?(?:[eE][+-]?\d+)?)/.source;
-  const patternVertex = new RegExp('vertex' + patternFloat + patternFloat + patternFloat, 'g');
-  const patternNormal = new RegExp('normal' + patternFloat + patternFloat + patternFloat, 'g');
+  const patternVertex = new RegExp(
+    'vertex' + patternFloat + patternFloat + patternFloat,
+    'g',
+  );
+  const patternNormal = new RegExp(
+    'normal' + patternFloat + patternFloat + patternFloat,
+    'g',
+  );
 
   const vertices = [];
   const normals = [];
@@ -106,7 +118,11 @@ function parseAscii(data: string): BufferGeometry {
       }
 
       while ((result = patternVertex.exec(text)) !== null) {
-        vertices.push(parseFloat(result[1]), parseFloat(result[2]), parseFloat(result[3]));
+        vertices.push(
+          parseFloat(result[1]),
+          parseFloat(result[2]),
+          parseFloat(result[3]),
+        );
         normals.push(normal.x, normal.y, normal.z);
         vertexCountPerFace++;
         endVertex++;
@@ -115,13 +131,19 @@ function parseAscii(data: string): BufferGeometry {
       // every face have to own ONE valid normal
 
       if (normalCountPerFace !== 1) {
-        console.error("STLLoader: Something isn't right with the normal of face number " + faceCounter);
+        console.error(
+          "STLLoader: Something isn't right with the normal of face number " +
+            faceCounter,
+        );
       }
 
       // each face have to own THREE valid vertices
 
       if (vertexCountPerFace !== 3) {
-        console.error("STLLoader: Something isn't right with the vertices of face number " + faceCounter);
+        console.error(
+          "STLLoader: Something isn't right with the vertices of face number " +
+            faceCounter,
+        );
       }
 
       faceCounter++;

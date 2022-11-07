@@ -57,7 +57,12 @@ const io: SocketServer = new SocketServer(http);
 app.use(express.static(absoluteWebRootDirPath, { fallthrough: true }));
 
 app.get(`/${BUILD_URL}/*`, (req, res) => {
-  res.sendFile(path.join(absoluteDesignBuildDirPath, req.url.replace(new RegExp(`\/${BUILD_URL}`), '')));
+  res.sendFile(
+    path.join(
+      absoluteDesignBuildDirPath,
+      req.url.replace(new RegExp(`\/${BUILD_URL}`), ''),
+    ),
+  );
 });
 
 http.listen(PORT, () => {
@@ -75,7 +80,10 @@ io.on('connection', (socket: Socket) => {
     socket.join(id);
 
     socket.on('client-triggered-reload', async () => {
-      let filePath = path.join(absoluteDesignDirPath, id.replace(BUILD_URL, '').replace(/\.[^.]*?$/, ''));
+      let filePath = path.join(
+        absoluteDesignDirPath,
+        id.replace(BUILD_URL, '').replace(/\.[^.]*?$/, ''),
+      );
 
       if (await fs.pathExists(`${filePath}.ts`)) {
         filePath += '.ts';
@@ -112,21 +120,38 @@ async function ready() {
     .watch(absoluteDesignDirPath)
     .on('change', processDesignFileChange)
     .on('ready', () => {
-      console.log(chalk.cyan(`Watching ${absoluteDesignDirPath.replace(process.cwd(), '.')} for changes...\n`));
+      console.log(
+        chalk.cyan(
+          `Watching ${absoluteDesignDirPath.replace(
+            process.cwd(),
+            '.',
+          )} for changes...\n`,
+        ),
+      );
     });
 
   if (WORKING_ON_NEW_SITE) {
     chokidar
       .watch(absoluteWebRootSrcPath)
-      .on('all', (event: 'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir', path: string) => {
-        if (event !== 'add' || 'change') {
-          return;
-        }
+      .on(
+        'all',
+        (event: 'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir', path: string) => {
+          if (event !== 'add' || 'change') {
+            return;
+          }
 
-        buildSite();
-      })
+          buildSite();
+        },
+      )
       .on('ready', () => {
-        console.log(chalk.cyan(`Watching ${absoluteWebRootSrcPath.replace(process.cwd(), '.')} for changes...\n`));
+        console.log(
+          chalk.cyan(
+            `Watching ${absoluteWebRootSrcPath.replace(
+              process.cwd(),
+              '.',
+            )} for changes...\n`,
+          ),
+        );
       });
 
     await buildSite();
@@ -167,23 +192,39 @@ async function processDesignFileChange(filePath: string) {
 
       const { default: shape }: { default: Shape } = require(filePath);
 
-      const output: string[] | ArrayBuffer[] = stlSerializer.serialize({ binary: false }, shape.render());
-      await fs.writeFile(outputFileName, output.join(''), typeof output[0] === 'string' ? 'utf-8' : 'binary');
+      const output: string[] | ArrayBuffer[] = stlSerializer.serialize(
+        { binary: false },
+        shape.render(),
+      );
+      await fs.writeFile(
+        outputFileName,
+        output.join(''),
+        typeof output[0] === 'string' ? 'utf-8' : 'binary',
+      );
     } else {
       delete require.cache[require.resolve(filePath)];
       const render = require(filePath);
 
       if (typeof render === 'function') {
-        const output: string[] | ArrayBuffer[] = stlSerializer.serialize({ binary: false }, render());
-        await fs.writeFile(outputFileName, output, typeof output[0] === 'string' ? 'utf-8' : 'binary');
+        const output: string[] | ArrayBuffer[] = stlSerializer.serialize(
+          { binary: false },
+          render(),
+        );
+        await fs.writeFile(
+          outputFileName,
+          output,
+          typeof output[0] === 'string' ? 'utf-8' : 'binary',
+        );
       } else {
-        const output = await exec(`npx openjscad ${filePath} -of stla -o ${outputFileName}`);
+        const output = await exec(
+          `npx openjscad ${filePath} -of stla -o ${outputFileName}`,
+        );
         // first line is output from openjscad
         console.log(output.split('\n').slice(1).join('\n'));
       }
     }
   } catch (err) {
-    console.error(chalk.red('[Error]\n\n', err, err.stack));
+    console.error(chalk.red('[Error]\n\n', err, (<Error>err).stack));
 
     notifier.notify({
       title: '3D Print Design',

@@ -19,7 +19,8 @@ export class WirelessChargerAssist extends Shape<WirelessChargerAssistOptions> {
   }
 
   protected createInitialRawShape(): RawShape {
-    const { lipWidth, lipLength, lipHeight, totalWidth, wallThickness } = this.inputOptions;
+    const { lipWidth, lipLength, lipHeight, totalWidth, wallThickness } =
+      this.inputOptions;
 
     const hole = new Cube({
       size: {
@@ -68,7 +69,9 @@ export class WirelessChargerAssist extends Shape<WirelessChargerAssistOptions> {
     );
     console.log('');
 
-    return mainShape.subtractShapes(hole.centerOn(mainShape, { x: true, y: true })).render();
+    return mainShape
+      .subtractShapes(hole.centerOn(mainShape, { x: true, y: true }))
+      .render();
   }
 }
 

@@ -1,4 +1,4 @@
-const { polyhedron } = require('@jscad/csg/src/api/primitives3d-api');
+import { polyhedron } from '@jscad/modeling/src/primitives';
 
 import { RawShape, Shape } from '../../shape';
 import { CubeOptions } from '../core/cube';
@@ -60,7 +60,7 @@ export class TriangularPrism extends Shape<TriangularPrismOptions> {
         [0, x2, y2],
         [0, x3, y3],
       ],
-      polygons: [
+      faces: [
         [2, 0, 1],
         [3, 5, 4],
         [2, 1, 4, 5],

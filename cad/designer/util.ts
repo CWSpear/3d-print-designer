@@ -26,7 +26,14 @@ export class Util {
 
   static magnetMinWall: number = 0.59999;
 
-  static convertAxesTogglesToBooleans(axes: Partial<AxesToggles>): BooleanAxesToggles {
+  static convertAxesTogglesToBooleans(axes: Partial<AxesToggles>): BooleanAxesToggles;
+  static convertAxesTogglesToBooleans(axes?: null): undefined;
+  static convertAxesTogglesToBooleans(
+    axes?: Partial<AxesToggles> | null,
+  ): BooleanAxesToggles | undefined;
+  static convertAxesTogglesToBooleans(
+    axes?: Partial<AxesToggles> | null,
+  ): BooleanAxesToggles | undefined {
     if (!axes) {
       return undefined;
     }
@@ -62,7 +69,22 @@ export class Util {
     return { x, y, z };
   }
 
-  static convertDimensionsToNumbers(dimensions: Partial<Dimensions>, defaultValue: number = 0): NumbersDimensions {
+  static convertDimensionsToNumbers(
+    dimensions: Partial<Dimensions>,
+    defaultValue?: number,
+  ): NumbersDimensions;
+  static convertDimensionsToNumbers(
+    dimensions?: null,
+    defaultValue?: number,
+  ): undefined;
+  static convertDimensionsToNumbers(
+    dimensions?: Partial<Dimensions> | null,
+    defaultValue?: number,
+  ): NumbersDimensions | undefined;
+  static convertDimensionsToNumbers(
+    dimensions?: Partial<Dimensions> | null,
+    defaultValue: number = 0,
+  ): NumbersDimensions | undefined {
     if (!dimensions && dimensions !== 0) {
       return undefined;
     }
@@ -76,11 +98,19 @@ export class Util {
     }
 
     if (Util.dimensionsIsXYZ(dimensions)) {
-      return [dimensions.x || defaultValue, dimensions.y || defaultValue, dimensions.z || defaultValue];
+      return [
+        dimensions.x || defaultValue,
+        dimensions.y || defaultValue,
+        dimensions.z || defaultValue,
+      ];
     }
 
     if (Util.dimensionsIsWLH(dimensions)) {
-      return [dimensions.width || defaultValue, dimensions.length || defaultValue, dimensions.height || defaultValue];
+      return [
+        dimensions.width || defaultValue,
+        dimensions.length || defaultValue,
+        dimensions.height || defaultValue,
+      ];
     }
 
     throw new Error(`Unexpected dimensions format: ${JSON.stringify(dimensions)}`);
@@ -90,13 +120,22 @@ export class Util {
     return <T>degrees.map((degree) => degToRad(degree));
   }
 
-  static convertDimensionsToWLH(dimensions: Partial<Dimensions>, defaultValue: number = 0): WLHDimensions {
-    const [width, length, height] = Util.convertDimensionsToNumbers(dimensions, defaultValue);
+  static convertDimensionsToWLH(
+    dimensions: Partial<Dimensions>,
+    defaultValue: number = 0,
+  ): WLHDimensions {
+    const [width, length, height] = Util.convertDimensionsToNumbers(
+      dimensions,
+      defaultValue,
+    );
 
     return { width, length, height };
   }
 
-  static convertDimensionsToXYZ(dimensions: Partial<Dimensions>, defaultValue: number = 0): XYZDimensions {
+  static convertDimensionsToXYZ(
+    dimensions: Partial<Dimensions>,
+    defaultValue: number = 0,
+  ): XYZDimensions {
     const [x, y, z] = Util.convertDimensionsToNumbers(dimensions, defaultValue);
 
     return { x, y, z };
@@ -106,31 +145,47 @@ export class Util {
     return typeof dimensions === 'number';
   }
 
-  static dimensionsIsNumbers(dimensions: Partial<Dimensions>): dimensions is NumbersDimensions {
+  static dimensionsIsNumbers(
+    dimensions: Partial<Dimensions>,
+  ): dimensions is NumbersDimensions {
     return Array.isArray(dimensions);
   }
 
   static dimensionsIsXYZ(dimensions: Partial<Dimensions>): dimensions is XYZDimensions {
-    return typeof dimensions === 'object' && ('x' in dimensions || 'y' in dimensions || 'z' in dimensions);
+    return (
+      typeof dimensions === 'object' &&
+      ('x' in dimensions || 'y' in dimensions || 'z' in dimensions)
+    );
   }
 
   static dimensionsIsWLH(dimensions: Partial<Dimensions>): dimensions is WLHDimensions {
     return (
-      typeof dimensions === 'object' && ('width' in dimensions || 'length' in dimensions || 'height' in dimensions)
+      typeof dimensions === 'object' &&
+      ('width' in dimensions || 'length' in dimensions || 'height' in dimensions)
     );
   }
 
-  static axesTogglesIsNumbers(axesToggles: Partial<AxesToggles>): axesToggles is BooleanAxesToggles {
+  static axesTogglesIsNumbers(
+    axesToggles: Partial<AxesToggles>,
+  ): axesToggles is BooleanAxesToggles {
     return Array.isArray(axesToggles);
   }
 
-  static axesTogglesIsXYZ(axesToggles: Partial<AxesToggles>): axesToggles is XYZAxesToggles {
-    return typeof axesToggles === 'object' && ('x' in axesToggles || 'y' in axesToggles || 'z' in axesToggles);
+  static axesTogglesIsXYZ(
+    axesToggles: Partial<AxesToggles>,
+  ): axesToggles is XYZAxesToggles {
+    return (
+      typeof axesToggles === 'object' &&
+      ('x' in axesToggles || 'y' in axesToggles || 'z' in axesToggles)
+    );
   }
 
-  static axesTogglesIsWLH(axesToggles: Partial<AxesToggles>): axesToggles is WLHAxesToggles {
+  static axesTogglesIsWLH(
+    axesToggles: Partial<AxesToggles>,
+  ): axesToggles is WLHAxesToggles {
     return (
-      typeof axesToggles === 'object' && ('width' in axesToggles || 'length' in axesToggles || 'height' in axesToggles)
+      typeof axesToggles === 'object' &&
+      ('width' in axesToggles || 'length' in axesToggles || 'height' in axesToggles)
     );
   }
 
